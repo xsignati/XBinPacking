@@ -1,0 +1,16 @@
+#root{
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, black 0%, grey 50%);
+}
+
+GridPane{
+ -fx-background-color: transparent;
+}
+
+
+#title{
+    -fx-font: 55px "Century Gothic";
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, white 0%, grey 50%);
+}
+
+
+
