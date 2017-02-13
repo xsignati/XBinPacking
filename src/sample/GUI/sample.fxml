@@ -6,19 +6,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.SubScene?>
-<?import javafx.scene.shape.Sphere?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.CubicCurve?>
-<?import javafx.scene.shape.Box?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.paint.PhongMaterial?>
-<?import javafx.scene.Camera?>
-<?import javafx.scene.PerspectiveCamera?>
-<?import javafx.scene.effect.Lighting?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.effect.Light.Distant?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.Group?>
+<?import sample.GUI.BinView.*?>
+
 <GridPane fx:controller="sample.GUI.Controller" id = "root"
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="60" vgap="60"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
@@ -37,26 +28,13 @@
     <Text fx:id="title" text="XBINPACKING"
           GridPane.columnIndex="0" GridPane.rowIndex="0"
           GridPane.columnSpan="2"/>
-    <Button text="Click Me!" onAction="#handleButtonAction"/>
-
         <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1" >
-            <SubScene fx:id="binScene" fill="#000000" onMouseClicked="#handleButtonAction" >
+            <SubScene fx:id="binScene" depthBuffer="true" fill="transparent" antiAliasing="$ssaa">
                 <root>
-                    <GridPane alignment="CENTER" fx:id="binsView"  >
-                        <Box depth="50" width="50" height="50" fx:id="kolko" >
-                            <material>
-                                <PhongMaterial diffuseColor="firebrick" specularColor="yellow">
-                                </PhongMaterial>
-                            </material>
-                            <effect>
-                                <Lighting>
-                                    <light>
-                                        <Light.Distant/>
-                                    </light>
-                                </Lighting>
-                            </effect>
-                        </Box>
-                    </GridPane>
+                    <Group fx:id="binsView">
+                        <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="320" distance="1200"/>
+                        <Group fx:id="bin"/>
+                    </Group>
                 </root>
             </SubScene>
         </Pane>

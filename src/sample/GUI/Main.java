@@ -26,7 +26,7 @@ public class Main extends Application{
 
         //Create a main scene
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(root, screenBounds.getWidth() * MAIN_SCREEN_H_SCALE, screenBounds.getHeight() * MAIN_SCREEN_W_SCALE);
+        Scene scene = new Scene(root, screenBounds.getWidth() * MAIN_SCREEN_H_SCALE, screenBounds.getHeight() * MAIN_SCREEN_W_SCALE, true, SceneAntialiasing.BALANCED);
         scene.getStylesheets().add(getClass().getResource("css/main.css").toExternalForm());
 
         //Show a primary stage
@@ -34,8 +34,11 @@ public class Main extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Manager manager = new Manager(controller);
-        manager.run();
+        controller.test();
+        //Manager manager = new Manager(controller);
+        //manager.run();
+        //MoleculeSampleApp msa = new MoleculeSampleApp(controller);
+        //msa.start(controller);;
 
 
     }

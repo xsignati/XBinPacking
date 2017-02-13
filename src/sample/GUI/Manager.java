@@ -27,6 +27,7 @@ public class Manager {
         //Get the display subscene
         SubScene subscene = controller.getBinScene();
 
+
         //Bind display subscene size to main scene width and height
 
         subscene.heightProperty().bind(controller.getBsPane().heightProperty());

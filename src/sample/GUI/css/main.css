@@ -2,10 +2,17 @@
     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, black 0%, grey 50%);
 }
 
-GridPane{
+Group{
  -fx-background-color: transparent;
 }
 
+Pane{
+-fx-background-color: transparent;
+}
+
+#binScene{
+    -fx-fill: yellow;
+}
 
 #title{
     -fx-font: 55px "Century Gothic";
