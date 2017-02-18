@@ -1,17 +1,16 @@
 #root{
     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, black 0%, grey 50%);
+    -fx-accent: #959595;
+    -fx-font-size: 1.5em;
+    -fx-mid-text-color: #959595;
 }
 
 Group{
- -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 Pane{
--fx-background-color: transparent;
-}
-
-#binScene{
-    -fx-fill: yellow;
+    -fx-background-color: transparent;
 }
 
 #title{
@@ -19,5 +18,32 @@ Pane{
     -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, white 0%, grey 50%);
 }
 
+#boxList{
+     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, white 0%, grey 50%);
+}
 
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color:  linear-gradient(from 0% 0% to 100% 200%, repeat, white 0%, grey 50%);
+    -fx-text-fill: #959595;
+}
+
+.list-cell:odd {
+    -fx-cell-hover-color: #000000;
+    -fx-background-color: black;
+}
+
+.list-cell:even {
+    -fx-cell-hover-color: #000000;
+    -fx-background-color: black;
+}
+
+
+.list-cell:filled:hover {
+    -fx-cell-hover-color: #ff00ff;
+    -fx-text-fill: black;
+}
+
+.textField{
+     -fx-border-insets: 5px;
+}
 

@@ -38,9 +38,7 @@ public class Main extends Application{
         //Manager manager = new Manager(controller);
         //manager.run();
         //MoleculeSampleApp msa = new MoleculeSampleApp(controller);
-        //msa.start(controller);;
-
-
+        //msa.start(controller);
     }
 
     public static void main(String[] args) {

@@ -1,20 +1,25 @@
 package sample.GUI;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Text;
+import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import sample.GUI.BinView.BinModel;
 import sample.GUI.BinView.BoxModel;
 import sample.GUI.BinView.CameraModel;
+import sample.BinPackingLogic.Box;
 
 import java.util.concurrent.SynchronousQueue;
 
@@ -28,13 +33,11 @@ public class Controller {
     @FXML
     public Group  binsView;
     @FXML
-    public Box box;
-    @FXML
     private CameraModel cameraModel;
     @FXML
     private Group bin;
     @FXML
-    SceneAntialiasing ssaa = SceneAntialiasing.BALANCED;
+    private SceneAntialiasing ssaa = SceneAntialiasing.BALANCED;
 
     public Group getBin() {
         return bin;
@@ -44,10 +47,6 @@ public class Controller {
 
     public Group getBinsView() {
         return binsView;
-    }
-
-    public Box getBox() {
-        return box;
     }
 
     public Text getTitle() {
@@ -74,6 +73,8 @@ public class Controller {
         binScene.setOnMouseDragged(dragEvent);
         binScene.setOnScroll(scrollEvent);
 
+        addBox.setOnAction(addBoxEvent);
+
     }
 
     /**
@@ -81,7 +82,11 @@ public class Controller {
      */
 
     public void test() {
-        System.out.println(binScene.getAntiAliasing());
+
+        System.out.println(binScene.getHeight());
+        System.out.println(binScene.getWidth());
+        getCameraModel().setDistance(binScene.getWidth()*4);
+        getCameraModel().reset();
         double scale = subSceneScale();
 
         BinModel binModel = new BinModel(getBinWidth(),getBinHeight(),getBinDepth(),scale);
@@ -97,6 +102,8 @@ public class Controller {
         bin.getChildren().add(box3);
         bin.getChildren().add(box4);
 
+        boxsetter();
+
     }
 
     private int getBinWidth(){
@@ -107,8 +114,6 @@ public class Controller {
     }
 
     private double subSceneScale(){
-
-        System.out.print(binScene.getWidth());
         return getMin(binScene.getWidth()/getBinWidth(), binScene.getHeight()/getBinDepth(), binScene.getWidth()/getBinHeight());
     }
 
@@ -121,8 +126,121 @@ public class Controller {
      * *******************************************************
      */
 
+
     /**
-     * GUI Event handlers
+    * Box list
+    */
+    @FXML
+    private TableView<Box> boxListViewer;
+    @FXML
+    private TableColumn widthCol;
+    @FXML
+    private TableColumn heightCol;
+    @FXML
+    private TableColumn depthCol;
+    @FXML
+    private TableColumn xCol;
+    @FXML
+    private TableColumn yCol;
+    @FXML
+    private TableColumn zCol;
+    @FXML
+    private Button addBox;
+    @FXML
+    private TextField addWidth;
+    @FXML
+    private TextField addHeight;
+    @FXML
+    private TextField addDepth;
+
+    private ObservableList<Box> boxList = FXCollections.observableArrayList();
+
+    private void boxsetter(){
+        widthCol.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        heightCol.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        depthCol.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        addWidth.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        addHeight.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        addDepth.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+        addBox.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
+
+        boxList.add(new Box(20,30,40));
+        boxList.add(new Box(20,30,40));
+
+        widthCol.setCellValueFactory(
+                new PropertyValueFactory<Box,Integer>("w")
+        );
+        heightCol.setCellValueFactory(
+                new PropertyValueFactory<Box,Integer>("h")
+        );
+        depthCol.setCellValueFactory(
+                new PropertyValueFactory<Box,Integer>("d")
+        );
+
+        boxListViewer.setItems(boxList);
+
+        widthCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        widthCol.setOnEditCommit(widthEditEvent);
+        heightCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        heightCol.setOnEditCommit(heightEditEvent);
+        depthCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        depthCol.setOnEditCommit(depthEditEvent);
+
+    }
+
+
+    EventHandler<ActionEvent> addBoxEvent = new EventHandler<ActionEvent>() {
+        @Override public void handle(ActionEvent e) {
+            boxList.add(new Box(
+                    Integer.parseInt(addWidth.getText()),
+                    Integer.parseInt(addHeight. getText()),
+                    Integer.parseInt(addDepth.getText())
+            ));
+            addWidth.clear();
+            addHeight.clear();
+            addDepth.clear();
+
+
+        }
+    };
+
+
+    EventHandler<TableColumn.CellEditEvent<Box, Integer>> widthEditEvent =
+            new EventHandler<TableColumn.CellEditEvent<Box, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Box, Integer> ce) {
+                (ce.getTableView().getItems().get(
+                 ce.getTablePosition().getRow())
+                ).setW(ce.getNewValue());
+            }
+        };
+    EventHandler<TableColumn.CellEditEvent<Box, Integer>> heightEditEvent =
+            new EventHandler<TableColumn.CellEditEvent<Box, Integer>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<Box, Integer> ce) {
+                    System.out.println(ce.getTableView().getItems());
+                    (ce.getTableView().getItems().get(
+                     ce.getTablePosition().getRow())
+                    ).setH(ce.getNewValue());
+
+                    for (Box b:boxList){
+                        System.out.println(b.getH());
+                    }
+                }
+            };
+    EventHandler<TableColumn.CellEditEvent<Box, Integer>> depthEditEvent =
+            new EventHandler<TableColumn.CellEditEvent<Box, Integer>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<Box, Integer> ce) {
+                    (ce.getTableView().getItems().get(
+                     ce.getTablePosition().getRow())
+                    ).setD(ce.getNewValue());
+                }
+            };
+
+
+    /**
+     * Bin View Event handlers
      */
     private double rotationSpeed = 0.2;
     private double scrollSpeed = 50;

@@ -1,6 +1,7 @@
 package sample.GUI.BinView;
 
 import javafx.beans.NamedArg;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
@@ -13,7 +14,7 @@ public class CameraModel extends Group {
     private int xRotation;
     private int yRotation;
     private int zRotation;
-    private int distance;
+    private double distance;
     public final static int Y_ROTATION= 0;
     public final static int Z_ROTATION = 320;
     public final static int CAMERA_DISTANCE = 2000;
@@ -26,11 +27,11 @@ public class CameraModel extends Group {
 
 
     public CameraModel(@NamedArg("xRotation") int xRotation, @NamedArg("yRotation") int yRotation, @NamedArg("zRotation") int zRotation, @NamedArg("distance") int distance){
-        //@NamedArg("exo") int exo
         this.xRotation = xRotation;
         this.yRotation = yRotation;
         this.zRotation = zRotation;
         this.distance = distance;
+
         reset();
         rx.setAxis(Rotate.X_AXIS);
         ry.setAxis(Rotate.Y_AXIS);
@@ -70,10 +71,15 @@ public class CameraModel extends Group {
         return rz;
     }
 
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
     public void reset() {
         rx.setAngle(xRotation);
         ry.setAngle(yRotation);
         rz.setAngle(zRotation);
+        //camera.setTranslateZ(-distance);
         camera.setTranslateZ(-distance);
     }
 

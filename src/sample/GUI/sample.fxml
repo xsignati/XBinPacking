@@ -10,40 +10,117 @@
 <?import javafx.scene.Group?>
 <?import sample.GUI.BinView.*?>
 
-<GridPane fx:controller="sample.GUI.Controller" id = "root"
-          xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="60" vgap="60"  >
+<?import javafx.scene.control.ListView?>
+<?import javafx.collections.ObservableList?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<GridPane fx:controller="sample.GUI.Controller" fx:id = "root"
+          xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 
+    <!--Whole window -->
     <rowConstraints>
         <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
-        <RowConstraints percentHeight="60.0" vgrow="SOMETIMES" />
-        <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
+        <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
-        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+        <ColumnConstraints percentWidth="55.0" hgrow="SOMETIMES"  />
+        <ColumnConstraints percentWidth="45.0" hgrow="SOMETIMES"  />
     </columnConstraints>
 
-
+    <!--Title -->
     <Text fx:id="title" text="XBINPACKING"
           GridPane.columnIndex="0" GridPane.rowIndex="0"
           GridPane.columnSpan="2"/>
+
+    <!--Subscene-->
         <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1" >
             <SubScene fx:id="binScene" depthBuffer="true" fill="transparent" antiAliasing="$ssaa">
                 <root>
                     <Group fx:id="binsView">
-                        <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="320" distance="1200"/>
+                        <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
                         <Group fx:id="bin"/>
                     </Group>
                 </root>
             </SubScene>
         </Pane>
 
-    <Label text="Bin packing algorithm"
-           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <TextArea
-            GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1"  >
+        <rowConstraints>
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="40.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+
+        </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints percentWidth="100.0"  hgrow="ALWAYS" />
+        </columnConstraints>
+
+        <Label text="Packing algorithm" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="3" spacing="15">
+            <fx:define>
+                <ToggleGroup fx:id="algorithmButtons"/>
+            </fx:define>
+            <RadioButton text="BestFit (default)" toggleGroup="$algorithmButtons"> </RadioButton>
+            <RadioButton text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
+
+        </HBox>
+        <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+
+        <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="5" editable="true" >
+            <columns>
+                <TableColumn fx:id="widthCol" text="width">
+                </TableColumn>
+                <TableColumn fx:id="heightCol" text="height">
+                </TableColumn>
+                <TableColumn fx:id="depthCol" text="depth">
+                </TableColumn>
+                <TableColumn fx:id="xCol" text="X">
+                </TableColumn>
+                <TableColumn fx:id="yCol" text="Y">
+                </TableColumn>
+                <TableColumn fx:id="zCol" text="Z">
+                </TableColumn>
+            </columns>
+        </TableView>
+
+        <Label text="Add a new box" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+
+        <HBox GridPane.columnIndex="0" GridPane.RowIndex="7" spacing="5">
+            <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
+            <TextField fx:id="addWidth" styleClass="textField"  promptText="width"></TextField>
+            <TextField fx:id="addHeight" styleClass="textField"  promptText="height"></TextField>
+            <TextField fx:id="addDepth" styleClass="textField"  promptText="depth"></TextField>
+            <Button fx:id="addBox" text="Add Box"></Button>
+        </HBox>
+
+        <Label text="Bin size" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+        <HBox GridPane.columnIndex="0" GridPane.RowIndex="1" spacing="5">
+            <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+            <TextField fx:id="setWidth" styleClass="textField"  promptText="width"></TextField>
+            <TextField fx:id="setHeight" styleClass="textField"  promptText="height"></TextField>
+            <TextField fx:id="setDepth" styleClass="textField"  promptText="depth"></TextField>
+        </HBox>
+
+    </GridPane>
+    <!--<ListView GridPane.RowIndex="1" GridPane.columnIndex="1"> </ListView>-->
 
 
 </GridPane>
