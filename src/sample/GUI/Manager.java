@@ -30,8 +30,8 @@ public class Manager {
 
         //Bind display subscene size to main scene width and height
 
-        subscene.heightProperty().bind(controller.getBsPane().heightProperty());
-        subscene.widthProperty().bind(controller.getBsPane().widthProperty());
+//        subscene.heightProperty().bind(controller.getBsPane().heightProperty());
+//        subscene.widthProperty().bind(controller.getBsPane().widthProperty());
 
         Camera camera = new PerspectiveCamera();
         subscene.setCamera(camera);
@@ -40,7 +40,7 @@ public class Manager {
 //        controller.getBox().setTranslateZ(30);
 
 
-        controller.getBsPane().requestFocus();
+//        controller.getBsPane().requestFocus();
 
         final Group axisGroup = new Group();
         final PhongMaterial redMaterial = new PhongMaterial();
@@ -64,7 +64,7 @@ public class Manager {
         zAxis.setMaterial(blueMaterial);
 
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        controller.getBsPane().getChildren().addAll(axisGroup);
+//        controller.getBsPane().getChildren().addAll(axisGroup);
 
 
 

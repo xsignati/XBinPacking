@@ -26,8 +26,8 @@ public class BoxModel extends Group {
     public BoxModel (double x, double y, double z, double width, double height, double depth , double scale, Color color){
         box = new Box(scale * width, scale * height, scale * depth);
         box.setTranslateX(scale * (x  + SHIFT_RATIO * width));
-        box.setTranslateY(scale * (y  + SHIFT_RATIO * depth));
-        box.setTranslateZ(scale * (z  + SHIFT_RATIO * height));
+        box.setTranslateY(scale * (y  + SHIFT_RATIO * height));
+        box.setTranslateZ(scale * (z  + SHIFT_RATIO * depth));
         material.setDiffuseColor(color);
         material.setSpecularColor(Color.DARKGREY);
         box.setMaterial(material);

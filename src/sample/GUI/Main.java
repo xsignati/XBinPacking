@@ -35,16 +35,10 @@ public class Main extends Application{
         primaryStage.show();
 
         controller.test();
-        //Manager manager = new Manager(controller);
-        //manager.run();
-        //MoleculeSampleApp msa = new MoleculeSampleApp(controller);
-        //msa.start(controller);
     }
 
     public static void main(String[] args) {
         launch(args);
-
-        // run();
     }
 
 

@@ -22,11 +22,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
-<GridPane fx:controller="sample.GUI.Controller" fx:id = "root"
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<GridPane fx:controller="sample.GUI.Controller" fx:id = "mainLayout"
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 
-    <!--Whole window -->
+    <!--Whole window Grid Layout -->
     <rowConstraints>
         <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
@@ -37,53 +39,72 @@
         <ColumnConstraints percentWidth="45.0" hgrow="SOMETIMES"  />
     </columnConstraints>
 
+
     <!--Title -->
-    <Text fx:id="title" text="XBINPACKING"
-          GridPane.columnIndex="0" GridPane.rowIndex="0"
-          GridPane.columnSpan="2"/>
+    <Text fx:id="title" text="XBINPACKING" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
 
     <!--Subscene-->
-        <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1" >
-            <SubScene fx:id="binScene" depthBuffer="true" fill="transparent" antiAliasing="$ssaa">
-                <root>
-                    <Group fx:id="binsView">
-                        <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
-                        <Group fx:id="bin"/>
-                    </Group>
-                </root>
-            </SubScene>
-        </Pane>
+    <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1" >
+        <SubScene fx:id="binScene" depthBuffer="true" fill="transparent" antiAliasing="$ssaa">
+            <root>
+                <Group fx:id="binsView">
+                    <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
+                    <Group fx:id="bin"/>
+                </Group>
+            </root>
+        </SubScene>
+    </Pane>
 
 
 
     <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1"  >
         <rowConstraints>
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
+            <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
             <RowConstraints percentHeight="40.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-            <RowConstraints percentHeight="8.0" vgrow="ALWAYS" />
-
+            <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
         </rowConstraints>
         <columnConstraints>
             <ColumnConstraints percentWidth="100.0"  hgrow="ALWAYS" />
         </columnConstraints>
 
-        <Label text="Packing algorithm" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <HBox GridPane.columnIndex="0" GridPane.rowIndex="3" spacing="15">
+        <HBox fx:id = "setWrap" GridPane.columnIndex="0" GridPane.RowIndex="0" spacing="5">
+            <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+            <Label fx:id="setSizeLabel" text="Bin size: "></Label>
+            <TextField fx:id="setWidth" styleClass="textField"  promptText="width"></TextField>
+            <TextField fx:id="setHeight" styleClass="textField"  promptText="height"></TextField>
+            <TextField fx:id="setDepth" styleClass="textField"  promptText="depth"></TextField>
+        </HBox>
+
+
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="15">
             <fx:define>
                 <ToggleGroup fx:id="algorithmButtons"/>
             </fx:define>
-            <RadioButton text="BestFit (default)" toggleGroup="$algorithmButtons"> </RadioButton>
+            <Label text="Packing algorithm:" textAlignment="CENTER" />
+            <RadioButton selected="true" text="BestFit (default)" toggleGroup="$algorithmButtons"> </RadioButton>
             <RadioButton text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
 
         </HBox>
-        <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
 
-        <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="5" editable="true" >
+        <HBox fx:id="selectorWrapper" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="15">
+            <Label text="Loaded Bins: "></Label>
+            <ComboBox fx:id="binSelector" visibleRowCount="5" >
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="NVT" />
+                        <String fx:value="Bezig" />
+                        <String fx:value="Positief" />
+                        <String fx:value="Negatief" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </HBox>
+
+        <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="4" editable="true" >
             <columns>
                 <TableColumn fx:id="widthCol" text="width">
                 </TableColumn>
@@ -100,27 +121,27 @@
             </columns>
         </TableView>
 
-        <Label text="Add a new box" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-
-        <HBox GridPane.columnIndex="0" GridPane.RowIndex="7" spacing="5">
+        <HBox fx:id="addWrap" GridPane.columnIndex="0" GridPane.RowIndex="5" spacing="5">
             <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
+            <Label text="New box:" textAlignment="CENTER" />
             <TextField fx:id="addWidth" styleClass="textField"  promptText="width"></TextField>
             <TextField fx:id="addHeight" styleClass="textField"  promptText="height"></TextField>
             <TextField fx:id="addDepth" styleClass="textField"  promptText="depth"></TextField>
             <Button fx:id="addBox" text="Add Box"></Button>
         </HBox>
 
-        <Label text="Bin size" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-
-        <HBox GridPane.columnIndex="0" GridPane.RowIndex="1" spacing="5">
-            <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
-            <TextField fx:id="setWidth" styleClass="textField"  promptText="width"></TextField>
-            <TextField fx:id="setHeight" styleClass="textField"  promptText="height"></TextField>
-            <TextField fx:id="setDepth" styleClass="textField"  promptText="depth"></TextField>
+        <HBox fx:id="processWrapper" GridPane.columnIndex="0" GridPane.RowIndex="6" spacing="5">
+            <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
+            <Label text="Start packing: " textAlignment="CENTER" />
+            <Button fx:id="processBtn" text="Process"></Button>
         </HBox>
+
 
     </GridPane>
     <!--<ListView GridPane.RowIndex="1" GridPane.columnIndex="1"> </ListView>-->
+
+    <!--<Label text="Bin size" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"/>-->
+
 
 
 </GridPane>
