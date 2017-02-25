@@ -3,71 +3,71 @@ package sample.BinPackingLogic;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-abstract class Cuboid{
+public abstract class Cuboid{
     /**
      * Coordinates and measurements
      * | Z height
      * |        /
      * |      /
-     * |    /Y depth
+     * |    /Y width
      * |  /
      * |/
-     * ------------ X width
+     * ------------ X length
      * */
-    private int x;
-    private int y;
-    private int z;
-    private int width;
-    private int depth;
-    private int height;
-    private int volume;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected double length;
+    protected double width;
+    protected double height;
+    protected double volume;
 
-    public Cuboid(int x, int y, int z, int width, int depth, int height){
+    public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x = x;
         this.y = y;
         this.z = z;
+        this.length = length;
         this.width = width;
-        this.depth = depth;
         this.height = height;
-        volume = width * depth * height;
+        volume = length * width * height;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public int getZ() {
+    public double getZ() {
         return z;
     }
 
-    public int getWidth() {
+    public double getLength() {
+        return length;
+    }
+
+    public double getWidth() {
         return width;
     }
 
-    public int getDepth() {
-        return depth;
-    }
-
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public int getVolume() {
+    public double getVolume() {
         return volume;
     }
 
-    public void setCoordinates(int x, int y, int z){
+    public void setCoordinates(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
     }
-    public void setDimensions(int width, int depth, int height){
+    public void setDimensions(double length, double width, double height){
+        this.length = length;
         this.width = width;
-        this.depth = depth;
         this.height = height;
     }
 

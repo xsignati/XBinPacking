@@ -50,6 +50,7 @@
                 <Group fx:id="binsView">
                     <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
                     <Group fx:id="bin"/>
+                    <Group fx:id="boxes"/>
                 </Group>
             </root>
         </SubScene>
@@ -73,9 +74,9 @@
         <HBox fx:id = "setWrap" GridPane.columnIndex="0" GridPane.RowIndex="0" spacing="5">
             <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
             <Label fx:id="setSizeLabel" text="Bin size: "></Label>
+            <TextField fx:id="setLength" styleClass="textField"  promptText="length"></TextField>
             <TextField fx:id="setWidth" styleClass="textField"  promptText="width"></TextField>
             <TextField fx:id="setHeight" styleClass="textField"  promptText="height"></TextField>
-            <TextField fx:id="setDepth" styleClass="textField"  promptText="depth"></TextField>
         </HBox>
 
 
@@ -106,11 +107,11 @@
         <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="4" editable="true" >
             <columns>
+                <TableColumn fx:id="lengthCol" text="length">
+                </TableColumn>
                 <TableColumn fx:id="widthCol" text="width">
                 </TableColumn>
                 <TableColumn fx:id="heightCol" text="height">
-                </TableColumn>
-                <TableColumn fx:id="depthCol" text="depth">
                 </TableColumn>
                 <TableColumn fx:id="xCol" text="X">
                 </TableColumn>
@@ -124,16 +125,16 @@
         <HBox fx:id="addWrap" GridPane.columnIndex="0" GridPane.RowIndex="5" spacing="5">
             <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
             <Label text="New box:" textAlignment="CENTER" />
+            <TextField fx:id="addLength" styleClass="textField"  promptText="length"></TextField>
             <TextField fx:id="addWidth" styleClass="textField"  promptText="width"></TextField>
             <TextField fx:id="addHeight" styleClass="textField"  promptText="height"></TextField>
-            <TextField fx:id="addDepth" styleClass="textField"  promptText="depth"></TextField>
             <Button fx:id="addBox" text="Add Box"></Button>
         </HBox>
 
         <HBox fx:id="processWrapper" GridPane.columnIndex="0" GridPane.RowIndex="6" spacing="5">
             <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
             <Label text="Start packing: " textAlignment="CENTER" />
-            <Button fx:id="processBtn" text="Process"></Button>
+            <Button fx:id="processBtn" text="Process" onAction="#startProcess"></Button>
         </HBox>
 
 

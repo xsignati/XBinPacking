@@ -1,56 +1,114 @@
 package sample.BinPackingLogic;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+
+import java.util.Random;
 
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class Box extends Cuboid implements Comparable<Box>{
+public class Box extends Group implements Comparable<Box>{
     /**
      * Box parameters
      */
+    //Dimensions and size
+    public final double ORIGINAL_LENGTH;
+    public final double ORIGINAL_WIDTH;
+    public final double INIT_HEIGHT;
+    private SimpleDoubleProperty length = new SimpleDoubleProperty();
+    private SimpleDoubleProperty width = new SimpleDoubleProperty();
+    private SimpleDoubleProperty height = new SimpleDoubleProperty();
+    private SimpleDoubleProperty x = new SimpleDoubleProperty();
+    private SimpleDoubleProperty y = new SimpleDoubleProperty();
+    private SimpleDoubleProperty z = new SimpleDoubleProperty();
+    private double volume;
 
-    private SimpleIntegerProperty w;
-    private   SimpleIntegerProperty d;
-    private SimpleIntegerProperty h;
+    //Appearance
+    private final PhongMaterial material = new PhongMaterial();
+    private javafx.scene.shape.Box box;
+    private final static double SHIFT_RATIO = 0.5;
 
-    public final int INIT_WIDTH;
-    public final int INIT_DEPTH;
-    public final int INIT_HEIGHT;
-
-    private BoxState boxState;
+    //Id and others
     private int binId;
     private int weight;
 
-    public Box(int width, int depth, int height){
-        super(-1, -1, -1, width, depth, height);
-        this.INIT_WIDTH = width;
-        this.INIT_DEPTH = depth;
+    private double scale;
+
+    public Box(double length, double width, double height , double scale){
+        this(length, width, height, scale, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
+    }
+
+    public Box(double length, double width, double height , double scale, Color color){
+        //measurements
+        this.ORIGINAL_LENGTH = length;
+        this.ORIGINAL_WIDTH = width;
         this.INIT_HEIGHT = height;
-        w = new SimpleIntegerProperty(width);
-        h = new SimpleIntegerProperty(height);
-        d = new SimpleIntegerProperty(depth);
+        this.length.set(length);
+        this.width.set(width);
+        this.height.set(height);
+        this.x.set(-1);
+        this.y.set(-1);
+        this.z.set(-1);
+        volume = length * width * height;
+
+        //appearance
+        this.scale = scale;
+        box = new javafx.scene.shape.Box(scale * length, scale * width, scale * height);
+        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * length));
+        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * width));
+        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * height));
+        material.setDiffuseColor(color);
+        material.setSpecularColor(Color.DARKGREY);
+        box.setMaterial(material);
+        getChildren().add(box);
+    }
+
+    public void setBoxes(){
+        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
+        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
+        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
     }
 
     @Override
     public int compareTo(Box o){
-        return o.getVolume() - getVolume();
+        return (int)(o.getVolume() - getVolume());
     }
 
-    public enum BoxState {
-        ASSIGNED, AWAITING, NOT_ASSIGNED,
+    public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
+
+    public void rotate(Rotations rotation) {
+        switch (rotation) {
+            case WLH:
+                setDimensions(ORIGINAL_WIDTH, ORIGINAL_LENGTH, INIT_HEIGHT);
+                break;
+            case LHW:
+                setDimensions(ORIGINAL_LENGTH, INIT_HEIGHT, ORIGINAL_WIDTH);
+                break;
+            case HLW:
+                setDimensions(INIT_HEIGHT, ORIGINAL_LENGTH, ORIGINAL_WIDTH);
+                break;
+            case WHL:
+                setDimensions(ORIGINAL_WIDTH, INIT_HEIGHT, ORIGINAL_LENGTH);
+                break;
+            case HWL:
+                setDimensions(INIT_HEIGHT, ORIGINAL_WIDTH, ORIGINAL_LENGTH);
+                break;
+            case LWH:
+                setDimensions(ORIGINAL_LENGTH, ORIGINAL_WIDTH, INIT_HEIGHT);
+                break;
+            default:
+                setDimensions(ORIGINAL_LENGTH, ORIGINAL_WIDTH, INIT_HEIGHT);
+                break;
+        }
     }
 
-    public BoxState getBoxState() {
-        return boxState;
-    }
+    //Setters and getters
 
-    public void setBoxState(BoxState boxState) {
-        this.boxState = boxState;
-    }
-
-    public int getBinId() {
+    public double getBinId() {
         return binId;
     }
 
@@ -58,7 +116,7 @@ public class Box extends Cuboid implements Comparable<Box>{
         this.binId = binTreeNumber;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -66,39 +124,98 @@ public class Box extends Cuboid implements Comparable<Box>{
         this.weight = weight;
     }
 
-    public void setW(int w) {
-        this.w.set(w);
+    public double getLength() {
+        return length.get();
     }
 
-    public void setD(int d) {
-        this.d.set(d);
+    public SimpleDoubleProperty lengthProperty() {
+        return length;
     }
 
-    public void setH(int h) {
-        this.h.set(h);
+    public void setLength(double length) {
+        this.length.set(length);
+        box.setWidth(scale * length);
+        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * length));
     }
 
-    public int getW() {
-        return w.get();
+    public double getWidth() {
+        return width.get();
     }
 
-    public SimpleIntegerProperty wProperty() {
-        return w;
+    public SimpleDoubleProperty widthProperty() {
+        return width;
     }
 
-    public int getD() {
-        return d.get();
+    public void setWidth(double width) {
+        this.width.set(width);
+        box.setHeight(scale * width);
+        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * width));
+
     }
 
-    public SimpleIntegerProperty dProperty() {
-        return d;
+    public double getHeight() {
+        return height.get();
     }
 
-    public int getH() {
-        return h.get();
+    public SimpleDoubleProperty heightProperty() {
+        return height;
     }
 
-    public SimpleIntegerProperty hProperty() {
-        return h;
+    public void setHeight(double height) {
+        this.height.set(height);
+        box.setDepth(scale * height);
+        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * height));
+    }
+
+    public double getX() {
+        return x.get();
+    }
+
+    public SimpleDoubleProperty xProperty() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x.set(x);
+    }
+
+    public double getY() {
+        return y.get();
+    }
+
+    public SimpleDoubleProperty yProperty() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y.set(y);
+    }
+
+    public double getZ() {
+        return z.get();
+    }
+
+    public SimpleDoubleProperty zProperty() {
+        return z;
+    }
+
+    public void setZ(double z) {
+        this.z.set(z);
+    }
+
+    public double getVolume() {
+        return volume;
+    }
+
+    public void setDimensions(double length, double width, double height){
+        this.length.set(length);
+        this.width.set(width);
+        this.height.set(height);
+    }
+
+    public void setCoordinates(double x, double y, double z){
+        this.x.set(x);
+        this.y.set(y);
+        this.z.set(z);
     }
 }
