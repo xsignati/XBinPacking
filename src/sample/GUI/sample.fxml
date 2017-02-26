@@ -24,6 +24,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
+
 <GridPane fx:controller="sample.GUI.Controller" fx:id = "mainLayout"
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>

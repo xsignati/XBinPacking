@@ -280,7 +280,7 @@ public class Controller {
         @Override public void handle(ActionEvent e) {
             boxList.add(new Box(
                     Double.parseDouble(addLength.getText()),
-                    Double.parseDouble(addWidth. getText()),
+                    Double.parseDouble(addWidth.getText()),
                     Double.parseDouble(addHeight.getText()),
                     scale.getScale()
             ));

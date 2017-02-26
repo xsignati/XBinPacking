@@ -64,7 +64,7 @@ public class Manager {
         zAxis.setMaterial(blueMaterial);
 
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-//        controller.getBsPane().getChildren().addAll(axisGroup);
+//        controller.getBsPane().getBinChildren().addAll(axisGroup);
 
 
 

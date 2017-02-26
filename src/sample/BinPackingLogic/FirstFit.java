@@ -7,7 +7,7 @@ public class FirstFit extends SearchStrategy{
     @Override
     public Bin search(Bin bin, Box box) {
         if(bin.getBinState() == Bin.BinState.FULL) {
-            for (Bin subBin : bin.getChildren()) {
+            for (Bin subBin : bin.getBinChildren()) {
                 Bin foundNode;
                 if((foundNode = search(subBin, box)) != null) return foundNode;
             }

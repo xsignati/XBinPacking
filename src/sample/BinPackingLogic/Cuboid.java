@@ -1,9 +1,12 @@
 package sample.BinPackingLogic;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Group;
+
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public abstract class Cuboid{
+public abstract class Cuboid extends Group {
     /**
      * Coordinates and measurements
      * | Z height
@@ -13,62 +16,65 @@ public abstract class Cuboid{
      * |  /
      * |/
      * ------------ X length
-     * */
-    protected double x;
-    protected double y;
-    protected double z;
-    protected double length;
-    protected double width;
-    protected double height;
+     **/
+    protected SimpleDoubleProperty length = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty width = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty height = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty x = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty y = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty z = new SimpleDoubleProperty();
     protected double volume;
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.length = length;
-        this.width = width;
-        this.height = height;
+        this.x.set(x);
+        this.y.set(y);
+        this.z.set(z);
+        this.length.set(length);
+        this.width.set(width);
+        this.height.set(height);
         volume = length * width * height;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
     public double getLength() {
-        return length;
+        return length.get();
     }
+
 
     public double getWidth() {
-        return width;
+        return width.get();
     }
 
     public double getHeight() {
-        return height;
+        return height.get();
     }
+
+
+    public double getX() {
+        return x.get();
+    }
+
+    public double getY() {
+        return y.get();
+    }
+
+    public double getZ() {
+        return z.get();
+    }
+
 
     public double getVolume() {
         return volume;
     }
 
     public void setCoordinates(double x, double y, double z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x.set(x);
+        this.y.set(y);
+        this.z.set(z);
     }
     public void setDimensions(double length, double width, double height){
-        this.length = length;
-        this.width = width;
-        this.height = height;
+        this.length.set(length);
+        this.width.set(width);
+        this.height.set(height);
     }
 
 }

@@ -12,7 +12,7 @@ public class AreaBestFit extends SearchStrategy {
         else
             minBin = null;
 
-        for (Bin child : bin.getChildren()) {
+        for (Bin child : bin.getBinChildren()) {
             minBin = min(minBin, search(child, box));
         }
 

@@ -50,6 +50,7 @@ public class Loader {
                         break;
                     } else {
                         box.rotate(currRotation);
+                        System.out.println("rotation");
                     }
                 }
                 System.out.println("RESULT: " + "X: " + box.getX() + " Y: " + box.getY() + " Z: " + box.getZ() +
