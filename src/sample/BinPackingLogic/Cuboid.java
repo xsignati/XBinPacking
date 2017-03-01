@@ -71,7 +71,7 @@ public abstract class Cuboid extends Group {
         this.y.set(y);
         this.z.set(z);
     }
-    public void setDimensions(double length, double width, double height){
+    public void setSize(double length, double width, double height){
         this.length.set(length);
         this.width.set(width);
         this.height.set(height);

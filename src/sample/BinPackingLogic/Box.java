@@ -1,6 +1,7 @@
 package sample.BinPackingLogic;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
@@ -17,6 +18,7 @@ public class Box extends Cuboid implements Comparable<Box>{
     public final double ORIGINAL_LENGTH;
     public final double ORIGINAL_WIDTH;
     public final double ORIGINAL_HEIGHT;
+
     //Appearance
     private final PhongMaterial material = new PhongMaterial();
     private javafx.scene.shape.Box box;
@@ -26,35 +28,38 @@ public class Box extends Cuboid implements Comparable<Box>{
     private int binId;
     private int weight;
 
-    private double scale;
-
-    public Box(double length, double width, double height , double scale){
-        this(length, width, height, scale, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
+    public Box(double length, double width, double height){
+        this(length, width, height, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
     }
 
-    public Box(double length, double width, double height , double scale, Color color){
-        super(-1, -1, -1, length, width, height);
+    public Box(double length, double width, double height, Color color){
+        super(0, 0, 0, length, width, height);
         //measurements
         this.ORIGINAL_LENGTH = length;
         this.ORIGINAL_WIDTH = width;
         this.ORIGINAL_HEIGHT = height;
 
         //appearance
-        this.scale = scale;
-        box = new javafx.scene.shape.Box(scale * length, scale * width, scale * height);
+        box = new javafx.scene.shape.Box(length, width, height);
         material.setDiffuseColor(color);
         material.setSpecularColor(Color.DARKGREY);
         box.setMaterial(material);
         getChildren().add(box);
     }
 
-    public void setBoxes(){
-        box.setWidth(scale * getLength());
-        box.setHeight(scale * getWidth());
-        box.setDepth(scale * getHeight());
+    public void scale(double scale){
+        box.setWidth(getLength() * scale);
+        box.setHeight(getWidth() * scale);
+        box.setDepth(getHeight() * scale);
         box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
         box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
         box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
+    }
+
+    public void setBoxes(){
+        box.setTranslateX(getX()  + SHIFT_RATIO * getLength());
+        box.setTranslateY(getY()  + SHIFT_RATIO * getWidth());
+        box.setTranslateZ(getZ()  + SHIFT_RATIO * getHeight());
     }
 
     @Override
@@ -67,25 +72,25 @@ public class Box extends Cuboid implements Comparable<Box>{
     public void rotate(Rotations rotation) {
         switch (rotation) {
             case WLH:
-                setDimensions(ORIGINAL_WIDTH, ORIGINAL_LENGTH, ORIGINAL_HEIGHT);
+                setSize(ORIGINAL_WIDTH, ORIGINAL_LENGTH, ORIGINAL_HEIGHT);
                 break;
             case LHW:
-                setDimensions(ORIGINAL_LENGTH, ORIGINAL_HEIGHT, ORIGINAL_WIDTH);
+                setSize(ORIGINAL_LENGTH, ORIGINAL_HEIGHT, ORIGINAL_WIDTH);
                 break;
             case HLW:
-                setDimensions(ORIGINAL_HEIGHT, ORIGINAL_LENGTH, ORIGINAL_WIDTH);
+                setSize(ORIGINAL_HEIGHT, ORIGINAL_LENGTH, ORIGINAL_WIDTH);
                 break;
             case WHL:
-                setDimensions(ORIGINAL_WIDTH, ORIGINAL_HEIGHT, ORIGINAL_LENGTH);
+                setSize(ORIGINAL_WIDTH, ORIGINAL_HEIGHT, ORIGINAL_LENGTH);
                 break;
             case HWL:
-                setDimensions(ORIGINAL_HEIGHT, ORIGINAL_WIDTH, ORIGINAL_LENGTH);
+                setSize(ORIGINAL_HEIGHT, ORIGINAL_WIDTH, ORIGINAL_LENGTH);
                 break;
             case LWH:
-                setDimensions(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
+                setSize(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
                 break;
             default:
-                setDimensions(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
+                setSize(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
                 break;
         }
     }
@@ -118,8 +123,6 @@ public class Box extends Cuboid implements Comparable<Box>{
 
     public void setLength(double length) {
         this.length.set(length);
-        box.setWidth(scale * length);
-        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * length));
     }
 
     public double getWidth() {
@@ -132,9 +135,6 @@ public class Box extends Cuboid implements Comparable<Box>{
 
     public void setWidth(double width) {
         this.width.set(width);
-        box.setHeight(scale * width);
-        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * width));
-
     }
 
     public double getHeight() {
@@ -147,8 +147,45 @@ public class Box extends Cuboid implements Comparable<Box>{
 
     public void setHeight(double height) {
         this.height.set(height);
-        box.setDepth(scale * height);
-        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * height));
     }
 
+    public double getX() {
+        return x.get();
+    }
+
+    public SimpleDoubleProperty xProperty() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x.set(x);
+    }
+
+    public double getY() {
+        return y.get();
+    }
+
+    public SimpleDoubleProperty yProperty() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y.set(y);
+    }
+
+    public double getZ() {
+        return z.get();
+    }
+
+    public SimpleDoubleProperty zProperty() {
+        return z;
+    }
+
+    public void setZ(double z) {
+        this.z.set(z);
+    }
+
+    public double getVolume() {
+        return volume;
+    }
 }

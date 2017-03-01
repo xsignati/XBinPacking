@@ -1,6 +1,7 @@
 package sample.BinPackingLogic;
 
 import javafx.collections.ObservableList;
+import sample.GUI.BinView.InputData;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,37 +11,20 @@ import java.util.List;
  * Created by Xsignati on 24.01.2017.
  */
 public class Loader {
-    private List<Bin> binTrees;
-    private ObservableList<Box> boxes;
 
-
-    public Loader() {
-//        boxes = new LinkedList<>();
-          binTrees = new LinkedList<>();
-//
-//
-//        Collections.sort(boxes);
-//        for (Box b : boxes) {
-//            System.out.println(b.getVolume());
-//        }
-    }
-
-
-    public boolean run(SearchStrategy packingStrategy, ObservableList<Box> boxes) {
-        this.boxes = boxes;
+    public boolean run(InputData d) {
         /**
          * Main Loader loop. Try to fit to the container all boxes.
          */
         boolean continueLoop = true;
         final int ROTATIONS_NUM = Box.Rotations.values().length;
-        List<Box> remainingBoxes = new LinkedList<>(boxes);
-        binTrees.add(new Bin(500, 500, 500));
+        List<Box> remainingBoxes = new LinkedList<>(d.getBoxList());
         while (continueLoop) {
-            Bin currRoot = binTrees.get(binTrees.size()-1);
+
             for (Iterator<Box> iterator = remainingBoxes.iterator(); iterator.hasNext();) {
                 Box box = iterator.next();
                 for (int i = 0; i < ROTATIONS_NUM; i++) {
-                    Bin foundNode = currRoot.search(packingStrategy, box);
+                    Bin foundNode = d.getBin().search(d.getPackingStrategy(), box);
                     Box.Rotations currRotation = Box.Rotations.values()[i];
                     if (foundNode != null) {
                         foundNode.reserveBin(box);
@@ -59,10 +43,8 @@ public class Loader {
             }
             if(remainingBoxes.isEmpty())
                 continueLoop = false;
-            else{
-                binTrees.add(new Bin(100, 100, 100));
-            }
-
+            else
+                d.setBin(new Bin(500,500,500));
         }
         return true;
     }

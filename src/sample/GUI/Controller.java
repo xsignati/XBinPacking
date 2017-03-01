@@ -15,14 +15,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import sample.GUI.BinView.BinModel;
-import sample.GUI.BinView.BoxModel;
 import sample.GUI.BinView.CameraModel;
 import sample.BinPackingLogic.*;
+import sample.GUI.BinView.InputData;
 
 import java.util.Collections;
-import java.util.concurrent.SynchronousQueue;
 
 public class Controller {
     /**
@@ -102,7 +100,6 @@ public class Controller {
             mousePosY = me.getSceneY();
             mouseOldX = me.getSceneX();
             mouseOldY = me.getSceneY();
-
         }
     };
 
@@ -151,18 +148,13 @@ public class Controller {
         public Scale(double s1, double s2, double s3){
             scale = getMin(s1, s2, s3);
         }
-//        private double subSceneScale(){
-//            return getMin(binScene.getWidth()/getBinLength(), binScene.getHeight()/getBinHeight(), binScene.getWidth()/getBinWidth());
-//        }
         private double getMin(double r1, double r2, double r3) {
             return Math.min(r1, Math.min(r2, r3));
         }
-
         public double getScale() {
             return scale;
         }
     }
-
 
 
 
@@ -173,11 +165,12 @@ public class Controller {
 
         settings();
 
-        boxList.add(new Box(200,300,400, scale.getScale()));
-        boxList.add(new Box(20,30,40, scale.getScale()));
+        boxList.add(new Box(200,300,400));
+        boxList.add(new Box(100,200,300));
 
-        BinModel binModel = new BinModel(getBinLength(),getBinWidth(),getBinHeight(),scale.getScale());
-        bin.getChildren().addAll(binModel);
+        //BinModel binModel = new BinModel(getBinLength(),getBinWidth(),getBinHeight());
+        //binModel.scale(scale.getScale());
+        //bin.getChildren().addAll(binModel);
 
        // boxsetter();
 
@@ -223,8 +216,6 @@ public class Controller {
     private TextField addWidth;
     @FXML
     private TextField addHeight;
-
-
     private ObservableList<Box> boxList = FXCollections.observableArrayList();
 
     private void boxsetter(){
@@ -256,11 +247,11 @@ public class Controller {
 
         //Add box table event handlers
         lengthCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        lengthCol.setOnEditCommit(lengthEditEvent);
+        lengthCol.setOnEditCommit(tableEditEvent);
         widthCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        widthCol.setOnEditCommit(widthEditEvent);
+        widthCol.setOnEditCommit(tableEditEvent);
         heightCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        heightCol.setOnEditCommit(heightEditEvent);
+        heightCol.setOnEditCommit(tableEditEvent);
 
         //Bind add box controls size properties to their wrapper
         addLength.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
@@ -281,8 +272,7 @@ public class Controller {
             boxList.add(new Box(
                     Double.parseDouble(addLength.getText()),
                     Double.parseDouble(addWidth.getText()),
-                    Double.parseDouble(addHeight.getText()),
-                    scale.getScale()
+                    Double.parseDouble(addHeight.getText())
             ));
             addLength.clear();
             addWidth.clear();
@@ -292,34 +282,24 @@ public class Controller {
         }
     };
 
-    EventHandler<TableColumn.CellEditEvent<Box, Double>> lengthEditEvent =
+    EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent =
             new EventHandler<TableColumn.CellEditEvent<Box, Double>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Box, Double> ce) {
-                (ce.getTableView().getItems().get(
-                 ce.getTablePosition().getRow())
-                ).setLength(ce.getNewValue());
+                Box be = (ce.getTableView().getItems().get(ce.getTablePosition().getRow()));
+
+                if(ce.getSource() == lengthCol) {
+                    be.setLength(ce.getNewValue());
+                }
+                else if(ce.getSource() == widthCol){
+                    be.setWidth(ce.getNewValue());
+                }
+                else{
+                    be.setHeight(ce.getNewValue());
+                }
+                be.scale(scale.getScale());
             }
         };
-    EventHandler<TableColumn.CellEditEvent<Box, Double>> widthEditEvent =
-            new EventHandler<TableColumn.CellEditEvent<Box, Double>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Box, Double> ce) {
-                    System.out.println(ce.getTableView().getItems());
-                    (ce.getTableView().getItems().get(
-                     ce.getTablePosition().getRow())
-                    ).setWidth(ce.getNewValue());
-                }
-            };
-    EventHandler<TableColumn.CellEditEvent<Box, Double>> heightEditEvent =
-            new EventHandler<TableColumn.CellEditEvent<Box, Double>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<Box, Double> ce) {
-                    (ce.getTableView().getItems().get(
-                     ce.getTablePosition().getRow())
-                    ).setHeight(ce.getNewValue());
-                }
-            };
 
     /**
      * Bin size control
@@ -350,9 +330,11 @@ public class Controller {
     private ComboBox binSelector;
     @FXML
     private HBox selectorWrapper;
+    private ObservableList<Bin> binIdList = FXCollections.observableArrayList();
 
     private void binSelectInit(){
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
+        binSelector.setItems(binIdList);
     }
 
     /**
@@ -370,10 +352,13 @@ public class Controller {
     /**
      * Draw Boxes
      */
-    private void draw(){
+    private void draw(InputData d){
         for(Box box: boxList){
             boxes.getChildren().add(box);
         }
+
+        d.getBin().scale(scale.getScale());
+        bin.getChildren().addAll(d.getBin());
     }
 
     /**
@@ -381,6 +366,7 @@ public class Controller {
      */
     @FXML
     private void startProcess(){
+        InputData inputData = new InputData(new Bin(500,500,500), new BestFit(), boxList);
         for (Box box: boxList){
             System.out.println(box.getHeight() + " " + box.getWidth() + " "  + box.getLength());
         }
@@ -389,15 +375,18 @@ public class Controller {
 
 
         Collections.sort(boxList);
-        loader.run(new BestFit(), boxList);
+        loader.run(inputData);
 
         for (Box box: boxList){
             box.setBoxes();
+            box.scale(scale.getScale());
         }
 
         boxes.getChildren().clear();
-        draw();
+        bin.getChildren().clear();
+        draw(inputData);
     }
+
 
 }
 

@@ -94,14 +94,6 @@
         <HBox fx:id="selectorWrapper" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="15">
             <Label text="Loaded Bins: "></Label>
             <ComboBox fx:id="binSelector" visibleRowCount="5" >
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="NVT" />
-                        <String fx:value="Bezig" />
-                        <String fx:value="Positief" />
-                        <String fx:value="Negatief" />
-                    </FXCollections>
-                </items>
             </ComboBox>
         </HBox>
 
