@@ -9,29 +9,33 @@ import sample.BinPackingLogic.SearchStrategy;
  * Created by Xsignati on 01.03.2017.
  */
 public class InputData{
-    private Bin bin;
+    private ObservableList<Bin> binList;
     private SearchStrategy packingStrategy;
     private ObservableList<Box> boxList;
+    private double binLength;
+    private double binWidth;
+    private double binHeight;
 
-    public InputData(Bin bin, SearchStrategy packingStrategy, ObservableList<Box> boxList){
-        this.bin = bin;
+    public InputData(double binLength, double binWidth, double binHeight, ObservableList<Bin> binList, SearchStrategy packingStrategy, ObservableList<Box> boxList){
+        this.binLength = binLength;
+        this.binWidth = binWidth;
+        this.binHeight = binHeight;
+        this.binList = binList;
         this.packingStrategy = packingStrategy;
         this.boxList = boxList;
     }
 
-    public Bin getBin() {
-        return bin;
+    public ObservableList<Bin> getBinList() {
+        return binList;
     }
-
-    public void setBin(Bin bin) {
-        this.bin = bin;
-    }
-
     public SearchStrategy getPackingStrategy() {
         return packingStrategy;
     }
-
     public ObservableList<Box> getBoxList() {
         return boxList;
     }
+    public double getBinLength() {return binLength;}
+    public double getBinWidth() {return binWidth;}
+    public double getBinHeight() {return binHeight;}
+
 }

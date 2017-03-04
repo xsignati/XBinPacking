@@ -18,6 +18,7 @@ public class Box extends Cuboid implements Comparable<Box>{
     public final double ORIGINAL_LENGTH;
     public final double ORIGINAL_WIDTH;
     public final double ORIGINAL_HEIGHT;
+    public static final int ROTATIONS_NUM = Box.Rotations.values().length;
 
     //Appearance
     private final PhongMaterial material = new PhongMaterial();
@@ -25,7 +26,6 @@ public class Box extends Cuboid implements Comparable<Box>{
     private final static double SHIFT_RATIO = 0.5;
 
     //Id and others
-    private int binId;
     private int weight;
 
     public Box(double length, double width, double height){
@@ -96,14 +96,6 @@ public class Box extends Cuboid implements Comparable<Box>{
     }
 
     //Setters and getters
-
-    public double getBinId() {
-        return binId;
-    }
-
-    public void setBinId(int binTreeNumber) {
-        this.binId = binTreeNumber;
-    }
 
     public double getWeight() {
         return weight;

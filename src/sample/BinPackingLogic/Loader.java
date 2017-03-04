@@ -12,41 +12,39 @@ import java.util.List;
  */
 public class Loader {
 
-    public boolean run(InputData d) {
+    public void run(InputData d) {
         /**
          * Main Loader loop. Try to fit to the container all boxes.
          */
-        boolean continueLoop = true;
-        final int ROTATIONS_NUM = Box.Rotations.values().length;
-        List<Box> remainingBoxes = new LinkedList<>(d.getBoxList());
-        while (continueLoop) {
 
-            for (Iterator<Box> iterator = remainingBoxes.iterator(); iterator.hasNext();) {
-                Box box = iterator.next();
-                for (int i = 0; i < ROTATIONS_NUM; i++) {
-                    Bin foundNode = d.getBin().search(d.getPackingStrategy(), box);
-                    Box.Rotations currRotation = Box.Rotations.values()[i];
+        d.getPackingStrategy().prepareInput(d.getBoxList());
+        d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
+
+        for(Box box: d.getBoxList()) {
+            int binListSize = d.getBinList().size();
+
+            BinListLoop:
+            for(int i = 0 ; i <= binListSize; i++){
+                for (int j = 0; j < Box.ROTATIONS_NUM; j++) {
+                    Bin foundNode = d.getBinList().get(i).search(d.getPackingStrategy(), box);
+                    Box.Rotations currRotation = Box.Rotations.values()[j];
                     if (foundNode != null) {
                         foundNode.reserveBin(box);
                         foundNode.createChildren(box);
                         foundNode.removeAltChildren();
-                        iterator.remove();
-                        break;
+                        break BinListLoop;
                     } else {
                         box.rotate(currRotation);
                         System.out.println("rotation");
                     }
                 }
-                System.out.println("RESULT: " + "X: " + box.getX() + " Y: " + box.getY() + " Z: " + box.getZ() +
-                        "  length: " + box.getLength() + "width: " + box.getWidth() + "height: " + box.getHeight() + "containerID: " + box.getBinId());
 
+                if (i == binListSize - 1)
+                    d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
             }
-            if(remainingBoxes.isEmpty())
-                continueLoop = false;
-            else
-                d.setBin(new Bin(500,500,500));
+            System.out.println("RESULT: " + "X: " + box.getX() + " Y: " + box.getY() + " Z: " + box.getZ() +
+                    "  length: " + box.getLength() + "width: " + box.getWidth() + "height: " + box.getHeight() + "containerID: " + box.getCid());
         }
-        return true;
     }
 
     public static void main(String argv[]) {

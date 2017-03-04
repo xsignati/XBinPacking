@@ -1,5 +1,9 @@
 package sample.BinPackingLogic;
 
+import javafx.collections.ObservableList;
+
+import java.util.Collections;
+
 /**
  * Created by Xsignati on 24.01.2017.
  */
@@ -15,5 +19,10 @@ public class FirstFit extends SearchStrategy{
         else if (boxFitsToBin(bin, box))
             return bin;
         return null;
+    }
+
+    @Override
+    protected void prepareInput(ObservableList<Box> boxList){
+        Collections.sort(boxList);
     }
 }

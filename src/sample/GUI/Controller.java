@@ -1,5 +1,7 @@
 package sample.GUI;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,13 +16,16 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
-import sample.GUI.BinView.BinModel;
 import sample.GUI.BinView.CameraModel;
 import sample.BinPackingLogic.*;
 import sample.GUI.BinView.InputData;
 
-import java.util.Collections;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.Locale;
 
 public class Controller {
     /**
@@ -35,29 +40,14 @@ public class Controller {
     @FXML
     private CameraModel cameraModel;
     @FXML
-    private Group bin;
+    private Group bins;
     @FXML
     private Group boxes;
     @FXML
     private SceneAntialiasing ssaa = SceneAntialiasing.BALANCED;
 
-    public Group getBin() {
-        return bin;
-    }
 
     public CameraModel getCameraModel() {return cameraModel;}
-
-    public Text getTitle() {
-        return title;
-    }
-
-    public SubScene getBinScene() {
-        return binScene;
-    }
-
-    public Pane getBsPane() {return bsPane; }
-
-    SubScene getDrawArea() { return binScene; }
 
     @FXML
     public void initialize(){
@@ -130,67 +120,10 @@ public class Controller {
         }
     };
 
-    /**
-     * Post settings
-     */
-   // private double scale;
-    private void settings(){
-        getCameraModel().setDistance(binScene.getWidth()*4);
-        getCameraModel().reset();
-        scale = new Scale(binScene.getWidth()/getBinLength(), binScene.getHeight()/getBinHeight(), binScene.getWidth()/getBinWidth());
-        //scale = subSceneScale();
-
-    }
-
-    private Scale scale;
-    class Scale{
-        private double scale;
-        public Scale(double s1, double s2, double s3){
-            scale = getMin(s1, s2, s3);
-        }
-        private double getMin(double r1, double r2, double r3) {
-            return Math.min(r1, Math.min(r2, r3));
-        }
-        public double getScale() {
-            return scale;
-        }
-    }
-
 
 
     /**
-     * *******************************************************
-     */
-    public void test() {
-
-        settings();
-
-        boxList.add(new Box(200,300,400));
-        boxList.add(new Box(100,200,300));
-
-        //BinModel binModel = new BinModel(getBinLength(),getBinWidth(),getBinHeight());
-        //binModel.scale(scale.getScale());
-        //bin.getChildren().addAll(binModel);
-
-       // boxsetter();
-
-    }
-
-    private int getBinLength(){
-        return 500;
-    }
-    private int getBinWidth(){ return 500; }
-    private int getBinHeight(){ return 500;
-    }
-
-
-
-
-    /**
-     * *******************************************************
-     */
-    /**
-    * Box list
+    * Box table
     */
     @FXML
     private TableView<Box> boxListViewer;
@@ -259,10 +192,13 @@ public class Controller {
         addHeight.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
         addBox.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
 
+        addLength.setTextFormatter(getDigitValidator());
+        addWidth.setTextFormatter(getDigitValidator());
+        addHeight.setTextFormatter(getDigitValidator());
         //Add box listener
         addBox.setOnAction(addBoxEvent);
 
-        //Add Box objects to the box table observable list
+        //Add Box objects to the table observable list
         boxListViewer.setItems(boxList);
     }
 
@@ -277,8 +213,6 @@ public class Controller {
             addLength.clear();
             addWidth.clear();
             addHeight.clear();
-
-
         }
     };
 
@@ -321,6 +255,24 @@ public class Controller {
         setLength.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
         setWidth.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
         setHeight.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
+
+        setLength.setTextFormatter(getDigitValidator());
+        setWidth.setTextFormatter(getDigitValidator());
+        setHeight.setTextFormatter(getDigitValidator());
+    }
+
+    /**
+     * Packing algorithm
+     */
+    @FXML
+    private ToggleGroup algorithmButtons;
+    @FXML
+    private RadioButton algBtn1;
+    @FXML
+    private RadioButton algBtn2;
+
+    private SearchStrategy getPackingStrategy(String alg){
+        return alg.equals("BestFit") ? new BestFit() : new FirstFit();
     }
 
     /**
@@ -330,11 +282,69 @@ public class Controller {
     private ComboBox binSelector;
     @FXML
     private HBox selectorWrapper;
-    private ObservableList<Bin> binIdList = FXCollections.observableArrayList();
+    private ObservableList<Bin> binList = FXCollections.observableArrayList();
+
+    private Callback<ListView<Bin>, ListCell<Bin>> cf = new Callback<ListView<Bin>, ListCell<Bin>>() {
+        @Override
+        public ListCell<Bin> call(ListView<Bin> list) {
+            return new ListCell<Bin>(){
+                @Override
+                public void updateItem(Bin item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+                        setText(null);
+                    } else {
+                        setText("BIN " + Integer.toString(item.getCid()));
+                    }
+                }
+            };
+        }
+    };
 
     private void binSelectInit(){
+        binSelector.setButtonCell(cf.call(null));
+        binSelector.setCellFactory(cf);
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
-        binSelector.setItems(binIdList);
+        binSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Bin>() {
+                public void changed(ObservableValue<? extends Bin> ov, Bin old_val, Bin new_val) {
+                    if(new_val != null)
+                        drawScene(new_val.getCid());
+                }
+         });
+        binSelector.setItems(binList);
+    }
+
+    /**
+     * Display bin scene
+     */
+    // private double scale;
+    private void prepareScene(double binLength, double binWidth, double binHeight){
+        getCameraModel().setDistance(binScene.getWidth()*4);
+        getCameraModel().reset();
+        scale = new Scale(binScene.getWidth()/binLength, binScene.getHeight()/binWidth, binScene.getWidth()/binHeight);
+
+        for (Box box: boxList){
+            box.setBoxes();
+            box.scale(scale.getScale());
+        }
+
+        for (Bin bin: binList) {
+            bin.scale(scale.getScale());
+        }
+    }
+
+    private Scale scale;
+    class Scale{
+        private double scale;
+        public Scale(double s1, double s2, double s3){
+            scale = getMin(s1, s2, s3);
+        }
+        private double getMin(double r1, double r2, double r3) {
+            return Math.min(r1, Math.min(r2, r3));
+        }
+        public double getScale() {
+            return scale;
+        }
     }
 
     /**
@@ -349,43 +359,122 @@ public class Controller {
         processBtn.prefWidthProperty().bind(processWrapper.widthProperty().multiply(0.7));
     }
 
+    @FXML
+    private void startProcess(){
+        if(!validate()){
+            System.err.println("ERROR");
+            return;
+        }
+
+        double binLength = Double.parseDouble(setLength.getCharacters().toString());
+        double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
+        double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
+        RadioButton selectedBtn = (RadioButton)algorithmButtons.getSelectedToggle();
+        SearchStrategy packingAlg = getPackingStrategy(selectedBtn.getText());
+
+        clean();
+
+        InputData inputData = new InputData(binLength, binWidth, binHeight, binList, packingAlg, boxList);
+        Loader loader = new Loader();
+
+        loader.run(inputData);
+
+        prepareScene(binLength, binWidth, binHeight);
+
+        drawScene(0);
+
+    }
+
+    /**
+     * clean
+     */
+    private void clean(){
+        binList.clear();
+        Bin.setRootBinCounter(0);
+    }
+
     /**
      * Draw Boxes
      */
-    private void draw(InputData d){
+    private void drawScene(int binId){
+        boxes.getChildren().clear();
+        bins.getChildren().clear();
+
         for(Box box: boxList){
-            boxes.getChildren().add(box);
+            if(box.getCid() == binId)
+                boxes.getChildren().add(box);
         }
 
-        d.getBin().scale(scale.getScale());
-        bin.getChildren().addAll(d.getBin());
+         bins.getChildren().add(binList.get(binId));
+
     }
 
     /**
-     * Process
+     * Validator
      */
-    @FXML
-    private void startProcess(){
-        InputData inputData = new InputData(new Bin(500,500,500), new BestFit(), boxList);
-        for (Box box: boxList){
-            System.out.println(box.getHeight() + " " + box.getWidth() + " "  + box.getLength());
-        }
 
-        Loader loader = new Loader();
+    private TextFormatter getDigitValidator(){
+        Locale locale = new Locale("en", "usa");
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
+        DecimalFormat digitOnly = (DecimalFormat)numberFormat;
+        digitOnly.applyPattern( "#.0" );
 
+        return new TextFormatter<>(c ->
+        {
+            if ( c.getControlNewText().isEmpty() ) {
+                return c;
+            }
 
-        Collections.sort(boxList);
-        loader.run(inputData);
+            ParsePosition parsePosition = new ParsePosition( 0 );
+            Object object = digitOnly.parse( c.getControlNewText(), parsePosition );
 
-        for (Box box: boxList){
-            box.setBoxes();
-            box.scale(scale.getScale());
-        }
-
-        boxes.getChildren().clear();
-        bin.getChildren().clear();
-        draw(inputData);
+            if ( object == null || parsePosition.getIndex() < c.getControlNewText().length() ){
+                return null;
+            }
+            else {
+                return c;
+            }
+        });
     }
+
+
+    public boolean validate(){
+        boolean status = true;
+        if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0){
+            status = false;
+        }
+        if(setWidth.getCharacters().length() > 10 || setLength.getCharacters().length() == 10 || setHeight.getCharacters().length() > 10){
+            status = false;
+        }
+        if(boxList.size() == 0)
+            status = false;
+        return status;
+    }
+
+
+    /**
+     * *******************************************************
+     */
+    public void test() {
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+        boxList.add(new Box(600,600,330));
+
+    }
+
+    /**
+     * *******************************************************
+     */
 
 
 }

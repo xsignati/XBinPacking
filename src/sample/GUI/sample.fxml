@@ -2,27 +2,19 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.SubScene?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.Group?>
 <?import sample.GUI.BinView.*?>
-
-<?import javafx.scene.control.ListView?>
-<?import javafx.collections.ObservableList?>
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 
 <GridPane fx:controller="sample.GUI.Controller" fx:id = "mainLayout"
@@ -50,7 +42,7 @@
             <root>
                 <Group fx:id="binsView">
                     <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
-                    <Group fx:id="bin"/>
+                    <Group fx:id="bins"/>
                     <Group fx:id="boxes"/>
                 </Group>
             </root>
@@ -86,15 +78,14 @@
                 <ToggleGroup fx:id="algorithmButtons"/>
             </fx:define>
             <Label text="Packing algorithm:" textAlignment="CENTER" />
-            <RadioButton selected="true" text="BestFit (default)" toggleGroup="$algorithmButtons"> </RadioButton>
-            <RadioButton text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
-
+            <RadioButton fx:id="algBtn1" selected="true" text="BestFit" toggleGroup="$algorithmButtons"> </RadioButton>
+            <RadioButton fx:id="algBtn2" text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
         </HBox>
 
         <HBox fx:id="selectorWrapper" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="15">
             <Label text="Loaded Bins: "></Label>
             <ComboBox fx:id="binSelector" visibleRowCount="5" >
-            </ComboBox>
+            </ComboBox >
         </HBox>
 
         <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3"/>

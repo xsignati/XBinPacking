@@ -14,8 +14,7 @@ public class Bin extends Cuboid {
     private BinState binState = BinState.EMPTY;
     public enum BinType {ROOT,A,B,C,D}
     private BinType binType;
-    private static int rootBinCounter = 0; //< Each box gets this id. The id indicates the bin assigned to box.
-    private int id;
+    private static int rootBinCounter = 0; //< Each box gets this cid. The cid indicates the bin assigned to box.
     private Bin parent;
     private List<Bin> children;
 
@@ -40,7 +39,7 @@ public class Bin extends Cuboid {
         material.setSpecularColor(Color.DARKGREY);
         material.setDiffuseColor(color);
         for(int i = 0 ; i < EDGES_SHIFTS.length; i++) {
-            edges[i] = new javafx.scene.shape.Box(EDGES_SIZES[i][0] * (length ) + thickness, EDGES_SIZES[i][1] * (width ) + thickness, EDGES_SIZES[i][2] * (height ) + thickness);
+            edges[i] = new javafx.scene.shape.Box(EDGES_SIZES[i][0] * length  + thickness, EDGES_SIZES[i][1] * (width ) + thickness, EDGES_SIZES[i][2] * (height ) + thickness);
             edges[i].setTranslateX(EDGES_POSITIONS[i][0] * length  + SHIFT_RATIO * edges[i].getWidth() - EDGES_SHIFTS[i][0] * thickness);
             edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width  + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
             edges[i].setTranslateZ(EDGES_POSITIONS[i][2] * height + SHIFT_RATIO * edges[i].getDepth() - EDGES_SHIFTS[i][2] * thickness);
@@ -53,13 +52,13 @@ public class Bin extends Cuboid {
     private Bin(double x, double y, double z, double length, double width, double height, BinType binType) {
         super(x, y, z, length, width, height);
         this.binType = binType;
-        id = rootBinCounter;
+        setCid(rootBinCounter);
         children = new LinkedList<Bin>();
     }
 
     private void addChild(Bin bin) {
         bin.parent = this;
-        bin.id = id;
+        bin.setCid(getCid());
         children.add(bin);
     }
 
@@ -96,7 +95,7 @@ public class Bin extends Cuboid {
 
     public void reserveBin(Box box){
         box.setCoordinates(getX(), getY(), getZ());
-        box.setBinId(id);
+        box.setCid(getCid());
         setBinState(BinState.FULL);
     }
 
@@ -131,5 +130,7 @@ public class Bin extends Cuboid {
         return binState;
     }
 
-    
+    public static void setRootBinCounter(int rootBinCounter) {
+        Bin.rootBinCounter = rootBinCounter;
+    }
 }

@@ -1,5 +1,9 @@
 package sample.BinPackingLogic;
 
+import javafx.collections.ObservableList;
+
+import java.util.Collections;
+
 /**
  * Created by Xsignati on 24.01.2017.
  */
@@ -41,6 +45,11 @@ public class AreaBestFit extends SearchStrategy {
             }
         }
         return minBin;
+    }
+
+    @Override
+    protected void prepareInput(ObservableList<Box> boxList){
+        Collections.sort(boxList);
     }
 
 }

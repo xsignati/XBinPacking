@@ -1,6 +1,7 @@
 package sample.BinPackingLogic;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 
 /**
@@ -24,6 +25,7 @@ public abstract class Cuboid extends Group {
     protected SimpleDoubleProperty y = new SimpleDoubleProperty();
     protected SimpleDoubleProperty z = new SimpleDoubleProperty();
     protected double volume;
+    protected SimpleIntegerProperty cid = new SimpleIntegerProperty();
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x.set(x);
@@ -39,7 +41,6 @@ public abstract class Cuboid extends Group {
         return length.get();
     }
 
-
     public double getWidth() {
         return width.get();
     }
@@ -47,7 +48,6 @@ public abstract class Cuboid extends Group {
     public double getHeight() {
         return height.get();
     }
-
 
     public double getX() {
         return x.get();
@@ -60,7 +60,6 @@ public abstract class Cuboid extends Group {
     public double getZ() {
         return z.get();
     }
-
 
     public double getVolume() {
         return volume;
@@ -77,4 +76,15 @@ public abstract class Cuboid extends Group {
         this.height.set(height);
     }
 
+    public int getCid() {
+        return cid.get();
+    }
+
+    public SimpleIntegerProperty cidProperty() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid.set(cid);
+    }
 }
