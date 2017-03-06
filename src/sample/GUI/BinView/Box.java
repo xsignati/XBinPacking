@@ -1,7 +1,6 @@
-package sample.BinPackingLogic;
+package sample.GUI.BinView;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 

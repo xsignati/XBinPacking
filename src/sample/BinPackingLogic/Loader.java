@@ -1,11 +1,8 @@
 package sample.BinPackingLogic;
 
-import javafx.collections.ObservableList;
+import sample.GUI.BinView.Bin;
+import sample.GUI.BinView.Box;
 import sample.GUI.BinView.InputData;
-
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -50,9 +47,9 @@ public class Loader {
     public static void main(String argv[]) {
         System.out.println("main");
         Loader loader = new Loader();
-        SearchStrategy firstFit = new FirstFit();
-        SearchStrategy bestFit = new BestFit();
-        SearchStrategy areaBestFit = new AreaBestFit();
+        PackingStrategy firstFit = new FirstFit();
+        PackingStrategy bestFit = new BestFit();
+        PackingStrategy areaBestFit = new AreaBestFit();
         //loader.run(bestFit);
     }
 }

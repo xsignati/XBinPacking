@@ -1,13 +1,15 @@
 package sample.BinPackingLogic;
 
 import javafx.collections.ObservableList;
+import sample.GUI.BinView.Bin;
+import sample.GUI.BinView.Box;
 
 import java.util.Collections;
 
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class BestFit extends SearchStrategy {
+public class BestFit extends PackingStrategy {
     @Override
     public Bin search(Bin bin, Box box) {
         Bin minBin;

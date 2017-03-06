@@ -1,22 +1,20 @@
 package sample.GUI.BinView;
 
 import javafx.collections.ObservableList;
-import sample.BinPackingLogic.Bin;
-import sample.BinPackingLogic.Box;
-import sample.BinPackingLogic.SearchStrategy;
+import sample.BinPackingLogic.PackingStrategy;
 
 /**
  * Created by Xsignati on 01.03.2017.
  */
 public class InputData{
     private ObservableList<Bin> binList;
-    private SearchStrategy packingStrategy;
+    private PackingStrategy packingStrategy;
     private ObservableList<Box> boxList;
     private double binLength;
     private double binWidth;
     private double binHeight;
 
-    public InputData(double binLength, double binWidth, double binHeight, ObservableList<Bin> binList, SearchStrategy packingStrategy, ObservableList<Box> boxList){
+    public InputData(double binLength, double binWidth, double binHeight, ObservableList<Bin> binList, PackingStrategy packingStrategy, ObservableList<Box> boxList){
         this.binLength = binLength;
         this.binWidth = binWidth;
         this.binHeight = binHeight;
@@ -28,7 +26,7 @@ public class InputData{
     public ObservableList<Bin> getBinList() {
         return binList;
     }
-    public SearchStrategy getPackingStrategy() {
+    public PackingStrategy getPackingStrategy() {
         return packingStrategy;
     }
     public ObservableList<Box> getBoxList() {

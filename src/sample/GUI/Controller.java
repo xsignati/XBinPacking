@@ -18,6 +18,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
+import sample.GUI.BinView.Bin;
+import sample.GUI.BinView.Box;
 import sample.GUI.BinView.CameraModel;
 import sample.BinPackingLogic.*;
 import sample.GUI.BinView.InputData;
@@ -83,7 +85,7 @@ public class Controller {
     private double scrollPosZ;
 
     @FXML
-    EventHandler<MouseEvent> pressEvent = new EventHandler<MouseEvent>(){
+    private EventHandler<MouseEvent> pressEvent = new EventHandler<MouseEvent>(){
         @Override
         public void handle(MouseEvent me) {
             mousePosX = me.getSceneX();
@@ -94,7 +96,7 @@ public class Controller {
     };
 
     @FXML
-    EventHandler<MouseEvent> dragEvent = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> dragEvent = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent me) {
             mouseOldX = mousePosX;
@@ -111,7 +113,7 @@ public class Controller {
         }
     };
 
-    EventHandler<ScrollEvent> scrollEvent = new EventHandler<ScrollEvent>(){
+    private EventHandler<ScrollEvent> scrollEvent = new EventHandler<ScrollEvent>(){
         @Override
         public void handle(ScrollEvent se) {
             scrollDelta = se.getDeltaY() > 0 ?  scrollSpeed : -scrollSpeed;
@@ -203,7 +205,7 @@ public class Controller {
     }
 
     //Add box event listener
-    EventHandler<ActionEvent> addBoxEvent = new EventHandler<ActionEvent>() {
+    private EventHandler<ActionEvent> addBoxEvent = new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
             boxList.add(new Box(
                     Double.parseDouble(addLength.getText()),
@@ -216,7 +218,7 @@ public class Controller {
         }
     };
 
-    EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent =
+    private EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent =
             new EventHandler<TableColumn.CellEditEvent<Box, Double>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Box, Double> ce) {
@@ -262,7 +264,7 @@ public class Controller {
     }
 
     /**
-     * Packing algorithm
+     * Packing algorithm controls
      */
     @FXML
     private ToggleGroup algorithmButtons;
@@ -271,9 +273,6 @@ public class Controller {
     @FXML
     private RadioButton algBtn2;
 
-    private SearchStrategy getPackingStrategy(String alg){
-        return alg.equals("BestFit") ? new BestFit() : new FirstFit();
-    }
 
     /**
      * Loaded bins control
@@ -370,7 +369,7 @@ public class Controller {
         double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
         double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
         RadioButton selectedBtn = (RadioButton)algorithmButtons.getSelectedToggle();
-        SearchStrategy packingAlg = getPackingStrategy(selectedBtn.getText());
+        PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
 
         clean();
 

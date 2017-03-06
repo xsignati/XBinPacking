@@ -1,7 +1,8 @@
-package sample.BinPackingLogic;
+package sample.GUI.BinView;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
+import sample.BinPackingLogic.PackingStrategy;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class Bin extends Cuboid {
         }
     }
 
-    public Bin search(SearchStrategy packingStrategy, Box box) {
+    public Bin search(PackingStrategy packingStrategy, Box box) {
         return packingStrategy.search(this, box);
     }
 
