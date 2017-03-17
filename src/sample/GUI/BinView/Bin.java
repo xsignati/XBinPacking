@@ -134,4 +134,8 @@ public class Bin extends Cuboid {
     public static void setRootBinCounter(int rootBinCounter) {
         Bin.rootBinCounter = rootBinCounter;
     }
+
+    public static void resetRootBinCounter(){
+        Bin.rootBinCounter = 0;
+    }
 }

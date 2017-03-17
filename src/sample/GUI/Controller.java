@@ -230,7 +230,7 @@ public class Controller {
                 else if(ce.getSource() == widthCol){
                     be.setWidth(ce.getNewValue());
                 }
-                else{
+                else if(ce.getSource() == heightCol){
                     be.setHeight(ce.getNewValue());
                 }
                 be.scale(scale.getScale());
@@ -304,12 +304,12 @@ public class Controller {
         binSelector.setButtonCell(cf.call(null));
         binSelector.setCellFactory(cf);
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
-        binSelector.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Bin>() {
-                public void changed(ObservableValue<? extends Bin> ov, Bin old_val, Bin new_val) {
-                    if(new_val != null)
-                        drawScene(new_val.getCid());
-                }
-         });
+
+        binSelector.getSelectionModel().selectedItemProperty().addListener((ov, old_val, new_val) -> {
+                if(new_val != null)
+                    drawScene(((Bin)new_val).getCid());
+            }
+        );
         binSelector.setItems(binList);
     }
 
@@ -371,11 +371,10 @@ public class Controller {
         RadioButton selectedBtn = (RadioButton)algorithmButtons.getSelectedToggle();
         PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
 
-        clean();
+        clearBinList();
 
         InputData inputData = new InputData(binLength, binWidth, binHeight, binList, packingAlg, boxList);
         Loader loader = new Loader();
-
         loader.run(inputData);
 
         prepareScene(binLength, binWidth, binHeight);
@@ -387,9 +386,8 @@ public class Controller {
     /**
      * clean
      */
-    private void clean(){
+    private void clearBinList(){
         binList.clear();
-        Bin.setRootBinCounter(0);
     }
 
     /**

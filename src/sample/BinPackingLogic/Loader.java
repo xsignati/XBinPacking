@@ -15,7 +15,9 @@ public class Loader {
          */
 
         d.getPackingStrategy().prepareInput(d.getBoxList());
+        Bin.resetRootBinCounter();
         d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
+
 
         for(Box box: d.getBoxList()) {
             int binListSize = d.getBinList().size();
@@ -44,13 +46,5 @@ public class Loader {
         }
     }
 
-    public static void main(String argv[]) {
-        System.out.println("main");
-        Loader loader = new Loader();
-        PackingStrategy firstFit = new FirstFit();
-        PackingStrategy bestFit = new BestFit();
-        PackingStrategy areaBestFit = new AreaBestFit();
-        //loader.run(bestFit);
-    }
 }
 
