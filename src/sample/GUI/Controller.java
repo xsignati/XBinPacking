@@ -1,10 +1,13 @@
 package sample.GUI;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.sun.xml.internal.ws.api.pipe.FiberContextSwitchInterceptor;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.*;
@@ -23,11 +26,13 @@ import sample.GUI.BinView.Box;
 import sample.GUI.BinView.CameraModel;
 import sample.BinPackingLogic.*;
 import sample.GUI.BinView.InputData;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Controller {
     /**
@@ -151,7 +156,18 @@ public class Controller {
     private TextField addWidth;
     @FXML
     private TextField addHeight;
-    private ObservableList<Box> boxList = FXCollections.observableArrayList();
+
+    class BoxList {
+        private ObservableList<Box> boxList = FXCollections.observableArrayList();
+
+        private synchronized void add(Box box){
+            boxList.add(box);
+        }
+        private synchronized ObservableList<Box> get() {
+            return boxList;
+        }
+    }
+    BoxList boxList = new BoxList();
 
     private void boxsetter(){
         //Bind box table size properties to table size
@@ -201,7 +217,7 @@ public class Controller {
         addBox.setOnAction(addBoxEvent);
 
         //Add Box objects to the table observable list
-        boxListViewer.setItems(boxList);
+        boxListViewer.setItems(boxList.get());
     }
 
     //Add box event listener
@@ -268,11 +284,6 @@ public class Controller {
      */
     @FXML
     private ToggleGroup algorithmButtons;
-    @FXML
-    private RadioButton algBtn1;
-    @FXML
-    private RadioButton algBtn2;
-
 
     /**
      * Loaded bins control
@@ -281,7 +292,23 @@ public class Controller {
     private ComboBox binSelector;
     @FXML
     private HBox selectorWrapper;
-    private ObservableList<Bin> binList = FXCollections.observableArrayList();
+
+    class BinList {
+        private ObservableList<Bin> binList = FXCollections.observableArrayList();
+
+        private synchronized void add(Bin bin){
+            binList.add(bin);
+        }
+
+        private synchronized ObservableList<Bin> get() {
+            return binList;
+        }
+
+        private synchronized void clear(){
+            binList.clear();
+        }
+    }
+    BinList binList = new BinList();
 
     private Callback<ListView<Bin>, ListCell<Bin>> cf = new Callback<ListView<Bin>, ListCell<Bin>>() {
         @Override
@@ -310,7 +337,7 @@ public class Controller {
                     drawScene(((Bin)new_val).getCid());
             }
         );
-        binSelector.setItems(binList);
+        binSelector.setItems(binList.get());
     }
 
     /**
@@ -322,12 +349,12 @@ public class Controller {
         getCameraModel().reset();
         scale = new Scale(binScene.getWidth()/binLength, binScene.getHeight()/binWidth, binScene.getWidth()/binHeight);
 
-        for (Box box: boxList){
+        for (Box box: boxList.get()){
             box.setBoxes();
             box.scale(scale.getScale());
         }
 
-        for (Bin bin: binList) {
+        for (Bin bin: binList.get()) {
             bin.scale(scale.getScale());
         }
     }
@@ -353,10 +380,16 @@ public class Controller {
     private HBox processWrapper;
     @FXML
     private Button processBtn;
-
     private void processInit(){
         processBtn.prefWidthProperty().bind(processWrapper.widthProperty().multiply(0.7));
     }
+
+    ExecutorService loaderExecutor = Executors.newSingleThreadExecutor();
+
+    public ExecutorService getLoaderExecutor(){
+        return loaderExecutor;
+    }
+
 
     @FXML
     private void startProcess(){
@@ -364,31 +397,37 @@ public class Controller {
             System.err.println("ERROR");
             return;
         }
-
-        double binLength = Double.parseDouble(setLength.getCharacters().toString());
-        double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
-        double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
-        RadioButton selectedBtn = (RadioButton)algorithmButtons.getSelectedToggle();
-        PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
-
-        clearBinList();
-
-        InputData inputData = new InputData(binLength, binWidth, binHeight, binList, packingAlg, boxList);
-        Loader loader = new Loader();
-        loader.run(inputData);
-
-        prepareScene(binLength, binWidth, binHeight);
-
-        drawScene(0);
-
-    }
-
-    /**
-     * clean
-     */
-    private void clearBinList(){
         binList.clear();
+
+        loaderExecutor.submit( new LoaderTask());
     }
+
+    class LoaderTask extends Task<Void> {
+        @Override
+        public Void call() {
+            double binLength = Double.parseDouble(setLength.getCharacters().toString());
+            double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
+            double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
+            RadioButton selectedBtn = (RadioButton) algorithmButtons.getSelectedToggle();
+            PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
+
+            InputData inputData = new InputData(binLength, binWidth, binHeight, binList.get(), packingAlg, boxList.get());
+            Loader loader = new Loader();
+            loader.run(inputData);
+
+            prepareScene(binLength, binWidth, binHeight);
+
+            return null;
+        }
+
+        public LoaderTask(){
+            setOnSucceeded((WorkerStateEvent event) ->
+                    Platform.runLater(() ->
+                        drawScene(0))
+            );
+        }
+    }
+
 
     /**
      * Draw Boxes
@@ -397,19 +436,18 @@ public class Controller {
         boxes.getChildren().clear();
         bins.getChildren().clear();
 
-        for(Box box: boxList){
+        for(Box box: boxList.get()){
             if(box.getCid() == binId)
                 boxes.getChildren().add(box);
         }
 
-         bins.getChildren().add(binList.get(binId));
+         bins.getChildren().add(binList.get().get(binId));
 
     }
 
     /**
      * Validator
      */
-
     private TextFormatter getDigitValidator(){
         Locale locale = new Locale("en", "usa");
         NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
@@ -443,7 +481,7 @@ public class Controller {
         if(setWidth.getCharacters().length() > 10 || setLength.getCharacters().length() == 10 || setHeight.getCharacters().length() > 10){
             status = false;
         }
-        if(boxList.size() == 0)
+        if(boxList.get().size() == 0)
             status = false;
         return status;
     }

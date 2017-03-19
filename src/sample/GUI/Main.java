@@ -34,7 +34,15 @@ public class Main extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        controller.getCameraModel();
         controller.test();
+    }
+
+    @Override
+    public void stop() {
+        if (controller.getLoaderExecutor() != null) {
+            controller.getLoaderExecutor().shutdown();
+        }
     }
 
     public static void main(String[] args) {
