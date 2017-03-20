@@ -1,13 +1,11 @@
 package sample.GUI;
 
-import com.sun.xml.internal.ws.api.pipe.FiberContextSwitchInterceptor;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.*;
@@ -18,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import sample.GUI.BinView.Bin;
@@ -32,14 +29,23 @@ import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Controller {
     /**
-     * Main methods and variables
+     * UI elements initialization.
      */
     @FXML
-    private Text title;
+    public void initialize(){
+        subSceneInit();
+        boxTableInit();
+        binSizeInit();
+        binSelectInit();
+        processInit();
+    }
+
+    /**
+     * SubScene elements
+     */
     @FXML
     public SubScene binScene;
     @FXML
@@ -53,30 +59,21 @@ public class Controller {
     @FXML
     private SceneAntialiasing ssaa = SceneAntialiasing.BALANCED;
 
-
     public CameraModel getCameraModel() {return cameraModel;}
 
-    @FXML
-    public void initialize(){
-        //Bind Bin subScene size to its wrapper
+    public void subSceneInit(){
+        //Resize the SubScene with application window
         binScene.heightProperty().bind(bsPane.heightProperty());
         binScene.widthProperty().bind(bsPane.widthProperty());
 
-        //
         binScene.setCamera(cameraModel.getCamera());
         binScene.setOnMousePressed(pressEvent);
         binScene.setOnMouseDragged(dragEvent);
         binScene.setOnScroll(scrollEvent);
-
-        boxsetter();
-        binSizeInit();
-        binSelectInit();
-        processInit();
-
     }
 
     /**
-     * Bin View Event handlers
+     * SubScene Event handlers used to control a rotation of camera and ZOOM.
      */
     private double rotationSpeed = 0.2;
     private double scrollSpeed = 50;
@@ -127,10 +124,25 @@ public class Controller {
         }
     };
 
+    /**
+     * Add boxes and bins 3D models to SubScene.
+     */
+    private void drawSubScene(int binId){
+        boxes.getChildren().clear();
+        bins.getChildren().clear();
 
+        for(Box box: boxList.get()){
+            if(box.getCid() == binId)
+                boxes.getChildren().add(box);
+        }
+
+        bins.getChildren().add(binList.get().get(binId));
+
+    }
 
     /**
-    * Box table
+     * Box table. You're able to add new Boxes and edit existing ones. Boxes are saved in observableList boxList.
+     * The list is used by Loader.
     */
     @FXML
     private TableView<Box> boxListViewer;
@@ -169,7 +181,7 @@ public class Controller {
     }
     BoxList boxList = new BoxList();
 
-    private void boxsetter(){
+    private void boxTableInit(){
         //Bind box table size properties to table size
         lengthCol.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
         widthCol.prefWidthProperty().bind(boxListViewer.widthProperty().multiply(0.25));
@@ -195,7 +207,6 @@ public class Controller {
                 new PropertyValueFactory<Box,Double>("z")
         );
 
-
         //Add box table event handlers
         lengthCol.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         lengthCol.setOnEditCommit(tableEditEvent);
@@ -220,7 +231,7 @@ public class Controller {
         boxListViewer.setItems(boxList.get());
     }
 
-    //Add box event listener
+    //Add a box to the boxList displayed in the Box Table.
     private EventHandler<ActionEvent> addBoxEvent = new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
             boxList.add(new Box(
@@ -234,6 +245,8 @@ public class Controller {
         }
     };
 
+    //Box table cells editor. Box size is changed in both - the observableList boxList and SubScene. A new box is automatic
+    //rescaled.
     private EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent =
             new EventHandler<TableColumn.CellEditEvent<Box, Double>>() {
             @Override
@@ -254,7 +267,7 @@ public class Controller {
         };
 
     /**
-     * Bin size control
+     * Bin size controls.
      */
     @FXML
     private TextField setLength;
@@ -268,7 +281,6 @@ public class Controller {
     private HBox addWrap;
 
     private void binSizeInit() {
-        //Bind bin size controls size properties to their wrapper
         setSizeLabel.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
         setLength.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
         setWidth.prefWidthProperty().bind(setWrap.widthProperty().multiply(0.25));
@@ -286,7 +298,7 @@ public class Controller {
     private ToggleGroup algorithmButtons;
 
     /**
-     * Loaded bins control
+     * Loaded bins control. The binList is
      */
     @FXML
     private ComboBox binSelector;
@@ -334,16 +346,30 @@ public class Controller {
 
         binSelector.getSelectionModel().selectedItemProperty().addListener((ov, old_val, new_val) -> {
                 if(new_val != null)
-                    drawScene(((Bin)new_val).getCid());
+                    drawSubScene(((Bin)new_val).getCid());
             }
         );
         binSelector.setItems(binList.get());
     }
 
     /**
-     * Display bin scene
+     * The Scale class contains a scale method that computes an appropriate scaling factor. Every box and bin is scaled
+     * before drawing to match to the SubScene camera view and avoid too large objects to displaying.
      */
-    // private double scale;
+    class Scale{
+        private double scale; //Scale factor
+        public Scale(double s1, double s2, double s3){
+            scale = getMin(s1, s2, s3);
+        }
+        private double getMin(double r1, double r2, double r3) {
+            return Math.min(r1, Math.min(r2, r3));
+        }
+        public double getScale() {
+            return scale;
+        }
+    }
+    private Scale scale;
+
     private void prepareScene(double binLength, double binWidth, double binHeight){
         getCameraModel().setDistance(binScene.getWidth()*4);
         getCameraModel().reset();
@@ -359,20 +385,6 @@ public class Controller {
         }
     }
 
-    private Scale scale;
-    class Scale{
-        private double scale;
-        public Scale(double s1, double s2, double s3){
-            scale = getMin(s1, s2, s3);
-        }
-        private double getMin(double r1, double r2, double r3) {
-            return Math.min(r1, Math.min(r2, r3));
-        }
-        public double getScale() {
-            return scale;
-        }
-    }
-
     /**
      * Process control
      */
@@ -380,26 +392,9 @@ public class Controller {
     private HBox processWrapper;
     @FXML
     private Button processBtn;
-    private void processInit(){
-        processBtn.prefWidthProperty().bind(processWrapper.widthProperty().multiply(0.7));
-    }
-
-    ExecutorService loaderExecutor = Executors.newSingleThreadExecutor();
-
+    private ExecutorService loaderExecutor = Executors.newSingleThreadExecutor();
     public ExecutorService getLoaderExecutor(){
         return loaderExecutor;
-    }
-
-
-    @FXML
-    private void startProcess(){
-        if(!validate()){
-            System.err.println("ERROR");
-            return;
-        }
-        binList.clear();
-
-        loaderExecutor.submit( new LoaderTask());
     }
 
     class LoaderTask extends Task<Void> {
@@ -423,30 +418,28 @@ public class Controller {
         public LoaderTask(){
             setOnSucceeded((WorkerStateEvent event) ->
                     Platform.runLater(() ->
-                        drawScene(0))
+                            drawSubScene(0))
             );
         }
     }
 
-
-    /**
-     * Draw Boxes
-     */
-    private void drawScene(int binId){
-        boxes.getChildren().clear();
-        bins.getChildren().clear();
-
-        for(Box box: boxList.get()){
-            if(box.getCid() == binId)
-                boxes.getChildren().add(box);
-        }
-
-         bins.getChildren().add(binList.get().get(binId));
-
+    private void processInit(){
+        processBtn.prefWidthProperty().bind(processWrapper.widthProperty().multiply(0.7));
     }
 
+    @FXML
+    private void startProcess(){
+        if(!validate()){
+            return;
+        }
+
+        binList.clear();
+        loaderExecutor.submit( new LoaderTask());
+    }
+
+
     /**
-     * Validator
+     * Validators.
      */
     private TextFormatter getDigitValidator(){
         Locale locale = new Locale("en", "usa");
@@ -472,7 +465,6 @@ public class Controller {
         });
     }
 
-
     public boolean validate(){
         boolean status = true;
         if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0){
@@ -485,7 +477,6 @@ public class Controller {
             status = false;
         return status;
     }
-
 
     /**
      * *******************************************************

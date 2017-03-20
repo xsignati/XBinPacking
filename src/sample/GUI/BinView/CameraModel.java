@@ -15,11 +15,6 @@ public class CameraModel extends Group {
     private int yRotation;
     private int zRotation;
     private double distance;
-    public final static int Y_ROTATION= 0;
-    public final static int Z_ROTATION = 320;
-    public final static int CAMERA_DISTANCE = 2000;
-
-
     private Rotate rx = new Rotate();
     private Rotate ry = new Rotate();
     private Rotate rz = new Rotate();
@@ -79,7 +74,6 @@ public class CameraModel extends Group {
         rx.setAngle(xRotation);
         ry.setAngle(yRotation);
         rz.setAngle(zRotation);
-        //camera.setTranslateZ(-distance);
         camera.setTranslateZ(-distance);
     }
 
