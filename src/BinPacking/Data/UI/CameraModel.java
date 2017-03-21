@@ -1,7 +1,6 @@
-package sample.GUI.BinView;
+package BinPacking.Data.UI;
 
 import javafx.beans.NamedArg;
-import javafx.beans.property.DoubleProperty;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;

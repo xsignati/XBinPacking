@@ -1,8 +1,8 @@
-package sample.BinPackingLogic;
+package BinPacking.Logic;
 
-import sample.GUI.BinView.Bin;
-import sample.GUI.BinView.Box;
-import sample.GUI.BinView.InputData;
+import BinPacking.Data.LogicUI.Bin;
+import BinPacking.Data.LogicUI.Box;
+import BinPacking.Data.LogicUI.InputData;
 
 /**
  * Created by Xsignati on 24.01.2017.

@@ -1,8 +1,8 @@
-package sample.GUI.BinView;
+package BinPacking.Data.LogicUI;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import sample.BinPackingLogic.PackingStrategy;
+import BinPacking.Logic.PackingStrategy.PackingStrategy;
 
 import java.util.LinkedList;
 import java.util.List;

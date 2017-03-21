@@ -1,8 +1,8 @@
-package sample.BinPackingLogic;
+package BinPacking.Logic.PackingStrategy;
 
 import javafx.collections.ObservableList;
-import sample.GUI.BinView.Bin;
-import sample.GUI.BinView.Box;
+import BinPacking.Data.LogicUI.Bin;
+import BinPacking.Data.LogicUI.Box;
 
 import java.util.Collections;
 
@@ -44,7 +44,7 @@ public class BestFit extends PackingStrategy {
     }
 
     @Override
-    protected void prepareInput(ObservableList<Box> boxList){
+    public void prepareInput(ObservableList<Box> boxList){
         Collections.sort(boxList);
     }
 

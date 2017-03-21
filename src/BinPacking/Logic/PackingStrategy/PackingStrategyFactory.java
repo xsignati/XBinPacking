@@ -1,4 +1,4 @@
-package sample.BinPackingLogic;
+package BinPacking.Logic.PackingStrategy;
 
 /**
  * Created by Xsignati on 06.03.2017.

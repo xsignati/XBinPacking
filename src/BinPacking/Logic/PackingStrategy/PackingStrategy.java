@@ -1,8 +1,8 @@
-package sample.BinPackingLogic;
+package BinPacking.Logic.PackingStrategy;
 
 import javafx.collections.ObservableList;
-import sample.GUI.BinView.Bin;
-import sample.GUI.BinView.Box;
+import BinPacking.Data.LogicUI.Bin;
+import BinPacking.Data.LogicUI.Box;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -16,5 +16,5 @@ public abstract class PackingStrategy {
                 box.getHeight() <= bin.getHeight());
     }
 
-    protected abstract void prepareInput(ObservableList<Box> boxList);
+    public abstract void prepareInput(ObservableList<Box> boxList);
 }

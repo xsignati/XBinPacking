@@ -1,10 +1,14 @@
-package sample.GUI.BinView;
-
-import javafx.collections.ObservableList;
-import sample.BinPackingLogic.PackingStrategy;
+package BinPacking.Data.LogicUI;
 
 /**
- * Created by Xsignati on 01.03.2017.
+ * Created by Xsignati on 21.03.2017.
+ */
+
+import BinPacking.Logic.PackingStrategy.PackingStrategy;
+import javafx.collections.ObservableList;
+
+/**
+ * Process control
  */
 public class InputData{
     private ObservableList<Bin> binList;

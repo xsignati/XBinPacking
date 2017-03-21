@@ -1,5 +1,11 @@
-package sample.GUI;
+package BinPacking.UI;
 
+import BinPacking.Data.LogicUI.Bin;
+import BinPacking.Data.LogicUI.Box;
+import BinPacking.Data.LogicUI.InputData;
+import BinPacking.Data.UI.CameraModel;
+import BinPacking.Logic.PackingStrategy.PackingStrategy;
+import BinPacking.Logic.PackingStrategy.PackingStrategyFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,11 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
-import sample.GUI.BinView.Bin;
-import sample.GUI.BinView.Box;
-import sample.GUI.BinView.CameraModel;
-import sample.BinPackingLogic.*;
-import sample.GUI.BinView.InputData;
+import BinPacking.Logic.*;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -30,10 +33,10 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * UI view class.
+ */
 public class Controller {
-    /**
-     * UI elements initialization.
-     */
     @FXML
     public void initialize(){
         subSceneInit();
@@ -385,9 +388,6 @@ public class Controller {
         }
     }
 
-    /**
-     * Process control
-     */
     @FXML
     private HBox processWrapper;
     @FXML

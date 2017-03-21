@@ -1,4 +1,4 @@
-package sample.GUI.BinView;
+package BinPacking.Data.LogicUI;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
