@@ -1,6 +1,7 @@
 package BinPacking.Data.LogicUI;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
@@ -94,7 +95,17 @@ public class Box extends Cuboid implements Comparable<Box>{
         }
     }
 
-    //Setters and getters
+    @Override
+    public boolean equals(Object o){
+        boolean result = false;
+        if (o instanceof Box) {
+            Box otherBox = (Box)o;
+            result = (getX() == otherBox.getX() && getY() == otherBox.getY() && getZ() == otherBox.getZ());
+        }
+        return result;
+    }
+
+//Setters and getters
 
     public double getWeight() {
         return weight;
