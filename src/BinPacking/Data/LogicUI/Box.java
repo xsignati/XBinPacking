@@ -10,65 +10,44 @@ import java.util.Random;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class Box extends Cuboid implements Comparable<Box>{
-    /**
-     * Box parameters
-     */
-    //Dimensions and size
+public class Box extends Cuboid{
+    public static final int ROTATIONS_NUM = Box.Rotations.values().length;
+    public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
     public final double ORIGINAL_LENGTH;
     public final double ORIGINAL_WIDTH;
     public final double ORIGINAL_HEIGHT;
-    public static final int ROTATIONS_NUM = Box.Rotations.values().length;
-
-    //Appearance
-    private final PhongMaterial material = new PhongMaterial();
-    private javafx.scene.shape.Box box;
-    private final static double SHIFT_RATIO = 0.5;
-
-    //Id and others
     private int weight;
 
+    /**
+     * Default color parameter constructor.
+     * @param length
+     * @param width
+     * @param height
+     */
     public Box(double length, double width, double height){
         this(length, width, height, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
     }
 
+    /**
+     * User defined color constructor.
+     * @param length
+     * @param width
+     * @param height
+     * @param color
+     */
     public Box(double length, double width, double height, Color color){
         super(0, 0, 0, length, width, height);
-        //measurements
         this.ORIGINAL_LENGTH = length;
         this.ORIGINAL_WIDTH = width;
         this.ORIGINAL_HEIGHT = height;
 
-        //appearance
-        box = new javafx.scene.shape.Box(length, width, height);
-        material.setDiffuseColor(color);
-        material.setSpecularColor(Color.DARKGREY);
-        box.setMaterial(material);
-        getChildren().add(box);
+        createGraphicModel(length, width, height, color);
     }
 
-    public void scale(double scale){
-        box.setWidth(getLength() * scale);
-        box.setHeight(getWidth() * scale);
-        box.setDepth(getHeight() * scale);
-        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
-        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
-        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
-    }
-
-    public void setBoxes(){
-        box.setTranslateX(getX()  + SHIFT_RATIO * getLength());
-        box.setTranslateY(getY()  + SHIFT_RATIO * getWidth());
-        box.setTranslateZ(getZ()  + SHIFT_RATIO * getHeight());
-    }
-
-    @Override
-    public int compareTo(Box o){
-        return (int)(o.getVolume() - getVolume());
-    }
-
-    public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
-
+    /**
+     * Rotation in six sensible directions.
+     * @param rotation
+     */
     public void rotate(Rotations rotation) {
         switch (rotation) {
             case WLH:
@@ -95,6 +74,10 @@ public class Box extends Cuboid implements Comparable<Box>{
         }
     }
 
+    /**
+     * @param o - Box
+     * @return
+     */
     @Override
     public boolean equals(Object o){
         boolean result = false;
@@ -104,8 +87,6 @@ public class Box extends Cuboid implements Comparable<Box>{
         }
         return result;
     }
-
-//Setters and getters
 
     public double getWeight() {
         return weight;
@@ -189,5 +170,29 @@ public class Box extends Cuboid implements Comparable<Box>{
 
     public double getVolume() {
         return volume;
+    }
+
+    //Appearance
+    private final PhongMaterial material = new PhongMaterial();
+    private javafx.scene.shape.Box box;
+    private final static double SHIFT_RATIO = 0.5;
+
+    @Override
+    public void scale(double scale){
+        box.setWidth(getLength() * scale);
+        box.setHeight(getWidth() * scale);
+        box.setDepth(getHeight() * scale);
+        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
+        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
+        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
+    }
+
+    @Override
+    public void createGraphicModel(double length, double width, double height, Color color){
+        box = new javafx.scene.shape.Box(length, width, height);
+        material.setDiffuseColor(color);
+        material.setSpecularColor(Color.DARKGREY);
+        box.setMaterial(material);
+        getChildren().add(box);
     }
 }

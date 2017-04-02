@@ -3,21 +3,21 @@ package BinPacking.Data.LogicUI;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 
 /**
  * Created by Xsignati on 24.01.2017.
- */
-public abstract class Cuboid extends Group {
-    /**
-     * Coordinates and measurements
-     * | Z height
-     * |        /
-     * |      /
-     * |    /Y width
-     * |  /
-     * |/
-     * ------------ X length
-     **/
+ * Parent class for cuboid-shape classes: Bin, Box.
+ * Coordinates and measurements :
+ * | Z height
+ * |        /
+ * |      /
+ * |    /Y width
+ * |  /
+ * |/
+ * ------------ X length
+ **/
+public abstract class Cuboid extends Group implements Comparable<Cuboid>{
     protected SimpleDoubleProperty length = new SimpleDoubleProperty();
     protected SimpleDoubleProperty width = new SimpleDoubleProperty();
     protected SimpleDoubleProperty height = new SimpleDoubleProperty();
@@ -86,5 +86,27 @@ public abstract class Cuboid extends Group {
 
     public void setCid(int cid) {
         this.cid.set(cid);
+    }
+
+    //Appearance
+
+    /**
+     * Scale method used to fit a model to the SubScene size
+     * @param scale
+     */
+    public abstract void scale(double scale);
+
+    /**
+     * Model's appearance creation
+     * @param length
+     * @param width
+     * @param height
+     * @param color
+     */
+    public abstract void createGraphicModel(double length, double width, double height, Color color);
+
+    @Override
+    public int compareTo(Cuboid o){
+        return (int)(o.getVolume() - getVolume());
     }
 }

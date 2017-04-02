@@ -379,7 +379,6 @@ public class Controller {
         scale = new Scale(binScene.getWidth()/binLength, binScene.getHeight()/binWidth, binScene.getWidth()/binHeight);
 
         for (Box box: boxList.get()){
-            box.setBoxes();
             box.scale(scale.getScale());
         }
 
@@ -475,33 +474,8 @@ public class Controller {
         }
         if(boxList.get().size() == 0)
             status = false;
+
         return status;
     }
-
-    /**
-     * *******************************************************
-     */
-    public void test() {
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-        boxList.add(new Box(600,600,330));
-
-    }
-
-    /**
-     * *******************************************************
-     */
-
-
 }
 

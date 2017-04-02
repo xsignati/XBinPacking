@@ -8,6 +8,8 @@ import BinPacking.Logic.PackingStrategy.PackingStrategyFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
+
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -48,6 +50,7 @@ public class UnitTest {
         loader.run(inputData);
 
         assertThat(boxList, is(testBoxList));
+
 
     }
 }

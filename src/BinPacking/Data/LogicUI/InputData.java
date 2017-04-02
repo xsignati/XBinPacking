@@ -8,7 +8,7 @@ import BinPacking.Logic.PackingStrategy.PackingStrategy;
 import javafx.collections.ObservableList;
 
 /**
- * Process control
+ * Structure that is being passed from Controller (View) to Loader (logic)
  */
 public class InputData{
     private ObservableList<Bin> binList;
