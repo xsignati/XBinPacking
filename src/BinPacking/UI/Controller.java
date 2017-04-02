@@ -46,9 +46,7 @@ public class Controller {
         processInit();
     }
 
-    /**
-     * SubScene elements
-     */
+    //SubScene elements
     @FXML
     public SubScene binScene;
     @FXML
@@ -69,15 +67,14 @@ public class Controller {
         binScene.heightProperty().bind(bsPane.heightProperty());
         binScene.widthProperty().bind(bsPane.widthProperty());
 
+        //Add SubScene event handlers
         binScene.setCamera(cameraModel.getCamera());
         binScene.setOnMousePressed(pressEvent);
         binScene.setOnMouseDragged(dragEvent);
         binScene.setOnScroll(scrollEvent);
     }
 
-    /**
-     * SubScene Event handlers used to control a rotation of camera and ZOOM.
-     */
+    //Event handlers controlling a rotation of camera and ZOOM.
     private double rotationSpeed = 0.2;
     private double scrollSpeed = 50;
     private double mousePosX;
@@ -128,7 +125,8 @@ public class Controller {
     };
 
     /**
-     * Add boxes and bins 3D models to SubScene.
+     * Add boxes and bins 3D models to the SubScene.
+     * @param binId - display boxes belong to the chosen Bin identified by binId
      */
     private void drawSubScene(int binId){
         boxes.getChildren().clear();
@@ -144,7 +142,7 @@ public class Controller {
     }
 
     /**
-     * Box table. You're able to add new Boxes and edit existing ones. Boxes are saved in observableList boxList.
+     * The Box table. You're able to add new Boxes and edit existing ones. Boxes are saved in observableList boxList.
      * The list is used by Loader.
     */
     @FXML
@@ -310,15 +308,12 @@ public class Controller {
 
     class BinList {
         private ObservableList<Bin> binList = FXCollections.observableArrayList();
-
         private synchronized void add(Bin bin){
             binList.add(bin);
         }
-
         private synchronized ObservableList<Bin> get() {
             return binList;
         }
-
         private synchronized void clear(){
             binList.clear();
         }
@@ -346,10 +341,9 @@ public class Controller {
         binSelector.setButtonCell(cf.call(null));
         binSelector.setCellFactory(cf);
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
-
-        binSelector.getSelectionModel().selectedItemProperty().addListener((ov, old_val, new_val) -> {
-                if(new_val != null)
-                    drawSubScene(((Bin)new_val).getCid());
+        binSelector.getSelectionModel().selectedItemProperty().addListener((ov, oldVal, newVal) -> {
+                if(newVal != null)
+                    drawSubScene(((Bin)newVal).getCid());
             }
         );
         binSelector.setItems(binList.get());
@@ -428,7 +422,21 @@ public class Controller {
 
     @FXML
     private void startProcess(){
-        if(!validate()){
+        try {validate();}
+        catch(NoInputException e){
+            e.printStackTrace(System.err);
+            return;
+        }
+        catch(TooLongInputException e){
+            e.printStackTrace(System.err);
+            return;
+        }
+        catch(EmptyListException e){
+            e.printStackTrace(System.err);
+            return;
+        }
+        catch(TooLargeBoxException e){
+            e.printStackTrace(System.err);
             return;
         }
 
@@ -464,18 +472,27 @@ public class Controller {
         });
     }
 
-    public boolean validate(){
-        boolean status = true;
-        if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0){
-            status = false;
-        }
-        if(setWidth.getCharacters().length() > 10 || setLength.getCharacters().length() == 10 || setHeight.getCharacters().length() > 10){
-            status = false;
-        }
-        if(boxList.get().size() == 0)
-            status = false;
+    class NoInputException extends Exception{}
+    class TooLongInputException extends Exception{}
+    class EmptyListException extends Exception{}
+    class TooLargeBoxException extends Exception{}
+    public void validate() throws NoInputException, TooLongInputException, EmptyListException, TooLargeBoxException   {
+        if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0)
+            throw new NoInputException();
 
-        return status;
+        if(setWidth.getCharacters().length() > 10 || setLength.getCharacters().length() == 10 || setHeight.getCharacters().length() > 10)
+            throw new TooLongInputException();
+
+        if(boxList.get().size() == 0)
+            throw new EmptyListException();
+
+        double binLength = Double.parseDouble(setLength.getCharacters().toString());
+        double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
+        double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
+        for(Box box: boxList.get()){
+            if(box.getLength() > binLength || box.getWidth() > binWidth || box.getHeight() > binHeight)
+                throw new TooLargeBoxException();
+        }
     }
 }
 

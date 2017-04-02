@@ -8,6 +8,7 @@ import java.util.Collections;
 
 /**
  * Created by Xsignati on 24.01.2017.
+ * Find and return the Bin with minimum volume.
  */
 public class BestFit extends PackingStrategy {
     @Override
