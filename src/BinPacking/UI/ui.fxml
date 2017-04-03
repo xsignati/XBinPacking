@@ -108,11 +108,11 @@
 
         <HBox fx:id="addWrap" GridPane.columnIndex="0" GridPane.RowIndex="5" spacing="5">
             <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
-            <Label text="New box:" textAlignment="CENTER" />
+            <Label text="New: " textAlignment="CENTER" />
             <TextField fx:id="addLength" styleClass="textField"  promptText="length"></TextField>
             <TextField fx:id="addWidth" styleClass="textField"  promptText="width"></TextField>
             <TextField fx:id="addHeight" styleClass="textField"  promptText="height"></TextField>
-            <Button fx:id="addBox" text="Add Box"></Button>
+            <Button fx:id="addBox" text="Add"></Button>
         </HBox>
 
         <HBox fx:id="processWrapper" GridPane.columnIndex="0" GridPane.RowIndex="6" spacing="5">

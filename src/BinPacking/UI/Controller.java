@@ -217,10 +217,10 @@ public class Controller {
         heightCol.setOnEditCommit(tableEditEvent);
 
         //Bind add box controls size properties to their wrapper
-        addLength.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
-        addWidth.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
-        addHeight.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
-        addBox.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.25));
+        addLength.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.20));
+        addWidth.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.20));
+        addHeight.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.20));
+        addBox.prefWidthProperty().bind(addWrap.widthProperty().multiply(0.20));
 
         addLength.setTextFormatter(getDigitValidator());
         addWidth.setTextFormatter(getDigitValidator());
