@@ -24,8 +24,8 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
     protected SimpleDoubleProperty x = new SimpleDoubleProperty();
     protected SimpleDoubleProperty y = new SimpleDoubleProperty();
     protected SimpleDoubleProperty z = new SimpleDoubleProperty();
-    protected double volume;
     protected SimpleIntegerProperty cid = new SimpleIntegerProperty();
+    protected double volume;
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x.set(x);

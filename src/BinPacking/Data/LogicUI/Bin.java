@@ -13,12 +13,12 @@ import java.util.List;
  */
 public class Bin extends Cuboid {
     public enum BinState {EMPTY, FULL}
-    private BinState binState = BinState.EMPTY;
     public enum BinType {ROOT,A,B,C,D}
+    private BinState binState = BinState.EMPTY;
     private BinType binType;
-    private static int rootBinCounter = 0; //< Each box gets this cid. The cid indicates the bin assigned to box.
     private Bin parent;
     private List<Bin> children;
+    private static int rootBinCounter = 0; //< Each box gets this cid. The cid indicates the bin assigned to box.
 
     /**
      * Public constructor used to construct a new Root Bin
@@ -40,7 +40,6 @@ public class Bin extends Cuboid {
     public Bin(double length, double width, double height, Color color){
         this(0,0,0,length,width,height,BinType.ROOT);
         rootBinCounter++;
-
         createGraphicModel(length, width, height, color); //< Appearance part of code
     }
 
@@ -62,7 +61,6 @@ public class Bin extends Cuboid {
     }
 
     /**
-     * addChild
      * @param bin
      */
     private void addChild(Bin bin) {
@@ -100,7 +98,7 @@ public class Bin extends Cuboid {
     /**
      * If the box fits to the one of 3 subspaces forming a BinType, eg. A rest of them will be removed (B,C,D)
      */
-    public  void removeAltChildren() {
+    public  void removeAltSiblings() {
         if (parent != null)
             parent.children.removeIf((Bin bin) -> bin.binType != binType);
     }
@@ -148,7 +146,6 @@ public class Bin extends Cuboid {
     public static void resetRootBinCounter(){
         Bin.rootBinCounter = 0;
     }
-
 
     //Appearance
     private final static int  thickness = 10;

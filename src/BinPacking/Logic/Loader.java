@@ -30,7 +30,7 @@ public class Loader {
                     if (foundNode != null) {
                         foundNode.reserveBin(box);
                         foundNode.createChildren(box);
-                        foundNode.removeAltChildren();
+                        foundNode.removeAltSiblings();
                         break BinListLoop;
                     } else
                         box.rotate(currRotation);

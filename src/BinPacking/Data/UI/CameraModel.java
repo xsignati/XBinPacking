@@ -20,7 +20,6 @@ public class CameraModel extends Group {
     private Rotate rz = new Rotate();
     Camera camera = new PerspectiveCamera(true);
 
-
     /**
      * @param xRotation
      * @param yRotation

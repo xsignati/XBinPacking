@@ -40,7 +40,6 @@ public class Box extends Cuboid{
         this.ORIGINAL_LENGTH = length;
         this.ORIGINAL_WIDTH = width;
         this.ORIGINAL_HEIGHT = height;
-
         createGraphicModel(length, width, height, color);
     }
 

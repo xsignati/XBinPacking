@@ -21,7 +21,7 @@
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 
-    <!--Whole window Grid Layout -->
+    <!--Main window Grid Layout -->
     <rowConstraints>
         <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints percentHeight="80.0" vgrow="SOMETIMES" />
@@ -32,24 +32,21 @@
         <ColumnConstraints percentWidth="45.0" hgrow="SOMETIMES"  />
     </columnConstraints>
 
-
-    <!--Title -->
+    <!-- Application Logo -->
     <Text fx:id="title" text="XBINPACKING" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
 
     <!--Subscene-->
-    <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1" >
-        <SubScene fx:id="binScene" depthBuffer="true" fill="transparent" antiAliasing="$ssaa">
+    <Pane fx:id="bsPane" GridPane.columnIndex="0" GridPane.RowIndex="1"  >
+        <BinScene fx:id="binScene" depthBuffer="true" fill="transparent">
             <root>
-                <Group fx:id="binsView">
+                <Group fx:id="binSceneObjects">
                     <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
                     <Group fx:id="bins"/>
                     <Group fx:id="boxes"/>
                 </Group>
             </root>
-        </SubScene>
+        </BinScene>
     </Pane>
-
-
 
     <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1"  >
         <rowConstraints>
@@ -87,7 +84,6 @@
             <ComboBox fx:id="binSelector" visibleRowCount="5" >
             </ComboBox >
         </HBox>
-
         <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="4" editable="true" >
             <columns>
@@ -120,13 +116,5 @@
             <Label text="Start packing: " textAlignment="CENTER" />
             <Button fx:id="processBtn" text="Process" onAction="#startProcess"></Button>
         </HBox>
-
-
     </GridPane>
-    <!--<ListView GridPane.RowIndex="1" GridPane.columnIndex="1"> </ListView>-->
-
-    <!--<Label text="Bin size" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"/>-->
-
-
-
 </GridPane>
