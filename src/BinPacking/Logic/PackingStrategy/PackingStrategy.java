@@ -17,7 +17,7 @@ public abstract class PackingStrategy {
      */
     public abstract Bin search(Bin bin, Box box);
 
-    protected boolean boxFitsToBin(Bin bin, Box box) {
+    boolean boxFitsToBin(Bin bin, Box box) {
         return (box.getLength() <= bin.getLength() &&
                 box.getWidth() <= bin.getWidth() &&
                 box.getHeight() <= bin.getHeight());

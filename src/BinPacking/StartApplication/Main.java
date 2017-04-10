@@ -1,4 +1,4 @@
-package BinPacking.UI.StartApplication;
+package BinPacking.StartApplication;
 import BinPacking.UI.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,15 +14,13 @@ import javafx.stage.Stage;
 public class Main extends Application{
     public static final double MAIN_SCREEN_W_SCALE = 0.5;
     public static final double MAIN_SCREEN_H_SCALE = 0.5;
-    private FXMLLoader loader;
-    private GridPane root;
     private static Controller controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         //Load the fxml and controller
-        loader = new FXMLLoader(getClass().getResource("/BinPacking/UI/ui.fxml"));
-        root = loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/BinPacking/UI/ui.fxml"));
+        GridPane root = loader.load();
         controller = loader.getController();
 
         //Create a main scene

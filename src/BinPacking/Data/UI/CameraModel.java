@@ -11,14 +11,14 @@ import javafx.scene.transform.Rotate;
  */
 public class CameraModel extends Group {
     public final static int Y_UP_ROTATION = 180;
-    private int xRotation;
-    private int yRotation;
-    private int zRotation;
+    private final int xRotation;
+    private final int yRotation;
+    private final int zRotation;
+    private final Rotate rx = new Rotate();
+    private final Rotate ry = new Rotate();
+    private final Rotate rz = new Rotate();
+    private final Camera camera = new PerspectiveCamera(true);
     private double distance;
-    private Rotate rx = new Rotate();
-    private Rotate ry = new Rotate();
-    private Rotate rz = new Rotate();
-    Camera camera = new PerspectiveCamera(true);
 
     /**
      * @param xRotation

@@ -27,8 +27,8 @@ import java.util.concurrent.Executors;
  * UI view class.
  */
 public class Controller {
-    BoxList boxList = new BoxList();
-    BinList binList = new BinList();
+    private final BoxList boxList = new BoxList();
+    private final BinList binList = new BinList();
 
     /**
      * Fill in FXML controls
@@ -58,19 +58,19 @@ public class Controller {
     @FXML
     private TableView<Box> boxListViewer;
     @FXML
-    private TableColumn lengthCol;
+    private TableColumn<Box,Double> lengthCol;
     @FXML
-    private TableColumn widthCol;
+    private TableColumn<Box,Double> widthCol;
     @FXML
-    private TableColumn heightCol;
+    private TableColumn<Box,Double> heightCol;
     @FXML
     private Label setSizeLabel;
     @FXML
-    private TableColumn xCol;
+    private TableColumn<Box,Double> xCol;
     @FXML
-    private TableColumn yCol;
+    private TableColumn<Box,Double> yCol;
     @FXML
-    private TableColumn zCol;
+    private TableColumn<Box,Double> zCol;
     @FXML
     private Button addBox;
     @FXML
@@ -91,22 +91,22 @@ public class Controller {
 
         //Set box table cell properties
         lengthCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("length")
+                new PropertyValueFactory<>("length")
         );
         widthCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("width")
+                new PropertyValueFactory<>("width")
         );
         heightCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("height")
+                new PropertyValueFactory<>("height")
         );
         xCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("x")
+                new PropertyValueFactory<>("x")
         );
         yCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("y")
+                new PropertyValueFactory<>("y")
         );
         zCol.setCellValueFactory(
-                new PropertyValueFactory<Box,Double>("z")
+                new PropertyValueFactory<>("z")
         );
 
         //Box table cells editor. Box size is changed in both - the observableList boxList and SubScene. A new box is automatic
@@ -190,7 +190,7 @@ public class Controller {
     }
 
     @FXML
-    private ComboBox binSelector;
+    private ComboBox<Bin> binSelector;
     @FXML
     private HBox selectorWrapper;
 
@@ -220,7 +220,7 @@ public class Controller {
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
         binSelector.getSelectionModel().selectedItemProperty().addListener((ov, oldVal, newVal) -> {
                 if(newVal != null)
-                    binScene.draw(boxList, binList, ((Bin)newVal).getCid());
+                    binScene.draw(boxList, binList, (newVal).getCid());
             }
         );
         binSelector.setItems(binList.get());
@@ -233,7 +233,7 @@ public class Controller {
     @FXML
     private Button processBtn;
 
-    private ExecutorService loaderExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService loaderExecutor = Executors.newSingleThreadExecutor();
     public ExecutorService getLoaderExecutor(){
         return loaderExecutor;
     }
@@ -333,7 +333,15 @@ public class Controller {
     class TooLongInputException extends Exception{}
     class EmptyListException extends Exception{}
     class TooLargeBoxException extends Exception{}
-    public void validate() throws NoInputException, TooLongInputException, EmptyListException, TooLargeBoxException   {
+
+    /**
+     *
+     * @throws NoInputException Control's field is empty
+     * @throws TooLongInputException Control's input is too large
+     * @throws EmptyListException No boxes in boxList
+     * @throws TooLargeBoxException Box is bigger than bin
+     */
+    private void validate() throws NoInputException, TooLongInputException, EmptyListException, TooLargeBoxException   {
         if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0)
             throw new NoInputException();
 

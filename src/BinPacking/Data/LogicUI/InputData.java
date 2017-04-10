@@ -11,12 +11,12 @@ import javafx.collections.ObservableList;
  * Structure that is being passed from Controller (View) to Loader (logic)
  */
 public class InputData{
-    private ObservableList<Bin> binList;
-    private PackingStrategy packingStrategy;
-    private ObservableList<Box> boxList;
-    private double binLength;
-    private double binWidth;
-    private double binHeight;
+    private final ObservableList<Bin> binList;
+    private final PackingStrategy packingStrategy;
+    private final ObservableList<Box> boxList;
+    private final double binLength;
+    private final double binWidth;
+    private final double binHeight;
 
     public InputData(double binLength, double binWidth, double binHeight, ObservableList<Bin> binList, PackingStrategy packingStrategy, ObservableList<Box> boxList){
         this.binLength = binLength;

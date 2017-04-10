@@ -18,14 +18,14 @@ import javafx.scene.paint.Color;
  * ------------ X length
  **/
 public abstract class Cuboid extends Group implements Comparable<Cuboid>{
-    protected SimpleDoubleProperty length = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty width = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty height = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty x = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty y = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty z = new SimpleDoubleProperty();
-    protected SimpleIntegerProperty cid = new SimpleIntegerProperty();
-    protected double volume;
+    protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
+    protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
+    protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
+    protected final SimpleDoubleProperty x = new SimpleDoubleProperty();
+    protected final SimpleDoubleProperty y = new SimpleDoubleProperty();
+    protected final SimpleDoubleProperty z = new SimpleDoubleProperty();
+    protected final SimpleIntegerProperty cid = new SimpleIntegerProperty();
+    protected final double volume;
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x.set(x);
@@ -78,10 +78,6 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
 
     public int getCid() {
         return cid.get();
-    }
-
-    public SimpleIntegerProperty cidProperty() {
-        return cid;
     }
 
     public void setCid(int cid) {

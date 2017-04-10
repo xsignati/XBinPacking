@@ -1,7 +1,5 @@
 package BinPacking.Data.LogicUI;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
@@ -13,9 +11,9 @@ import java.util.Random;
 public class Box extends Cuboid{
     public static final int ROTATIONS_NUM = Box.Rotations.values().length;
     public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
-    public final double ORIGINAL_LENGTH;
-    public final double ORIGINAL_WIDTH;
-    public final double ORIGINAL_HEIGHT;
+    private final double ORIGINAL_LENGTH;
+    private final double ORIGINAL_WIDTH;
+    private final double ORIGINAL_HEIGHT;
     private int weight;
 
     /**
@@ -87,20 +85,8 @@ public class Box extends Cuboid{
         return result;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
     public double getLength() {
         return length.get();
-    }
-
-    public SimpleDoubleProperty lengthProperty() {
-        return length;
     }
 
     public void setLength(double length) {
@@ -111,20 +97,12 @@ public class Box extends Cuboid{
         return width.get();
     }
 
-    public SimpleDoubleProperty widthProperty() {
-        return width;
-    }
-
     public void setWidth(double width) {
         this.width.set(width);
     }
 
     public double getHeight() {
         return height.get();
-    }
-
-    public SimpleDoubleProperty heightProperty() {
-        return height;
     }
 
     public void setHeight(double height) {
@@ -135,36 +113,12 @@ public class Box extends Cuboid{
         return x.get();
     }
 
-    public SimpleDoubleProperty xProperty() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x.set(x);
-    }
-
     public double getY() {
         return y.get();
     }
 
-    public SimpleDoubleProperty yProperty() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y.set(y);
-    }
-
     public double getZ() {
         return z.get();
-    }
-
-    public SimpleDoubleProperty zProperty() {
-        return z;
-    }
-
-    public void setZ(double z) {
-        this.z.set(z);
     }
 
     public double getVolume() {

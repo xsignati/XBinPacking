@@ -15,9 +15,9 @@ public class Bin extends Cuboid {
     public enum BinState {EMPTY, FULL}
     public enum BinType {ROOT,A,B,C,D}
     private BinState binState = BinState.EMPTY;
-    private BinType binType;
+    private final BinType binType;
     private Bin parent;
-    private List<Bin> children;
+    private final List<Bin> children;
     private static int rootBinCounter = 0; //< Each box gets this cid. The cid indicates the bin assigned to box.
 
     /**
@@ -127,20 +127,12 @@ public class Bin extends Cuboid {
         return children;
     }
 
-    public void setBinState(BinState binState) {
+    private void setBinState(BinState binState) {
         this.binState = binState;
-    }
-
-    public BinType getBinType() {
-        return binType;
     }
 
     public BinState getBinState() {
         return binState;
-    }
-
-    public static void setRootBinCounter(int rootBinCounter) {
-        Bin.rootBinCounter = rootBinCounter;
     }
 
     public static void resetRootBinCounter(){
@@ -153,7 +145,7 @@ public class Bin extends Cuboid {
     private final static double[][] EDGES_POSITIONS = {{0,0,0}, {1,0,0}, {0,1,0}, {1,1,0}, {0,0,0}, {0,1,0}, {0,0,1}, {0,1,1}, {0,0,0}, {1,0,0}, {0,0,1}, {1,0,1}};
     private final static double[][] EDGES_SHIFTS = {{1,1,0},{0,1,0},{1,0,0},{0,0,0},{0,1,1},{0,0,1},{0,1,0},{0,0,0},{1,0,1},{0,0,1},{1,0,0},{0,0,0}};
     private final PhongMaterial material = new PhongMaterial();
-    private javafx.scene.shape.Box[] edges = new javafx.scene.shape.Box[12];
+    private final javafx.scene.shape.Box[] edges = new javafx.scene.shape.Box[12];
     private final static double SHIFT_RATIO = 0.5;
 
     @Override

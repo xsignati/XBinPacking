@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
  * Created by Xsignati on 08.04.2017.
  */
 public class BoxList {
-    private ObservableList<Box> boxList = FXCollections.observableArrayList();
+    private final ObservableList<Box> boxList = FXCollections.observableArrayList();
     public synchronized void add(Box box){
         boxList.add(box);
     }

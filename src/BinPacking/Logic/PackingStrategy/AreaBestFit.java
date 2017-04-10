@@ -25,7 +25,7 @@ public class AreaBestFit extends PackingStrategy {
         return minBin;
     }
 
-    public Bin min(Bin bin1, Bin bin2){
+    private Bin min(Bin bin1, Bin bin2){
         Bin minBin;
         if(bin1 == null)
             minBin = bin2;

@@ -4,7 +4,6 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.SubScene?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.TextField?>
@@ -18,7 +17,7 @@
 <?import BinPacking.Data.UI.*?>
 
 <GridPane fx:controller="BinPacking.UI.Controller" fx:id = "mainLayout"
-          xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="30" vgap="30"  >
+          xmlns:fx="http://javafx.com/fxml" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 
     <!--Main window Grid Layout -->
@@ -48,6 +47,7 @@
         </BinScene>
     </Pane>
 
+    <!-- Right menu -->
     <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1"  >
         <rowConstraints>
             <RowConstraints percentHeight="10.0" vgrow="ALWAYS" />
@@ -61,29 +61,32 @@
             <ColumnConstraints percentWidth="100.0"  hgrow="ALWAYS" />
         </columnConstraints>
 
+        <!-- Bin size controls -->
         <HBox fx:id = "setWrap" GridPane.columnIndex="0" GridPane.RowIndex="0" spacing="5">
-            <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
-            <Label fx:id="setSizeLabel" text="Bin size: "></Label>
-            <TextField fx:id="setLength" styleClass="textField"  promptText="length"></TextField>
-            <TextField fx:id="setWidth" styleClass="textField"  promptText="width"></TextField>
-            <TextField fx:id="setHeight" styleClass="textField"  promptText="height"></TextField>
+            <Label fx:id="setSizeLabel" text="Bin size: "> </Label>
+            <TextField fx:id="setLength" styleClass="textField"  promptText="length"> </TextField>
+            <TextField fx:id="setWidth" styleClass="textField"  promptText="width"> </TextField>
+            <TextField fx:id="setHeight" styleClass="textField"  promptText="height"> </TextField>
         </HBox>
 
-
+        <!-- Packing Strategy controls-->
         <HBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="15">
             <fx:define>
                 <ToggleGroup fx:id="algorithmButtons"/>
             </fx:define>
             <Label text="Packing algorithm:" textAlignment="CENTER" />
-            <RadioButton fx:id="algBtn1" selected="true" text="BestFit" toggleGroup="$algorithmButtons"> </RadioButton>
-            <RadioButton fx:id="algBtn2" text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
+            <RadioButton selected="true" text="BestFit" toggleGroup="$algorithmButtons"> </RadioButton>
+            <RadioButton text="FirstFit" toggleGroup="$algorithmButtons"> </RadioButton>
         </HBox>
 
+        <!-- Bin selection controls -->
         <HBox fx:id="selectorWrapper" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="15">
-            <Label text="Loaded Bins: "></Label>
+            <Label text="Loaded Bins: "> </Label>
             <ComboBox fx:id="binSelector" visibleRowCount="5" >
             </ComboBox >
         </HBox>
+
+        <!-- Box list -->
         <Label text="Boxes list" textAlignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <TableView fx:id="boxListViewer" GridPane.columnIndex="0" GridPane.RowIndex="4" editable="true" >
             <columns>
@@ -102,19 +105,21 @@
             </columns>
         </TableView>
 
+        <!-- Add box controls -->
         <HBox fx:id="addWrap" GridPane.columnIndex="0" GridPane.RowIndex="5" spacing="5">
-            <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
+            <padding><Insets top="10"/></padding>
             <Label text="New: " textAlignment="CENTER" />
-            <TextField fx:id="addLength" styleClass="textField"  promptText="length"></TextField>
-            <TextField fx:id="addWidth" styleClass="textField"  promptText="width"></TextField>
-            <TextField fx:id="addHeight" styleClass="textField"  promptText="height"></TextField>
-            <Button fx:id="addBox" text="Add"></Button>
+            <TextField fx:id="addLength" styleClass="textField"  promptText="length"> </TextField>
+            <TextField fx:id="addWidth" styleClass="textField"  promptText="width"> </TextField>
+            <TextField fx:id="addHeight" styleClass="textField"  promptText="height"> </TextField>
+            <Button fx:id="addBox" text="Add"> </Button>
         </HBox>
 
+        <!-- Process controls -->
         <HBox fx:id="processWrapper" GridPane.columnIndex="0" GridPane.RowIndex="6" spacing="5">
-            <padding><Insets top="10" right="0" bottom="0" left="0"/></padding>
+            <padding><Insets top="10"/></padding>
             <Label text="Start packing: " textAlignment="CENTER" />
-            <Button fx:id="processBtn" text="Process" onAction="#startProcess"></Button>
+            <Button fx:id="processBtn" text="Process" onAction="#startProcess"> </Button>
         </HBox>
     </GridPane>
 </GridPane>

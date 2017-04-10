@@ -5,23 +5,28 @@ import BinPacking.Data.LogicUI.BinList;
 import BinPacking.Data.LogicUI.Box;
 import BinPacking.Data.LogicUI.BoxList;
 import javafx.beans.NamedArg;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-
 /**
  * Created by Xsignati on 08.04.2017.
  */
 public class BinScene extends SubScene {
+    private final CameraModel camera;
+    private final Group bins;
+    private final Group boxes;
     private Scale scale;
-    private CameraModel camera;
-    private Group bins;
-    private Group boxes;
+    private final double rotationSpeed = 0.2;
+    private final double scrollSpeed = 50;
+    private double mousePosX;
+    private double mousePosY;
+    private double mouseOldX;
+    private double mouseOldY;
+    private double mouseDeltaX;
+    private double mouseDeltaY;
+    private double scrollDelta;
+    private double scrollPosZ;
 
     public BinScene(@NamedArg("root") Parent root, @NamedArg("width") double width, @NamedArg("height") double height, @NamedArg("depthBuffer") boolean depthBuffer) {
         super(root, width, height, true, SceneAntialiasing.BALANCED);
@@ -31,9 +36,32 @@ public class BinScene extends SubScene {
 
         //Add SubScene event handlers
         setCamera(camera.getCamera());
-        setOnMousePressed(pressEvent);
-        setOnMouseDragged(dragEvent);
-        setOnScroll(scrollEvent);
+        setOnMousePressed(me -> {
+            mousePosX = me.getSceneX();
+            mousePosY = me.getSceneY();
+            mouseOldX = me.getSceneX();
+            mouseOldY = me.getSceneY();
+        });
+
+        setOnMouseDragged((me) -> {
+            mouseOldX = mousePosX;
+            mouseOldY = mousePosY;
+            mousePosX = me.getSceneX();
+            mousePosY = me.getSceneY();
+            mouseDeltaX = (mousePosX - mouseOldX);
+            mouseDeltaY = (mousePosY - mouseOldY);
+
+            if (me.isPrimaryButtonDown()) {
+                camera.getRz().setAngle(camera.getRz().getAngle() - mouseDeltaX * rotationSpeed);
+                camera.getRx().setAngle(camera.getRx().getAngle() + mouseDeltaY * rotationSpeed);
+            }
+        });
+
+        setOnScroll((se) -> {
+            scrollDelta = se.getDeltaY() > 0 ?  scrollSpeed : -scrollSpeed;
+            scrollPosZ = camera.getCamera().getTranslateZ();
+            camera.getCamera().setTranslateZ(scrollPosZ + scrollDelta);
+        });
     }
 
     /**
@@ -76,7 +104,7 @@ public class BinScene extends SubScene {
      * before drawing to match to the SubScene camera view and avoid too large objects to displaying.
      */
     private class Scale{
-        private double scale; //Scale factor
+        private final double scale; //Scale factor
         private Scale(double s1, double s2, double s3){
             scale = getMin(s1, s2, s3);
         }
@@ -87,55 +115,5 @@ public class BinScene extends SubScene {
             return scale;
         }
     }
-
-    //Event handlers controlling a rotation of camera and ZOOM.
-    private double mousePosX;
-    private double mousePosY;
-    private double mouseOldX;
-    private double mouseOldY;
-
-    @FXML
-    private EventHandler<MouseEvent> pressEvent = new EventHandler<MouseEvent>(){
-        @Override
-        public void handle(MouseEvent me) {
-            mousePosX = me.getSceneX();
-            mousePosY = me.getSceneY();
-            mouseOldX = me.getSceneX();
-            mouseOldY = me.getSceneY();
-        }
-    };
-
-    @FXML
-    private EventHandler<MouseEvent> dragEvent = new EventHandler<MouseEvent>() {
-        private double rotationSpeed = 0.2;
-        private double mouseDeltaX;
-        private double mouseDeltaY;
-        @Override
-        public void handle(MouseEvent me) {
-            mouseOldX = mousePosX;
-            mouseOldY = mousePosY;
-            mousePosX = me.getSceneX();
-            mousePosY = me.getSceneY();
-            mouseDeltaX = (mousePosX - mouseOldX);
-            mouseDeltaY = (mousePosY - mouseOldY);
-
-            if (me.isPrimaryButtonDown()) {
-                camera.getRz().setAngle(camera.getRz().getAngle() - mouseDeltaX * rotationSpeed);
-                camera.getRx().setAngle(camera.getRx().getAngle() + mouseDeltaY * rotationSpeed);
-            }
-        }
-    };
-
-    private EventHandler<ScrollEvent> scrollEvent = new EventHandler<ScrollEvent>(){
-        private double scrollSpeed = 50;
-        private double scrollDelta;
-        private double scrollPosZ;
-        @Override
-        public void handle(ScrollEvent se) {
-            scrollDelta = se.getDeltaY() > 0 ?  scrollSpeed : -scrollSpeed;
-            scrollPosZ = camera.getCamera().getTranslateZ();
-            camera.getCamera().setTranslateZ(scrollPosZ + scrollDelta);
-        }
-    };
 }
 

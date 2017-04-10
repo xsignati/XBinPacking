@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
  * Created by Xsignati on 08.04.2017.
  */
 public class BinList {
-    private ObservableList<Bin> binList = FXCollections.observableArrayList();
+    private final ObservableList<Bin> binList = FXCollections.observableArrayList();
     public synchronized void add(Bin bin){
         binList.add(bin);
     }
