@@ -282,19 +282,7 @@ public class Controller {
     @FXML
     private void startProcess(){
         try {validate();}
-        catch(NoInputException e){
-            e.printStackTrace(System.err);
-            return;
-        }
-        catch(TooLongInputException e){
-            e.printStackTrace(System.err);
-            return;
-        }
-        catch(EmptyListException e){
-            e.printStackTrace(System.err);
-            return;
-        }
-        catch(TooLargeBoxException e){
+        catch(NoInputException | TooLongInputException | EmptyListException | TooLargeBoxException e){
             e.printStackTrace(System.err);
             return;
         }
