@@ -15,9 +15,12 @@ public class Loader {
      * @param d the input data that contains bin size, boxes list, chose packing strategy and empty bins list
      */
     public void run(InputData d) {
-        d.getPackingStrategy().prepareInput(d.getBoxList()); //< prepare input. Eg. sort boxes by their volumes
-        Bin.resetRootBinCounter(); //< Reset the id counter used to mark new bins
-        d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight())); //< Add a first bin.
+        // Prepare the input, e.g sort boxes by their volume values
+        d.getPackingStrategy().prepareInput(d.getBoxList());
+        // Reset the id counter used to marking new bins
+        Bin.resetRootBinCounter();
+        //Add the first bin
+        d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
 
         for(Box box: d.getBoxList()) {
             int binListSize = d.getBinList().size();

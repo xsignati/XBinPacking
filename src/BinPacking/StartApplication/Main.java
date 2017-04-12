@@ -35,6 +35,9 @@ public class Main extends Application{
 
     }
 
+    /**
+     * Shutdown the thread executor in case of closing the application
+     */
     @Override
     public void stop() {
         if (controller.getLoaderExecutor() != null) {
@@ -45,9 +48,6 @@ public class Main extends Application{
     public static void main(String[] args) {
         launch(args);
     }
-
-
-
 }
 
 

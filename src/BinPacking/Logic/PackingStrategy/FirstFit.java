@@ -5,6 +5,7 @@ import BinPacking.Data.LogicUI.Bin;
 import BinPacking.Data.LogicUI.Box;
 
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -25,6 +26,6 @@ public class FirstFit extends PackingStrategy {
 
     @Override
     public void prepareInput(ObservableList<Box> boxList){
-        Collections.sort(boxList);
+        boxList.sort((b1,b2) -> b2.getVolume().compareTo(b1.getVolume()));
     }
 }

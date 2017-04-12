@@ -14,7 +14,6 @@ public class Box extends Cuboid{
     private final double ORIGINAL_LENGTH;
     private final double ORIGINAL_WIDTH;
     private final double ORIGINAL_HEIGHT;
-    private int weight;
 
     /**
      * Default color parameter constructor.
@@ -83,46 +82,6 @@ public class Box extends Cuboid{
             result = (getX() == otherBox.getX() && getY() == otherBox.getY() && getZ() == otherBox.getZ());
         }
         return result;
-    }
-
-    public double getLength() {
-        return length.get();
-    }
-
-    public void setLength(double length) {
-        this.length.set(length);
-    }
-
-    public double getWidth() {
-        return width.get();
-    }
-
-    public void setWidth(double width) {
-        this.width.set(width);
-    }
-
-    public double getHeight() {
-        return height.get();
-    }
-
-    public void setHeight(double height) {
-        this.height.set(height);
-    }
-
-    public double getX() {
-        return x.get();
-    }
-
-    public double getY() {
-        return y.get();
-    }
-
-    public double getZ() {
-        return z.get();
-    }
-
-    public double getVolume() {
-        return volume;
     }
 
     //Appearance

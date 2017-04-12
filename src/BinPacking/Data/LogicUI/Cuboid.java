@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * |/
  * ------------ X length
  **/
-public abstract class Cuboid extends Group implements Comparable<Cuboid>{
+public abstract class Cuboid extends Group{
     protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
@@ -25,7 +25,7 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
     protected final SimpleDoubleProperty y = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty z = new SimpleDoubleProperty();
     protected final SimpleIntegerProperty cid = new SimpleIntegerProperty();
-    protected final double volume;
+    protected final Double volume;
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x.set(x);
@@ -35,6 +35,18 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
         this.width.set(width);
         this.height.set(height);
         volume = length * width * height;
+    }
+
+    public void setLength(double length) {
+        this.length.set(length);
+    }
+
+    public void setWidth(double width) {
+        this.width.set(width);
+    }
+
+    public void setHeight(double height) {
+        this.height.set(height);
     }
 
     public double getLength() {
@@ -61,7 +73,7 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
         return z.get();
     }
 
-    public double getVolume() {
+    public Double getVolume() {
         return volume;
     }
 
@@ -100,9 +112,4 @@ public abstract class Cuboid extends Group implements Comparable<Cuboid>{
      * @param color
      */
     public abstract void createGraphicModel(double length, double width, double height, Color color);
-
-    @Override
-    public int compareTo(Cuboid o){
-        return (int)(o.getVolume() - getVolume());
-    }
 }
