@@ -1,5 +1,6 @@
 package BinPacking.Data.LogicUI;
 
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 
@@ -85,6 +86,7 @@ public class Box extends Cuboid{
     }
 
     //Appearance
+    private final Group boxModel = new Group();
     private final PhongMaterial material = new PhongMaterial();
     private javafx.scene.shape.Box box;
     private final static double SHIFT_RATIO = 0.5;
@@ -105,6 +107,10 @@ public class Box extends Cuboid{
         material.setDiffuseColor(color);
         material.setSpecularColor(Color.DARKGREY);
         box.setMaterial(material);
-        getChildren().add(box);
+        boxModel.getChildren().add(box);
+    }
+
+    public Group getBoxModel() {
+        return boxModel;
     }
 }

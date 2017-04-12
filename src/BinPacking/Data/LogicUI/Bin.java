@@ -1,5 +1,6 @@
 package BinPacking.Data.LogicUI;
 
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
@@ -100,7 +101,7 @@ public class Bin extends Cuboid {
      */
     public  void removeAltSiblings() {
         if (parent != null)
-            parent.children.removeIf((Bin bin) -> bin.binType != binType);
+            parent.children.removeIf(bin -> bin.binType != binType);
     }
 
     /**
@@ -140,6 +141,7 @@ public class Bin extends Cuboid {
     }
 
     //Appearance
+    private final Group binModel = new Group();
     private final static int  thickness = 10;
     private final static double[][] EDGES_SIZES = {{0,0,1}, {0,0,1}, {0,0,1}, {0,0,1}, {1,0,0}, {1,0,0}, {1,0,0}, {1,0,0}, {0,1,0}, {0,1,0}, {0,1,0}, {0,1,0}};
     private final static double[][] EDGES_POSITIONS = {{0,0,0}, {1,0,0}, {0,1,0}, {1,1,0}, {0,0,0}, {0,1,0}, {0,0,1}, {0,1,1}, {0,0,0}, {1,0,0}, {0,0,1}, {1,0,1}};
@@ -170,7 +172,11 @@ public class Bin extends Cuboid {
             edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width  + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
             edges[i].setTranslateZ(EDGES_POSITIONS[i][2] * height + SHIFT_RATIO * edges[i].getDepth() - EDGES_SHIFTS[i][2] * thickness);
             edges[i].setMaterial(material);
-            getChildren().add(edges[i]);
+            binModel.getChildren().add(edges[i]);
         }
+    }
+
+    public Group getBinModel() {
+        return binModel;
     }
 }

@@ -111,8 +111,7 @@ public class Controller {
 
         //Box table cells editor. Box size is changed in both - the observableList boxList and SubScene. A new box is automatic
         //rescaled.
-        EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent =
-            (ce) -> {
+        EventHandler<TableColumn.CellEditEvent<Box, Double>> tableEditEvent = ce -> {
                     Box be = (ce.getTableView().getItems().get(ce.getTablePosition().getRow()));
 
                     if(ce.getSource() == lengthCol) {
@@ -147,7 +146,7 @@ public class Controller {
         addHeight.setTextFormatter(getDigitValidator());
 
         //Add box listener
-        addBox.setOnAction((e) -> {
+        addBox.setOnAction(e -> {
                 boxList.add(new Box(
                         Double.parseDouble(addLength.getText()),
                         Double.parseDouble(addWidth.getText()),

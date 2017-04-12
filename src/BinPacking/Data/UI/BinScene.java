@@ -75,9 +75,9 @@ public class BinScene extends SubScene {
 
         for (Box box : boxList.get()) {
             if (box.getCid() == selectedBin)
-                boxes.getChildren().add(box);
+                boxes.getChildren().add(box.getBoxModel());
         }
-        bins.getChildren().add(binList.get().get(selectedBin));
+        bins.getChildren().add(binList.get().get(selectedBin).getBinModel());
     }
 
     public void rescale(BoxList boxList, BinList binList, double binLength, double binWidth, double binHeight) {

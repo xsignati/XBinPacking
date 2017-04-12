@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * |/
  * ------------ X length
  **/
-public abstract class Cuboid extends Group{
+public abstract class Cuboid{
     protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
