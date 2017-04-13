@@ -2,8 +2,6 @@ package BinPacking.Data.LogicUI;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -24,7 +22,7 @@ public abstract class Cuboid{
     protected final SimpleDoubleProperty x = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty y = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty z = new SimpleDoubleProperty();
-    protected final SimpleIntegerProperty cid = new SimpleIntegerProperty();
+    protected final SimpleIntegerProperty id = new SimpleIntegerProperty();
     protected final Double volume;
 
     public Cuboid(double x, double y, double z, double length, double width, double height){
@@ -88,28 +86,28 @@ public abstract class Cuboid{
         this.height.set(height);
     }
 
-    public int getCid() {
-        return cid.get();
+    public int getId() {
+        return id.get();
     }
 
-    public void setCid(int cid) {
-        this.cid.set(cid);
+    public void setId(int id) {
+        this.id.set(id);
     }
 
     //Appearance
 
-    /**
-     * Scale method used to fit a model to the SubScene size
-     * @param scale
-     */
-    public abstract void scale(double scale);
-
-    /**
-     * Model's appearance creation
-     * @param length
-     * @param width
-     * @param height
-     * @param color
-     */
-    public abstract void createGraphicModel(double length, double width, double height, Color color);
+//    /**
+//     * Scale method used to fit a model to the SubScene size
+//     * @param scale
+//     */
+//    public abstract void scale(double scale);
+//
+//    /**
+//     * BoxModel's appearance creation
+//     * @param length
+//     * @param width
+//     * @param height
+//     * @param color
+//     */
+//    public abstract void createGraphicModel(double length, double width, double height, Color color);
 }

@@ -19,7 +19,8 @@ public class Bin extends Cuboid {
     private final BinType binType;
     private Bin parent;
     private final List<Bin> children;
-    private static int rootBinCounter = 0; //< Each box gets this cid. The cid indicates the bin assigned to box.
+    private static int rootBinCounter = 0; //< Each box gets this id. The id indicates the bin assigned to box.
+    private final BinModel model = new BinModel();
 
     /**
      * Public constructor used to construct a new Root Bin
@@ -41,7 +42,7 @@ public class Bin extends Cuboid {
     public Bin(double length, double width, double height, Color color){
         this(0,0,0,length,width,height,BinType.ROOT);
         rootBinCounter++;
-        createGraphicModel(length, width, height, color); //< Appearance part of code
+        model.createGraphicModel(length, width, height, color); //< Appearance part of code
     }
 
     /**
@@ -57,7 +58,7 @@ public class Bin extends Cuboid {
     private Bin(double x, double y, double z, double length, double width, double height, BinType binType) {
         super(x, y, z, length, width, height);
         this.binType = binType;
-        setCid(rootBinCounter);
+        setId(rootBinCounter);
         children = new LinkedList<>();
     }
 
@@ -66,7 +67,7 @@ public class Bin extends Cuboid {
      */
     private void addChild(Bin bin) {
         bin.parent = this;
-        bin.setCid(getCid());
+        bin.setId(getId());
         children.add(bin);
     }
 
@@ -110,7 +111,7 @@ public class Bin extends Cuboid {
      */
     public void reserveBin(Box box){
         box.setCoordinates(getX(), getY(), getZ());
-        box.setCid(getCid());
+        box.setId(getId());
         setBinState(BinState.FULL);
     }
 
@@ -140,43 +141,50 @@ public class Bin extends Cuboid {
         Bin.rootBinCounter = 0;
     }
 
-    //Appearance
-    private final Group binModel = new Group();
-    private final static int  thickness = 10;
-    private final static double[][] EDGES_SIZES = {{0,0,1}, {0,0,1}, {0,0,1}, {0,0,1}, {1,0,0}, {1,0,0}, {1,0,0}, {1,0,0}, {0,1,0}, {0,1,0}, {0,1,0}, {0,1,0}};
-    private final static double[][] EDGES_POSITIONS = {{0,0,0}, {1,0,0}, {0,1,0}, {1,1,0}, {0,0,0}, {0,1,0}, {0,0,1}, {0,1,1}, {0,0,0}, {1,0,0}, {0,0,1}, {1,0,1}};
-    private final static double[][] EDGES_SHIFTS = {{1,1,0},{0,1,0},{1,0,0},{0,0,0},{0,1,1},{0,0,1},{0,1,0},{0,0,0},{1,0,1},{0,0,1},{1,0,0},{0,0,0}};
-    private final PhongMaterial material = new PhongMaterial();
-    private final javafx.scene.shape.Box[] edges = new javafx.scene.shape.Box[12];
-    private final static double SHIFT_RATIO = 0.5;
+    public class BinModel implements Model{
+        //Appearance
+        private final Group binModel = new Group();
+        private final int thickness = 10;
+        private final double[][] EDGES_SIZES = {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}, {0, 0, 1}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}};
+        private final double[][] EDGES_POSITIONS = {{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {1, 1, 0}, {0, 0, 0}, {0, 1, 0}, {0, 0, 1}, {0, 1, 1}, {0, 0, 0}, {1, 0, 0}, {0, 0, 1}, {1, 0, 1}};
+        private final double[][] EDGES_SHIFTS = {{1, 1, 0}, {0, 1, 0}, {1, 0, 0}, {0, 0, 0}, {0, 1, 1}, {0, 0, 1}, {0, 1, 0}, {0, 0, 0}, {1, 0, 1}, {0, 0, 1}, {1, 0, 0}, {0, 0, 0}};
+        private final PhongMaterial material = new PhongMaterial();
+        private final javafx.scene.shape.Box[] edges = new javafx.scene.shape.Box[12];
+        private final double SHIFT_RATIO = 0.5;
 
-    @Override
-    public void scale(double scale){
-        for(int i = 0 ; i < EDGES_SHIFTS.length; i++) {
-            edges[i].setWidth(edges[i].getWidth() * scale);
-            edges[i].setHeight(edges[i].getHeight() * scale);
-            edges[i].setDepth(edges[i].getDepth() * scale);
-            edges[i].setTranslateX(edges[i].getTranslateX() * scale);
-            edges[i].setTranslateY(edges[i].getTranslateY() * scale);
-            edges[i].setTranslateZ(edges[i].getTranslateZ() * scale);
+        //Only the outer class should be able to create its BoxModel
+        private BinModel(){}
+
+        public void scale(double scale) {
+            for (int i = 0; i < EDGES_SHIFTS.length; i++) {
+                edges[i].setWidth(edges[i].getWidth() * scale);
+                edges[i].setHeight(edges[i].getHeight() * scale);
+                edges[i].setDepth(edges[i].getDepth() * scale);
+                edges[i].setTranslateX(edges[i].getTranslateX() * scale);
+                edges[i].setTranslateY(edges[i].getTranslateY() * scale);
+                edges[i].setTranslateZ(edges[i].getTranslateZ() * scale);
+            }
+        }
+
+        public void createGraphicModel(double length, double width, double height, Color color) {
+            material.setSpecularColor(Color.DARKGREY);
+            material.setDiffuseColor(color);
+            for (int i = 0; i < EDGES_SHIFTS.length; i++) {
+                edges[i] = new javafx.scene.shape.Box(EDGES_SIZES[i][0] * length + thickness, EDGES_SIZES[i][1] * (width) + thickness, EDGES_SIZES[i][2] * (height) + thickness);
+                edges[i].setTranslateX(EDGES_POSITIONS[i][0] * length + SHIFT_RATIO * edges[i].getWidth() - EDGES_SHIFTS[i][0] * thickness);
+                edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
+                edges[i].setTranslateZ(EDGES_POSITIONS[i][2] * height + SHIFT_RATIO * edges[i].getDepth() - EDGES_SHIFTS[i][2] * thickness);
+                edges[i].setMaterial(material);
+                binModel.getChildren().add(edges[i]);
+            }
         }
     }
 
-    @Override
-    public void createGraphicModel(double length, double width, double height, Color color){
-        material.setSpecularColor(Color.DARKGREY);
-        material.setDiffuseColor(color);
-        for(int i = 0 ; i < EDGES_SHIFTS.length; i++) {
-            edges[i] = new javafx.scene.shape.Box(EDGES_SIZES[i][0] * length  + thickness, EDGES_SIZES[i][1] * (width ) + thickness, EDGES_SIZES[i][2] * (height ) + thickness);
-            edges[i].setTranslateX(EDGES_POSITIONS[i][0] * length  + SHIFT_RATIO * edges[i].getWidth() - EDGES_SHIFTS[i][0] * thickness);
-            edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width  + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
-            edges[i].setTranslateZ(EDGES_POSITIONS[i][2] * height + SHIFT_RATIO * edges[i].getDepth() - EDGES_SHIFTS[i][2] * thickness);
-            edges[i].setMaterial(material);
-            binModel.getChildren().add(edges[i]);
-        }
+    public BinModel getModel() {
+        return model;
     }
 
     public Group getBinModel() {
-        return binModel;
+        return model.binModel;
     }
 }

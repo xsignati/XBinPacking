@@ -74,8 +74,8 @@ public class BinScene extends SubScene {
         bins.getChildren().clear();
 
         for (Box box : boxList.get()) {
-            if (box.getCid() == selectedBin)
-                boxes.getChildren().add(box.getBoxModel());
+            if (box.getId() == selectedBin)
+                boxes.getChildren().add(box.getModelGroup());
         }
         bins.getChildren().add(binList.get().get(selectedBin).getBinModel());
     }
@@ -86,16 +86,16 @@ public class BinScene extends SubScene {
         scale = new Scale(getWidth() / binLength, getHeight() / binWidth, getWidth() / binHeight);
 
         for (Box box : boxList.get()) {
-            box.scale(scale.get());
+            box.getModel().scale(scale.get());
         }
 
         for (Bin bin : binList.get()) {
-            bin.scale(scale.get());
+            bin.getModel().scale(scale.get());
         }
     }
 
     public void rescale(Box box){
-        box.scale(scale.get());
+        box.getModel().scale(scale.get());
     }
 
     /**

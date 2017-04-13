@@ -207,7 +207,7 @@ public class Controller {
                         if (item == null) {
                             setText(null);
                         } else {
-                            setText("BIN " + Integer.toString(item.getCid()));
+                            setText("BIN " + Integer.toString(item.getId()));
                         }
                     }
                 };
@@ -219,7 +219,7 @@ public class Controller {
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
         binSelector.getSelectionModel().selectedItemProperty().addListener((ov, oldVal, newVal) -> {
                 if(newVal != null)
-                    binScene.draw(boxList, binList, (newVal).getCid());
+                    binScene.draw(boxList, binList, newVal.getId());
             }
         );
         binSelector.setItems(binList.get());

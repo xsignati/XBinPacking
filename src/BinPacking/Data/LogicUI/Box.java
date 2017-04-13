@@ -15,6 +15,7 @@ public class Box extends Cuboid{
     private final double ORIGINAL_LENGTH;
     private final double ORIGINAL_WIDTH;
     private final double ORIGINAL_HEIGHT;
+    private final BoxModel model = new BoxModel();
 
     /**
      * Default color parameter constructor.
@@ -38,7 +39,7 @@ public class Box extends Cuboid{
         this.ORIGINAL_LENGTH = length;
         this.ORIGINAL_WIDTH = width;
         this.ORIGINAL_HEIGHT = height;
-        createGraphicModel(length, width, height, color);
+        model.createGraphicModel(length, width, height, color);
     }
 
     /**
@@ -85,32 +86,39 @@ public class Box extends Cuboid{
         return result;
     }
 
-    //Appearance
-    private final Group boxModel = new Group();
-    private final PhongMaterial material = new PhongMaterial();
-    private javafx.scene.shape.Box box;
-    private final static double SHIFT_RATIO = 0.5;
+    public class BoxModel implements Model{
+        //Appearance
+        private final Group modelGroup = new Group();
+        private final PhongMaterial material = new PhongMaterial();
+        private javafx.scene.shape.Box box;
+        private final static double SHIFT_RATIO = 0.5;
 
-    @Override
-    public void scale(double scale){
-        box.setWidth(getLength() * scale);
-        box.setHeight(getWidth() * scale);
-        box.setDepth(getHeight() * scale);
-        box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
-        box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
-        box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
+        //Only the outer class should be able to create its BoxModel
+        private BoxModel(){}
+
+        public void scale(double scale){
+            box.setWidth(getLength() * scale);
+            box.setHeight(getWidth() * scale);
+            box.setDepth(getHeight() * scale);
+            box.setTranslateX(scale * (getX()  + SHIFT_RATIO * getLength()));
+            box.setTranslateY(scale * (getY()  + SHIFT_RATIO * getWidth()));
+            box.setTranslateZ(scale * (getZ()  + SHIFT_RATIO * getHeight()));
+        }
+
+        public void createGraphicModel(double length, double width, double height, Color color){
+            box = new javafx.scene.shape.Box(length, width, height);
+            material.setDiffuseColor(color);
+            material.setSpecularColor(Color.DARKGREY);
+            box.setMaterial(material);
+            modelGroup.getChildren().add(box);
+        }
     }
 
-    @Override
-    public void createGraphicModel(double length, double width, double height, Color color){
-        box = new javafx.scene.shape.Box(length, width, height);
-        material.setDiffuseColor(color);
-        material.setSpecularColor(Color.DARKGREY);
-        box.setMaterial(material);
-        boxModel.getChildren().add(box);
+    public BoxModel getModel() {
+        return model;
     }
 
-    public Group getBoxModel() {
-        return boxModel;
+    public Group getModelGroup(){
+        return model.modelGroup;
     }
 }
