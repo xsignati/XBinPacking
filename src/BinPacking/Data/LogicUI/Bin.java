@@ -9,10 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Flexscan2243 on 24.01.2017.
+ * Created by Xsignati on 24.01.2017.
  * The Bin is a tree-like structure. Every bin contains a list of its Bin children.
  */
-public class Bin extends Cuboid {
+public class Bin extends Cuboid implements SceneModel {
     public enum BinState {EMPTY, FULL}
     public enum BinType {ROOT,A,B,C,D}
     private BinState binState = BinState.EMPTY;
@@ -141,9 +141,12 @@ public class Bin extends Cuboid {
         Bin.rootBinCounter = 0;
     }
 
-    public class BinModel implements Model{
+    /**
+     * Graphic
+     */
+    public class BinModel{
         //Appearance
-        private final Group binModel = new Group();
+        private final Group modelGroup = new Group();
         private final int thickness = 10;
         private final double[][] EDGES_SIZES = {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}, {0, 0, 1}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}, {0, 1, 0}};
         private final double[][] EDGES_POSITIONS = {{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {1, 1, 0}, {0, 0, 0}, {0, 1, 0}, {0, 0, 1}, {0, 1, 1}, {0, 0, 0}, {1, 0, 0}, {0, 0, 1}, {1, 0, 1}};
@@ -175,16 +178,19 @@ public class Bin extends Cuboid {
                 edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
                 edges[i].setTranslateZ(EDGES_POSITIONS[i][2] * height + SHIFT_RATIO * edges[i].getDepth() - EDGES_SHIFTS[i][2] * thickness);
                 edges[i].setMaterial(material);
-                binModel.getChildren().add(edges[i]);
+                modelGroup.getChildren().add(edges[i]);
             }
         }
     }
 
-    public BinModel getModel() {
-        return model;
+    @Override
+    public void scale(double scale){
+        model.scale(scale);
     }
 
-    public Group getBinModel() {
-        return model.binModel;
+    @Override
+    public void addModel(Group binSceneElements){
+        binSceneElements.getChildren().add(model.modelGroup);
     }
+
 }

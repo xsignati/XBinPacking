@@ -29,10 +29,9 @@ public class Main extends Application{
         scene.getStylesheets().add(getClass().getResource("/BinPacking/UI/css/main.css").toExternalForm());
 
         //Show a primary stage
-        primaryStage.setTitle("Xbinpacking");
+        primaryStage.setTitle("XBinPacking");
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
 
     /**

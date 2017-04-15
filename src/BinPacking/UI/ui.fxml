@@ -40,8 +40,7 @@
             <root>
                 <Group fx:id="binSceneObjects">
                     <CameraModel fx:id="cameraModel" xRotation="120" yRotation="0" zRotation="300" distance="1200"/>
-                    <Group fx:id="bins"/>
-                    <Group fx:id="boxes"/>
+                    <Group fx:id="binSceneElements"/>
                 </Group>
             </root>
         </BinScene>
@@ -82,8 +81,8 @@
         <!-- Bin selection controls -->
         <HBox fx:id="selectorWrapper" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="15">
             <Label text="Loaded Bins: "> </Label>
-            <ComboBox fx:id="binSelector" visibleRowCount="5" >
-            </ComboBox >
+            <ComboBox fx:id="binSelector" visibleRowCount="5" > </ComboBox >
+            <Button fx:id="clearBtn" text="Clear" onAction="#clear"> </Button>
         </HBox>
 
         <!-- Box list -->

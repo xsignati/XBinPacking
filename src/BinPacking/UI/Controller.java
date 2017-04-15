@@ -31,7 +31,7 @@ public class Controller {
     private final BinList binList = new BinList();
 
     /**
-     * Fill in FXML controls
+     * Configure FXML controls
      */
     @FXML
     public void initialize(){
@@ -48,7 +48,7 @@ public class Controller {
     private Pane bsPane;
 
     /**
-     * Bind BinScene to allow resizing
+     * Bind the BinScene to its wrapper to make it resizable
      */
     private void subSceneInit(){
         binScene.heightProperty().bind(bsPane.heightProperty());
@@ -123,7 +123,8 @@ public class Controller {
                     else if(ce.getSource() == heightCol){
                         be.setHeight(ce.getNewValue());
                     }
-                    binScene.rescale(be);
+                    if(binScene.getScale() != null)
+                        binScene.rescale(be);
             };
 
         //Add box table event handlers
@@ -192,9 +193,11 @@ public class Controller {
     private ComboBox<Bin> binSelector;
     @FXML
     private HBox selectorWrapper;
+    @FXML
+    private Button clearBtn;
 
     /**
-     * Configure controls responsible for selecting Bins that are already packed
+     * Configure controls responsible for selecting Bins and clearing all data
      */
     private void binSelectInit(){
         Callback<ListView<Bin>, ListCell<Bin>> cf = new Callback<ListView<Bin>, ListCell<Bin>>() {
@@ -218,11 +221,27 @@ public class Controller {
         binSelector.setCellFactory(cf);
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.6));
         binSelector.getSelectionModel().selectedItemProperty().addListener((ov, oldVal, newVal) -> {
-                if(newVal != null)
-                    binScene.draw(boxList, binList, newVal.getId());
+                if(newVal != null) {
+                    binScene.clear();
+                    binScene.add(boxList.get(), newVal.getId());
+                    binScene.add(binList.get(), newVal.getId());
+                }
             }
         );
         binSelector.setItems(binList.get());
+
+        clearBtn.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.20));
+        binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.40));
+    }
+
+    /**
+     * Delete all boxes and bins from binScene and table
+     */
+    @FXML
+    private void clear(){
+        binScene.clear();
+        binList.clear();
+        boxList.clear();
     }
 
     @FXML
@@ -254,16 +273,23 @@ public class Controller {
             InputData inputData = new InputData(binLength, binWidth, binHeight, binList.get(), packingAlg, boxList.get());
             Loader loader = new Loader();
             loader.run(inputData);
+
             //Rescale BinScene
-            binScene.rescale(boxList, binList, binLength, binWidth, binHeight);
+            binScene.init(binLength, binWidth, binHeight);
+            binScene.rescale(boxList.get());
+            binScene.rescale(binList.get());
 
             return null;
         }
 
         public LoaderTask(){
             setOnSucceeded((WorkerStateEvent event) ->
-                    Platform.runLater(() ->
-                            binScene.draw(boxList, binList,0))
+                    Platform.runLater(() -> {
+                                binScene.clear();
+                                binScene.add(boxList.get(), 0);
+                                binScene.add(binList.get(), 0);
+                            }
+                    )
             );
         }
     }

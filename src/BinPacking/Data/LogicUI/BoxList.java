@@ -15,4 +15,7 @@ public class BoxList {
     public synchronized ObservableList<Box> get() {
         return boxList;
     }
+    public synchronized void clear(){
+        boxList.clear();
+    }
 }

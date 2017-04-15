@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class Box extends Cuboid{
+public class Box extends Cuboid implements SceneModel{
     public static final int ROTATIONS_NUM = Box.Rotations.values().length;
     public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
     private final double ORIGINAL_LENGTH;
@@ -86,7 +86,7 @@ public class Box extends Cuboid{
         return result;
     }
 
-    public class BoxModel implements Model{
+    public class BoxModel {
         //Appearance
         private final Group modelGroup = new Group();
         private final PhongMaterial material = new PhongMaterial();
@@ -114,11 +114,14 @@ public class Box extends Cuboid{
         }
     }
 
-    public BoxModel getModel() {
-        return model;
+    @Override
+    public void scale(double scale){
+        model.scale(scale);
     }
 
-    public Group getModelGroup(){
-        return model.modelGroup;
+    @Override
+    public void addModel(Group binSceneElements){
+        binSceneElements.getChildren().add(model.modelGroup);
     }
+
 }

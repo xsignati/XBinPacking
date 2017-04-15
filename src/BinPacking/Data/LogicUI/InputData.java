@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 /**
  * Structure that is being passed from Controller (View) to Loader (logic)
  */
-public class InputData{
+public class InputData extends javafx.scene.shape.Box{
     private final ObservableList<Bin> binList;
     private final PackingStrategy packingStrategy;
     private final ObservableList<Box> boxList;

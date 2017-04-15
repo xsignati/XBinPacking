@@ -1,21 +1,19 @@
 package BinPacking.Data.UI;
 
-import BinPacking.Data.LogicUI.Bin;
-import BinPacking.Data.LogicUI.BinList;
-import BinPacking.Data.LogicUI.Box;
-import BinPacking.Data.LogicUI.BoxList;
+import BinPacking.Data.LogicUI.SceneModel;
 import javafx.beans.NamedArg;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 /**
+ * Custom BinScene displaying boxes and bins.
  * Created by Xsignati on 08.04.2017.
  */
 public class BinScene extends SubScene {
     private final CameraModel camera;
-    private final Group bins;
-    private final Group boxes;
+    private final Group binSceneElements;
     private Scale scale;
     private final double rotationSpeed = 0.2;
     private final double scrollSpeed = 50;
@@ -28,11 +26,17 @@ public class BinScene extends SubScene {
     private double scrollDelta;
     private double scrollPosZ;
 
+    /**
+     * Custom BinScene
+     * @param root SubScene class root
+     * @param width SubScene class width
+     * @param height SubScene class height
+     * @param depthBuffer SubScene class dephtBuffer
+     */
     public BinScene(@NamedArg("root") Parent root, @NamedArg("width") double width, @NamedArg("height") double height, @NamedArg("depthBuffer") boolean depthBuffer) {
         super(root, width, height, true, SceneAntialiasing.BALANCED);
         camera = (CameraModel) getRoot().getChildrenUnmodifiable().get(0);
-        bins = (Group) getRoot().getChildrenUnmodifiable().get(1);
-        boxes = (Group) getRoot().getChildrenUnmodifiable().get(2);
+        binSceneElements = (Group) getRoot().getChildrenUnmodifiable().get(1);
 
         //Add SubScene event handlers
         setCamera(camera.getCamera());
@@ -43,7 +47,7 @@ public class BinScene extends SubScene {
             mouseOldY = me.getSceneY();
         });
 
-        setOnMouseDragged((me) -> {
+        setOnMouseDragged(me -> {
             mouseOldX = mousePosX;
             mouseOldY = mousePosY;
             mousePosX = me.getSceneX();
@@ -65,37 +69,52 @@ public class BinScene extends SubScene {
     }
 
     /**
-     * Add boxes and bins 3D models to the SubScene.
-     *
-     * @param selectedBin - display boxes belong to the chosen Bin identified by binId
+     * Add elements to the BinScene
+     * @param sceneModelsList list of objects addable to BinScene
+     * @param selectedBin allows to select boxes and bin with same ids only
      */
-    public void draw(BoxList boxList, BinList binList, int selectedBin) {
-        boxes.getChildren().clear();
-        bins.getChildren().clear();
-
-        for (Box box : boxList.get()) {
-            if (box.getId() == selectedBin)
-                boxes.getChildren().add(box.getModelGroup());
+    public void add(ObservableList<? extends SceneModel> sceneModelsList, int selectedBin) {
+        for (SceneModel sceneModel : sceneModelsList) {
+            if (sceneModel.getId() == selectedBin)
+                sceneModel.addModel(binSceneElements);
         }
-        bins.getChildren().add(binList.get().get(selectedBin).getBinModel());
     }
 
-    public void rescale(BoxList boxList, BinList binList, double binLength, double binWidth, double binHeight) {
+    /**
+     * Must be done after the creation of the application window (uses the window size)
+     * @param binLength length of bin
+     * @param binWidth width of bin
+     * @param binHeight height of bin
+     */
+    public void init(double binLength, double binWidth, double binHeight){
         camera.setDistance(getWidth() * 4);
         camera.reset();
         scale = new Scale(getWidth() / binLength, getHeight() / binWidth, getWidth() / binHeight);
+    }
 
-        for (Box box : boxList.get()) {
-            box.getModel().scale(scale.get());
-        }
-
-        for (Bin bin : binList.get()) {
-            bin.getModel().scale(scale.get());
+    /**
+     * The Method used to fit a model to the SubScene size
+     * @param sceneModelsList list of models
+     */
+    public void rescale(ObservableList<? extends SceneModel> sceneModelsList) {
+        for (SceneModel sceneModel : sceneModelsList) {
+            sceneModel.scale(scale.get());
         }
     }
 
-    public void rescale(Box box){
-        box.getModel().scale(scale.get());
+    /**
+     * The Method used to fit a model to the SubScene size
+     * @param sceneModel model
+     */
+    public void rescale(SceneModel sceneModel){
+        sceneModel.scale(scale.get());
+    }
+
+    /**
+     * Clear all graphics elements
+     */
+    public void clear(){
+        binSceneElements.getChildren().clear();
     }
 
     /**
@@ -114,6 +133,10 @@ public class BinScene extends SubScene {
         private double get() {
             return scale;
         }
+    }
+
+    public Scale getScale() {
+        return scale;
     }
 }
 

@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  * |/
  * ------------ X length
  **/
-public abstract class Cuboid{
+public abstract class Cuboid {
     protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
@@ -93,21 +93,4 @@ public abstract class Cuboid{
     public void setId(int id) {
         this.id.set(id);
     }
-
-    //Appearance
-
-//    /**
-//     * Scale method used to fit a model to the SubScene size
-//     * @param scale
-//     */
-//    public abstract void scale(double scale);
-//
-//    /**
-//     * BoxModel's appearance creation
-//     * @param length
-//     * @param width
-//     * @param height
-//     * @param color
-//     */
-//    public abstract void createGraphicModel(double length, double width, double height, Color color);
 }
