@@ -64,6 +64,8 @@ public class UnitTest {
             Loader loader = new Loader();
             loader.run(inputData);
 
+            br.close();
+
 
         }
         catch(FileNotFoundException e)
