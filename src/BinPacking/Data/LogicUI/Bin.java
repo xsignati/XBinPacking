@@ -5,8 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -159,20 +161,20 @@ public class Bin extends Cuboid implements SceneModel {
         private BinModel(){}
 
         public void scale(double scale) {
-            for (int i = 0; i < EDGES_SHIFTS.length; i++) {
-                edges[i].setWidth(edges[i].getWidth() * scale);
-                edges[i].setHeight(edges[i].getHeight() * scale);
-                edges[i].setDepth(edges[i].getDepth() * scale);
-                edges[i].setTranslateX(edges[i].getTranslateX() * scale);
-                edges[i].setTranslateY(edges[i].getTranslateY() * scale);
-                edges[i].setTranslateZ(edges[i].getTranslateZ() * scale);
-            }
+            Arrays.stream(edges).forEach(i -> {
+                i.setWidth(i.getWidth() * scale);
+                i.setHeight(i.getHeight() * scale);
+                i.setDepth(i.getDepth() * scale);
+                i.setTranslateX(i.getTranslateX() * scale);
+                i.setTranslateY(i.getTranslateY() * scale);
+                i.setTranslateZ(i.getTranslateZ() * scale);
+            });
         }
 
         public void createGraphicModel(double length, double width, double height, Color color) {
             material.setSpecularColor(Color.DARKGREY);
             material.setDiffuseColor(color);
-            for (int i = 0; i < EDGES_SHIFTS.length; i++) {
+            IntStream.range(0, edges.length).forEach( i -> {
                 edges[i] = new javafx.scene.shape.Box(EDGES_SIZES[i][0] * length + thickness, EDGES_SIZES[i][1] * (width) + thickness, EDGES_SIZES[i][2] * (height) + thickness);
                 edges[i].setTranslateX(EDGES_POSITIONS[i][0] * length + SHIFT_RATIO * edges[i].getWidth() - EDGES_SHIFTS[i][0] * thickness);
                 edges[i].setTranslateY(EDGES_POSITIONS[i][1] * width + SHIFT_RATIO * edges[i].getHeight() - EDGES_SHIFTS[i][1] * thickness);
@@ -180,6 +182,7 @@ public class Bin extends Cuboid implements SceneModel {
                 edges[i].setMaterial(material);
                 modelGroup.getChildren().add(edges[i]);
             }
+            );
         }
     }
 
