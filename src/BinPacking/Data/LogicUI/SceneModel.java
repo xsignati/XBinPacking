@@ -13,14 +13,15 @@ public interface SceneModel {
     void scale(double scale);
 
     /**
-     * Graphics instance of the object required by the BinScene
-     * @param binSceneModels
+     * Add models to the subScene
+     * @param binSceneModels graphics instance of the object required by the BinScene
      */
     void addModel(Group binSceneModels);
 
     /**
-     * Id required to draw elements that belong to a specific bin
-     * @return id of the object
+     * Add if id matches
+     * @param binSceneModels id of the object
+     * @param id model's id
      */
-    int getId();
+    void addModel(Group binSceneModels, int id);
 }

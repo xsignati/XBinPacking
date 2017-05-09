@@ -29,12 +29,15 @@ import java.util.concurrent.Executors;
 public class Controller {
     private final BoxList boxList = new BoxList();
     private final BinList binList = new BinList();
+    private final SceneModelComposite modelComposite = new SceneModelComposite();
 
     /**
      * Configure FXML controls
      */
     @FXML
     public void initialize(){
+        modelComposite.add(boxList);
+        modelComposite.add(binList);
         subSceneInit();
         boxTableInit();
         binSizeInit();
@@ -223,8 +226,7 @@ public class Controller {
         binSelector.getSelectionModel().selectedItemProperty().addListener((ov, oldVal, newVal) -> {
                 if(newVal != null) {
                     binScene.clear();
-                    binScene.add(boxList.get(), newVal.getId());
-                    binScene.add(binList.get(), newVal.getId());
+                    binScene.add(modelComposite, newVal.getId());
                 }
             }
         );
@@ -276,8 +278,7 @@ public class Controller {
 
             //Rescale BinScene
             binScene.init(binLength, binWidth, binHeight);
-            binScene.rescale(boxList.get());
-            binScene.rescale(binList.get());
+            binScene.rescale(modelComposite);
 
             return null;
         }
@@ -286,8 +287,7 @@ public class Controller {
             setOnSucceeded((WorkerStateEvent event) ->
                     Platform.runLater(() -> {
                                 binScene.clear();
-                                binScene.add(boxList.get(), 0);
-                                binScene.add(binList.get(), 0);
+                                binScene.add(modelComposite, 0);
                             }
                     )
             );

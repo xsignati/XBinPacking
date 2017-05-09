@@ -124,4 +124,10 @@ public class Box extends Cuboid implements SceneModel{
         binSceneElements.getChildren().add(model.modelGroup);
     }
 
+    @Override
+    public void addModel(Group binSceneElements, int id){
+        if(getId() == id)
+            binSceneElements.getChildren().add(model.modelGroup);
+    }
+
 }

@@ -1,6 +1,7 @@
 package BinPacking.Data.UI;
 
 import BinPacking.Data.LogicUI.SceneModel;
+import BinPacking.Data.LogicUI.SceneModelComposite;
 import javafx.beans.NamedArg;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -70,14 +71,11 @@ public class BinScene extends SubScene {
 
     /**
      * Add elements to the BinScene
-     * @param sceneModelsList list of objects addable to BinScene
+     * @param modelComposite set of objects addable to BinScene
      * @param selectedBin allows to select boxes and bin with same ids only
      */
-    public void add(ObservableList<? extends SceneModel> sceneModelsList, int selectedBin) {
-        for (SceneModel sceneModel : sceneModelsList) {
-            if (sceneModel.getId() == selectedBin)
-                sceneModel.addModel(binSceneElements);
-        }
+    public void add(SceneModelComposite modelComposite, int selectedBin) {
+        modelComposite.addModel(binSceneElements, selectedBin);
     }
 
     /**
@@ -94,12 +92,10 @@ public class BinScene extends SubScene {
 
     /**
      * The Method used to fit a model to the SubScene size
-     * @param sceneModelsList list of models
+     * @param modelComposite set of all models
      */
-    public void rescale(ObservableList<? extends SceneModel> sceneModelsList) {
-        for (SceneModel sceneModel : sceneModelsList) {
-            sceneModel.scale(scale.get());
-        }
+    public void rescale(SceneModelComposite modelComposite) {
+        modelComposite.scale(scale.get());
     }
 
     /**
