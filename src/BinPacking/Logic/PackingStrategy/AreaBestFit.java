@@ -4,9 +4,6 @@ import javafx.collections.ObservableList;
 import BinPacking.Data.LogicUI.Bin;
 import BinPacking.Data.LogicUI.Box;
 
-import java.util.Collections;
-import java.util.Comparator;
-
 /**
  * Created by Xsignati on 24.01.2017.
  */
@@ -26,6 +23,11 @@ public class AreaBestFit extends PackingStrategy {
         return minBin;
     }
 
+    /**
+     * @param bin1 first compared bin.
+     * @param bin2 second compared bin.
+     * @return bin with a lesser volume.
+     */
     private Bin min(Bin bin1, Bin bin2){
         Bin minBin;
         if(bin1 == null)

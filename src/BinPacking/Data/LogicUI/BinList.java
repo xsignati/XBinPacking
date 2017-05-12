@@ -1,13 +1,12 @@
 package BinPacking.Data.LogicUI;
 
-import BinPacking.Data.LogicUI.Bin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.transform.Scale;
 
 /**
  * Created by Xsignati on 08.04.2017.
+ * A wrapper for list of bins.
  */
 public class BinList implements SceneModel{
     private final ObservableList<Bin> binList = FXCollections.observableArrayList();

@@ -7,7 +7,7 @@ import javafx.scene.transform.Rotate;
 
 /**
  * Created by Xsignati on 10.02.2017.
- * A camera model with custom rotation settings and lights.
+ * A camera model with custom rotations and lights.
  */
 public class CameraModel extends Group {
     public final static int Y_UP_ROTATION = 180;
@@ -51,8 +51,7 @@ public class CameraModel extends Group {
 
         //There are 2 lights - ambient light illuminating all objects and point light attached to camera (used during manipulation of camera position)
         Color lightColor = Color.rgb(240, 240, 240);
-        PointLight headLight;
-        headLight = new PointLight(lightColor);
+        PointLight headLight = new PointLight(lightColor);
         headLight.translateXProperty().bind(camera.translateXProperty());
         headLight.translateYProperty().bind(camera.translateYProperty());
         headLight.translateZProperty().bind(camera.translateZProperty());
@@ -60,7 +59,6 @@ public class CameraModel extends Group {
         AmbientLight ambient = new AmbientLight(ambientColor);
         getChildren().add(headLight);
         getChildren().add(ambient);
-
     }
 
     public Rotate getRx() {
@@ -76,15 +74,14 @@ public class CameraModel extends Group {
     }
 
     /**
-     *
-     * @param distance distance of the camera to the (0,0,0) point of the subScene
+     * @param distance distance of the camera to the (0,0,0) point of the subScene.
      */
     public void setDistance(double distance) {
         this.distance = distance;
     }
 
     /**
-     * Set the camera position to default value
+     * Set the camera position to default value.
      */
     public void reset() {
         rx.setAngle(xRotation);

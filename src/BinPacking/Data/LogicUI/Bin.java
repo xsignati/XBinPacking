@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.stream.IntStream;
 
 /**
  * Created by Xsignati on 24.01.2017.
- * The Bin is a tree-like structure. Every bin contains a list of its Bin children.
+ * The bin is a tree-like structure. Every bin contains a list of its bin children.
  */
 public class Bin extends Cuboid implements SceneModel {
     public enum BinState {EMPTY, FULL}
@@ -25,21 +24,21 @@ public class Bin extends Cuboid implements SceneModel {
     private final BinModel model = new BinModel();
 
     /**
-     * Public constructor used to construct a new Root Bin
-     * @param length
-     * @param width
-     * @param height
+     * A public constructor used to construct a new ROOT Bin.
+     * @param length length of the bin.
+     * @param width width of the bin.
+     * @param height height of the bin.
      */
     public Bin(double length, double width, double height){
         this(length,width,height, Color.GREY);
     }
 
     /**
-     * Public constructor used to construct a new Root Bin. Additional parameter: color of graphic model edges.
-     * @param length
-     * @param width
-     * @param height
-     * @param color
+     * A Public constructor used to construct a new ROOT Bin.
+     * @param length length of the bin.
+     * @param width width of the bin.
+     * @param height height of the bin.
+     * @param color bin frame color.
      */
     public Bin(double length, double width, double height, Color color){
         this(0,0,0,length,width,height,BinType.ROOT);
@@ -48,14 +47,14 @@ public class Bin extends Cuboid implements SceneModel {
     }
 
     /**
-     * Main constructor used to construct a new Root Bin or Bin children.
-     * @param x Bin x
-     * @param y Bin y
-     * @param z Bin z
-     * @param length Bin length
-     * @param width Bin width
-     * @param height Bin height
-     * @param binType Space type needed to perform box insertion with alternate configurations.
+     * A private constructor used to construct a new ROOT Bin or CHILD bin
+     * @param x x coordinate of the bin.
+     * @param y y coordinate of the bin.
+     * @param z z coordinate of the bin.
+     * @param length length of the bin.
+     * @param width width of the bin.
+     * @param height height of the bin.
+     * @param binType type id needed to perform box insertion with alternate configurations.
      */
     private Bin(double x, double y, double z, double length, double width, double height, BinType binType) {
         super(x, y, z, length, width, height);
@@ -65,7 +64,7 @@ public class Bin extends Cuboid implements SceneModel {
     }
 
     /**
-     * @param bin
+     * @param bin a subspace of its parent bin.
      */
     private void addChild(Bin bin) {
         bin.parent = this;
@@ -76,7 +75,7 @@ public class Bin extends Cuboid implements SceneModel {
     /**
      * Every box insertion creates 12 new bins (3 subspaces in XYZ direction in 4 alternate versions). Each triplet has its BinType (A,B,C or D) exclusive to rest.
      * If one BinType is chosen the rest must be removed. The BinTypes represent new spaces created after box insertion.
-     * @param box
+     * @param box Box object.
      */
     public void createChildren(Box box) {
         if (getLength() - box.getLength() > 0) {
@@ -109,7 +108,7 @@ public class Bin extends Cuboid implements SceneModel {
 
     /**
      * Assign the Bin to the Box. The bin will be no longer available to assignation.
-     * @param box
+     * @param box Box Object.
      */
     public void reserveBin(Box box){
         box.setCoordinates(getX(), getY(), getZ());
@@ -118,10 +117,10 @@ public class Bin extends Cuboid implements SceneModel {
     }
 
     /**
-     * Search method dependent of used PackingStrategy.
-     * @param packingStrategy
-     * @param box
-     * @return
+     * The method search the ROOT bin to find a suitable subspace.
+     * @param packingStrategy the bin search method is dependent of used packing strategy.
+     * @param box Box Object.
+     * @return found bin or null.
      */
     public Bin search(PackingStrategy packingStrategy, Box box) {
         return packingStrategy.search(this, box);
@@ -144,7 +143,7 @@ public class Bin extends Cuboid implements SceneModel {
     }
 
     /**
-     * Graphic
+     * A Graphic model used to display a bin in the GUI.
      */
     public class BinModel{
         //Appearance
@@ -201,5 +200,4 @@ public class Bin extends Cuboid implements SceneModel {
         if(getId() == id)
             binSceneElements.getChildren().add(model.modelGroup);
     }
-
 }

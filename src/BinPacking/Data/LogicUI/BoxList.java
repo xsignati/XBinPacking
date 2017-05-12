@@ -1,12 +1,11 @@
 package BinPacking.Data.LogicUI;
 
-import BinPacking.Data.LogicUI.Box;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
-
 /**
  * Created by Xsignati on 08.04.2017.
+ * A wrapper for list of boxes.
  */
 public class BoxList implements SceneModel{
     private final ObservableList<Box> boxList = FXCollections.observableArrayList();

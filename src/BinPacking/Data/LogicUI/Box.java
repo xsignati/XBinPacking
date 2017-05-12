@@ -3,7 +3,6 @@ package BinPacking.Data.LogicUI;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-
 import java.util.Random;
 
 /**
@@ -43,7 +42,7 @@ public class Box extends Cuboid implements SceneModel{
     }
 
     /**
-     * Rotation in six sensible directions.
+     * Rotate the box.
      * @param rotation
      */
     public void rotate(Rotations rotation) {
@@ -72,10 +71,6 @@ public class Box extends Cuboid implements SceneModel{
         }
     }
 
-    /**
-     * @param o - Box
-     * @return
-     */
     @Override
     public boolean equals(Object o){
         boolean result = false;
@@ -86,6 +81,9 @@ public class Box extends Cuboid implements SceneModel{
         return result;
     }
 
+    /**
+     * A Graphic model used to display a box in the GUI.
+     */
     public class BoxModel {
         //Appearance
         private final Group modelGroup = new Group();

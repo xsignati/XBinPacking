@@ -1,12 +1,11 @@
 package BinPacking.Data.LogicUI;
-
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * Created by Xsignati on 24.01.2017.
- * Parent class for cuboid-shape classes: Bin, Box.
- * Coordinates and measurements :
+ * A parent class for cuboid-shaped classes: Bin, Box.
+ * Coordinates and measurements:
  * | Z height
  * |        /
  * |      /
@@ -25,6 +24,14 @@ public abstract class Cuboid {
     protected final SimpleIntegerProperty id = new SimpleIntegerProperty();
     protected final Double volume;
 
+    /**
+     * @param x coordinate of the cuboid.
+     * @param y coordinate of the cuboid.
+     * @param z coordinate of the cuboid.
+     * @param length length of the cuboid.
+     * @param width width of the cuboid.
+     * @param height height of the cuboid.
+     */
     public Cuboid(double x, double y, double z, double length, double width, double height){
         this.x.set(x);
         this.y.set(y);
