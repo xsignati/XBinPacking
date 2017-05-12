@@ -21,10 +21,10 @@ public class CameraModel extends Group {
     private double distance;
 
     /**
-     * @param xRotation rotation of the camera over the X axis
-     * @param yRotation rotation of the camera over the Y axis
-     * @param zRotation rotation of the camera over the Z axis
-     * @param distance distance from (0,0,0)
+     * @param xRotation rotation of the camera over the X axis.
+     * @param yRotation rotation of the camera over the Y axis.
+     * @param zRotation rotation of the camera over the Z axis.
+     * @param distance distance from (0,0,0).
      */
     public CameraModel(@NamedArg("xRotation") int xRotation, @NamedArg("yRotation") int yRotation, @NamedArg("zRotation") int zRotation, @NamedArg("distance") int distance){
         //Save FXML parameters

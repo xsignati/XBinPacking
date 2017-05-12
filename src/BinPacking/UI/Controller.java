@@ -32,7 +32,7 @@ public class Controller {
     private final SceneModelComposite modelComposite = new SceneModelComposite();
 
     /**
-     * Configure FXML controls
+     * Configure FXML controls.
      */
     @FXML
     public void initialize(){
@@ -51,7 +51,7 @@ public class Controller {
     private Pane bsPane;
 
     /**
-     * Bind the BinScene to its wrapper to make it resizable
+     * Bind the BinScene to its wrapper to make it resizable.
      */
     private void subSceneInit(){
         binScene.heightProperty().bind(bsPane.heightProperty());
@@ -177,7 +177,7 @@ public class Controller {
     private HBox addWrap;
 
     /**
-     * Configure controls responsible for getting data about Bin size
+     * Configure controls responsible for getting data about Bin size.
      */
     private void binSizeInit() {
         //Fields alignment
@@ -200,7 +200,7 @@ public class Controller {
     private Button clearBtn;
 
     /**
-     * Configure controls responsible for selecting Bins and clearing all data
+     * Configure controls responsible for selecting Bins and clearing all data.
      */
     private void binSelectInit(){
         Callback<ListView<Bin>, ListCell<Bin>> cf = new Callback<ListView<Bin>, ListCell<Bin>>() {
@@ -210,11 +210,10 @@ public class Controller {
                     @Override
                     public void updateItem(Bin item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (item == null) {
+                        if (item == null)
                             setText(null);
-                        } else {
+                        else
                             setText("BIN " + Integer.toString(item.getId()));
-                        }
                     }
                 };
             }
@@ -237,7 +236,7 @@ public class Controller {
     }
 
     /**
-     * Delete all boxes and bins from binScene and table
+     * Delete all boxes and bins from binScene and table.
      */
     @FXML
     private void clear(){
@@ -295,7 +294,7 @@ public class Controller {
     }
 
     /**
-     * Determine the process button size
+     * Determine the process button size.
      */
     private void processInit(){
         processBtn.prefWidthProperty().bind(processWrapper.widthProperty().multiply(0.7));
@@ -348,11 +347,10 @@ public class Controller {
     class TooLargeBoxException extends Exception{}
 
     /**
-     *
-     * @throws NoInputException Control's field is empty
-     * @throws TooLongInputException Control's input is too large
-     * @throws EmptyListException No boxes in boxList
-     * @throws TooLargeBoxException Box is bigger than bin
+     * @throws NoInputException Control's field is empty.
+     * @throws TooLongInputException Control's input is too large.
+     * @throws EmptyListException No boxes in boxList.
+     * @throws TooLargeBoxException Box is bigger than bin.
      */
     private void validate() throws NoInputException, TooLongInputException, EmptyListException, TooLargeBoxException   {
         if(setWidth.getCharacters().length() == 0 || setLength.getCharacters().length() == 0 || setHeight.getCharacters().length() == 0)

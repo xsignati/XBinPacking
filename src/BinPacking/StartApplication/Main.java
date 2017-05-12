@@ -35,7 +35,7 @@ public class Main extends Application{
     }
 
     /**
-     * Shutdown the thread executor in case of closing the application
+     * Shutdown the thread executor in case of closing the application.
      */
     @Override
     public void stop() {

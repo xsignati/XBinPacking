@@ -12,7 +12,7 @@ public class Loader {
 
     /**
      * Run the packing process.
-     * @param d the input data that contains bin size, boxes list, chose packing strategy and empty bins list
+     * @param d the input data that contains bin size, boxes list, chose packing strategy and empty bins list.
      */
     public void run(InputData d) {
         // Prepare the input, e.g sort boxes by their volume values
@@ -35,7 +35,8 @@ public class Loader {
                         foundNode.createChildren(box);
                         foundNode.removeAltSiblings();
                         break BinListLoop;
-                    } else
+                    }
+                    else
                         box.rotate(currRotation);
                 }
 

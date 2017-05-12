@@ -17,7 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by Xsignati on 21.03.2017.
- * TEST VERSION. REAL UNIT TESTS TODO
+ * TEST VERSION. REAL UNIT TESTS TO DO.
  */
 public class UnitTest {
     @Test
