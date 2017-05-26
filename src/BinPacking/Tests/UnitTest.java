@@ -3,7 +3,7 @@ package BinPacking.Tests;
 import BinPacking.Data.LogicUI.Bin;
 import BinPacking.Data.LogicUI.Box;
 import BinPacking.Data.LogicUI.InputData;
-import BinPacking.Logic.Loader;
+import BinPacking.Logic.BinPacker;
 import BinPacking.Logic.PackingStrategy.PackingStrategyFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,8 +61,8 @@ public class UnitTest {
             }
 
             InputData inputData = new InputData(binLength, binWidth,binHeight, binList, PackingStrategyFactory.getPS("BestFit"), boxList);
-            Loader loader = new Loader();
-            loader.run(inputData);
+            BinPacker loader = new BinPacker();
+            loader.pack(inputData);
 
             br.close();
 

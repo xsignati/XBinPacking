@@ -10,7 +10,7 @@ import java.util.Comparator;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class FirstFit extends PackingStrategy {
+public class FirstFit implements PackingStrategy {
     @Override
     public Bin search(Bin bin, Box box) {
         if(bin.getBinState() == Bin.BinState.FULL) {

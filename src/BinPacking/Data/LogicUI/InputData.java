@@ -4,9 +4,9 @@ import javafx.collections.ObservableList;
 
 /**
  * Created by Xsignati on 21.03.2017.
- * Structure that is being passed from Controller (View) to Loader (logic).
+ * Structure that is being passed from Controller (View) to BinPacker (logic).
  */
-public class InputData extends javafx.scene.shape.Box{
+public class InputData {
     private final ObservableList<Bin> binList;
     private final PackingStrategy packingStrategy;
     private final ObservableList<Box> boxList;

@@ -13,9 +13,6 @@ public class SceneModelComposite implements SceneModel {
     public void add(SceneModel model){
         modelsList.add(model);
     }
-    public void remove(SceneModel model){
-        modelsList.remove(model);
-    }
     @Override
     public void addModel(Group binSceneModels){
         modelsList.stream().forEach(m -> m.addModel(binSceneModels));

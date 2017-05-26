@@ -7,7 +7,7 @@ import BinPacking.Data.LogicUI.Box;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class AreaBestFit extends PackingStrategy {
+public class AreaBestFit implements PackingStrategy {
     @Override
     public Bin search(Bin bin, Box box) {
         Bin minBin;

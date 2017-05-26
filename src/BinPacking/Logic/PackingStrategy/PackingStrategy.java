@@ -7,7 +7,7 @@ import BinPacking.Data.LogicUI.Box;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public abstract class PackingStrategy {
+public interface PackingStrategy {
     /**
      * A recurrent method that search for a Bin that meet the conditions. The function look through Bin children
      * (the RootBin by default)
@@ -15,13 +15,13 @@ public abstract class PackingStrategy {
      * @param box
      * @return bin that meet the conditions
      */
-    public abstract Bin search(Bin bin, Box box);
+    Bin search(Bin bin, Box box);
 
-    boolean boxFitsToBin(Bin bin, Box box) {
+    default boolean boxFitsToBin(Bin bin, Box box) {
         return (box.getLength() <= bin.getLength() &&
                 box.getWidth() <= bin.getWidth() &&
                 box.getHeight() <= bin.getHeight());
     }
 
-    public abstract void prepareInput(ObservableList<Box> boxList);
+    void prepareInput(ObservableList<Box> boxList);
 }

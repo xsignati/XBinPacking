@@ -11,7 +11,7 @@ import java.util.Comparator;
  * Created by Xsignati on 24.01.2017.
  * Find and return the Bin with minimum volume.
  */
-public class BestFit extends PackingStrategy {
+public class BestFit implements PackingStrategy {
     @Override
     public Bin search(Bin bin, Box box) {
         Bin minBin;

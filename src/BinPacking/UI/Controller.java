@@ -2,8 +2,8 @@ package BinPacking.UI;
 
 import BinPacking.Data.LogicUI.*;
 import BinPacking.Data.UI.*;
+import BinPacking.Logic.BinPacker;
 import BinPacking.Logic.PackingStrategy.*;
-import BinPacking.Logic.*;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -270,10 +270,10 @@ public class Controller {
             RadioButton selectedBtn = (RadioButton) algorithmButtons.getSelectedToggle();
             PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
 
-            //Create the InputData structure for Loader
+            //Create the InputData structure for BinPacker
             InputData inputData = new InputData(binLength, binWidth, binHeight, binList.get(), packingAlg, boxList.get());
-            Loader loader = new Loader();
-            loader.run(inputData);
+            BinPacker loader = new BinPacker();
+            loader.pack(inputData);
 
             //Rescale BinScene
             binScene.init(binLength, binWidth, binHeight);

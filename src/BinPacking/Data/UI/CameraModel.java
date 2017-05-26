@@ -65,10 +65,6 @@ public class CameraModel extends Group {
         return rx;
     }
 
-    public Rotate getRy() {
-        return ry;
-    }
-
     public Rotate getRz() {
         return rz;
     }

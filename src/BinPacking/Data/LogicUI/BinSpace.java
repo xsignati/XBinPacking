@@ -14,7 +14,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  * |/
  * ------------ X length
  **/
-public abstract class Cuboid {
+public abstract class BinSpace {
     protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
     protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
@@ -23,23 +23,25 @@ public abstract class Cuboid {
     protected final SimpleDoubleProperty z = new SimpleDoubleProperty();
     protected final SimpleIntegerProperty id = new SimpleIntegerProperty();
     protected final Double volume;
+    public final double ORIGINAL_LENGTH;
+    public final double ORIGINAL_WIDTH;
+    public final double ORIGINAL_HEIGHT;
 
     /**
-     * @param x coordinate of the cuboid.
-     * @param y coordinate of the cuboid.
-     * @param z coordinate of the cuboid.
-     * @param length length of the cuboid.
-     * @param width width of the cuboid.
-     * @param height height of the cuboid.
+     * @param point coordinates of a (0,0,0) bin point.
+     * @param dimensions dimensions of a bin.
      */
-    public Cuboid(double x, double y, double z, double length, double width, double height){
-        this.x.set(x);
-        this.y.set(y);
-        this.z.set(z);
-        this.length.set(length);
-        this.width.set(width);
-        this.height.set(height);
-        volume = length * width * height;
+    public BinSpace(Point point, Dimensions dimensions){
+        this.x.set(point.getX());
+        this.y.set(point.getY());
+        this.z.set(point.getZ());
+        this.length.set(dimensions.getLength());
+        this.width.set(dimensions.getWidth());
+        this.height.set(dimensions.getHeight());
+        this.ORIGINAL_LENGTH = dimensions.getLength();
+        this.ORIGINAL_WIDTH = dimensions.getWidth();
+        this.ORIGINAL_HEIGHT = dimensions.getHeight();
+        volume = dimensions.getLength() * dimensions.getWidth() * dimensions.getHeight();
     }
 
     public void setLength(double length) {

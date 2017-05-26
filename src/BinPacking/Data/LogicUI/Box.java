@@ -8,12 +8,7 @@ import java.util.Random;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class Box extends Cuboid implements SceneModel{
-    public static final int ROTATIONS_NUM = Box.Rotations.values().length;
-    public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
-    private final double ORIGINAL_LENGTH;
-    private final double ORIGINAL_WIDTH;
-    private final double ORIGINAL_HEIGHT;
+public class Box extends BinSpace implements SceneModel{
     private final BoxModel model = new BoxModel();
 
     /**
@@ -34,41 +29,8 @@ public class Box extends Cuboid implements SceneModel{
      * @param color
      */
     public Box(double length, double width, double height, Color color){
-        super(0, 0, 0, length, width, height);
-        this.ORIGINAL_LENGTH = length;
-        this.ORIGINAL_WIDTH = width;
-        this.ORIGINAL_HEIGHT = height;
+        super(new Point(0,0,0), new Dimensions(length, width, height));
         model.createGraphicModel(length, width, height, color);
-    }
-
-    /**
-     * Rotate the box.
-     * @param rotation
-     */
-    public void rotate(Rotations rotation) {
-        switch (rotation) {
-            case WLH:
-                setSize(ORIGINAL_WIDTH, ORIGINAL_LENGTH, ORIGINAL_HEIGHT);
-                break;
-            case LHW:
-                setSize(ORIGINAL_LENGTH, ORIGINAL_HEIGHT, ORIGINAL_WIDTH);
-                break;
-            case HLW:
-                setSize(ORIGINAL_HEIGHT, ORIGINAL_LENGTH, ORIGINAL_WIDTH);
-                break;
-            case WHL:
-                setSize(ORIGINAL_WIDTH, ORIGINAL_HEIGHT, ORIGINAL_LENGTH);
-                break;
-            case HWL:
-                setSize(ORIGINAL_HEIGHT, ORIGINAL_WIDTH, ORIGINAL_LENGTH);
-                break;
-            case LWH:
-                setSize(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
-                break;
-            default:
-                setSize(ORIGINAL_LENGTH, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
-                break;
-        }
     }
 
     @Override

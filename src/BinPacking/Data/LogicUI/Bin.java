@@ -13,14 +13,14 @@ import java.util.stream.IntStream;
  * Created by Xsignati on 24.01.2017.
  * The bin is a tree-like structure. Every bin contains a list of its bin children.
  */
-public class Bin extends Cuboid implements SceneModel {
+public class Bin extends BinSpace implements SceneModel {
     public enum BinState {EMPTY, FULL}
     public enum BinType {ROOT,A,B,C,D}
     private BinState binState = BinState.EMPTY;
     private final BinType binType;
     private Bin parent;
     private final List<Bin> children;
-    private static int rootBinCounter = 0; //< Each box gets this id. The id indicates the bin assigned to box.
+    private static int rootBinCounter; //< Each box gets this id. The id indicates the bin assigned to box.
     private final BinModel model = new BinModel();
 
     /**
@@ -57,7 +57,7 @@ public class Bin extends Cuboid implements SceneModel {
      * @param binType type id needed to perform box insertion with alternate configurations.
      */
     private Bin(double x, double y, double z, double length, double width, double height, BinType binType) {
-        super(x, y, z, length, width, height);
+        super(new Point(x, y, z), new Dimensions(length, width, height));
         this.binType = binType;
         setId(rootBinCounter);
         children = new LinkedList<>();
