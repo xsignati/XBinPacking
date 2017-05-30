@@ -4,44 +4,54 @@ import BinPacking.Data.LogicUI.*;
 
 /**
  * Created by Xsignati on 24.01.2017.
- * Main logic class. It's responsible for assignation boxes to bins.
+ * Main logic class responsible for assigning boxes to binsTrees.
  */
 public class BinPacker implements Packer {
-    Rotator boxRotator = new BoxRotator();
 
-    /**
-     * Run the packing process.
-     * @param d the input data that contains bin size, boxes list, chose packing strategy and empty bins list.
-     */
-    public void pack(InputData d) {
-        // Prepare the input, e.g sort boxes by their volume values
-        d.getPackingStrategy().prepareInput(d.getBoxList());
-        // Reset the id counter used to marking new bins
-        Bin.resetRootBinCounter();
-        //Add the first bin
-        d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
-
-        for(Box box: d.getBoxList()) {
-            int binListSize = d.getBinList().size();
-
-            BinListLoop:
-            for(int i = 0 ; i <= binListSize; i++){
-                for (int j = 0; j < boxRotator.limit(); j++) {
-                    Bin foundNode = d.getBinList().get(i).search(d.getPackingStrategy(), box); //< set the PackingStrategy search method
-                    if (foundNode != null) {
-                        foundNode.reserveBin(box);
-                        foundNode.createChildren(box);
-                        foundNode.removeAltSiblings();
-                        break BinListLoop;
-                    }
-                    else
-                        boxRotator.rotate(box);
-                }
-
-                if (i == binListSize - 1)
-                    d.getBinList().add(new Bin(d.getBinLength(), d.getBinWidth(), d.getBinHeight()));
-            }
+    public void pack(InputData inputData) {
+        prepareInputAndAddBin(inputData);
+        for(Box box: inputData.getBoxList()) {
+            int binListSize = inputData.getBinList().size();
+            fitBoxOrCreateBinTree(inputData, box, binListSize);
         }
+    }
+
+    private void prepareInputAndAddBin(InputData inputData){
+        inputData.getPackingStrategy().prepareInput(inputData.getBoxList());
+        inputData.getBinList().add(BinTreeNode.rootNode((new Bin(new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight())))));
+    }
+
+    private void fitBoxOrCreateBinTree(InputData inputData, Box box, int binListSize){
+        for(int currentNode = 0 ; currentNode <= binListSize; currentNode++){
+            if(BoxFitsToBin(inputData, box, currentNode))
+                return;
+            else if (currentNode == binListSize - 1)
+                createNewBinTree(inputData);
+
+        }
+    }
+
+    private boolean BoxFitsToBin(InputData inputData, Box box, int currentNode){
+        for (int currentRotation = 0; currentRotation < BoxRotator.ROTATIONS_NUM; currentRotation++) {
+            BinTree foundNode = inputData.getBinList().get(currentNode).search(inputData.getPackingStrategy(), box);
+            if (nodeExists(foundNode)) {
+                foundNode.reserveBinFor(box);
+                foundNode.tryToAddSubspacesFor(box);
+                foundNode.removeNotSelectedSubspaces();
+                return true;
+            }
+            else
+                box.rotate();
+        }
+        return false;
+    }
+
+    private void createNewBinTree(InputData inputData){
+        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()))));
+    }
+
+    private boolean nodeExists(BinTree foundNode){
+        return foundNode != null;
     }
 }
 

@@ -14,13 +14,13 @@ import java.util.stream.IntStream;
  * The bin is a tree-like structure. Every bin contains a list of its bin children.
  */
 public class Bin extends BinSpace implements SceneModel {
-    public enum BinState {EMPTY, FULL}
-    public enum BinType {ROOT,A,B,C,D}
-    private BinState binState = BinState.EMPTY;
-    private final BinType binType;
+    public enum State {EMPTY, FULL}
+    public enum Type {ROOT,A,B,C,D}
+    private State state = State.EMPTY;
+    private Type type;
     private Bin parent;
     private final List<Bin> children;
-    private static int rootBinCounter; //< Each box gets this id. The id indicates the bin assigned to box.
+    //private static int rootBinCounter; //< Each box gets this id. The id indicates the bin assigned to box.
     private final BinModel model = new BinModel();
 
     /**
@@ -29,8 +29,8 @@ public class Bin extends BinSpace implements SceneModel {
      * @param width width of the bin.
      * @param height height of the bin.
      */
-    public Bin(double length, double width, double height){
-        this(length,width,height, Color.GREY);
+    public Bin(Dimensions dimensions){
+        this(dimensions, Color.GREY);
     }
 
     /**
@@ -40,10 +40,10 @@ public class Bin extends BinSpace implements SceneModel {
      * @param height height of the bin.
      * @param color bin frame color.
      */
-    public Bin(double length, double width, double height, Color color){
-        this(0,0,0,length,width,height,BinType.ROOT);
-        rootBinCounter++;
-        model.createGraphicModel(length, width, height, color); //< Appearance part of code
+    public Bin(Dimensions dimensions, Color color){
+        this(new Point(0,0,0),dimensions, Type.ROOT);
+        //rootBinCounter++;
+        model.createGraphicModel(dimensions.getLength(), dimensions.getWidth(), dimensions.getHeight(), color); //< Appearance part of code
     }
 
     /**
@@ -54,12 +54,12 @@ public class Bin extends BinSpace implements SceneModel {
      * @param length length of the bin.
      * @param width width of the bin.
      * @param height height of the bin.
-     * @param binType type id needed to perform box insertion with alternate configurations.
+     * @param type type id needed to perform box insertion with alternate configurations.
      */
-    private Bin(double x, double y, double z, double length, double width, double height, BinType binType) {
-        super(new Point(x, y, z), new Dimensions(length, width, height));
-        this.binType = binType;
-        setId(rootBinCounter);
+    public Bin(Point point, Dimensions dimensions, Type type) {
+        super(point, new Dimensions(dimensions.getLength(), dimensions.getWidth(), dimensions.getHeight()));
+        this.type = type;
+        //setId(rootBinCounter);
         children = new LinkedList<>();
     }
 
@@ -77,33 +77,33 @@ public class Bin extends BinSpace implements SceneModel {
      * If one BinType is chosen the rest must be removed. The BinTypes represent new spaces created after box insertion.
      * @param box Box object.
      */
-    public void createChildren(Box box) {
-        if (getLength() - box.getLength() > 0) {
-            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength() - box.getLength(), getWidth(), getHeight(), BinType.A));
-            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength()- box.getLength(), box.getWidth(), getHeight(), BinType.B));
-            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength() - box.getLength(), getWidth(), box.getHeight(), BinType.C));
-            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength()- box.getLength(), box.getWidth(), box.getHeight(), BinType.D));
-        }
-        if (getWidth() - box.getWidth() > 0) {
-            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), box.getLength(), getWidth() - box.getWidth(), getHeight(), BinType.A));
-            addChild(new Bin(getX(), getY()+ box.getWidth(), getZ(), getLength(), getWidth() - box.getWidth(), getHeight(), BinType.B));
-            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), box.getLength(), getWidth() - box.getWidth(), box.getHeight(), BinType.C));
-            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), getLength(), getWidth() - box.getWidth(), box.getHeight(), BinType.D));
-        }
-        if (getHeight() - box.getHeight() > 0) {
-            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), box.getLength(), box.getWidth(), getHeight() - box.getHeight(), BinType.A));
-            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), box.getLength(), box.getWidth(), getHeight() - box.getHeight(), BinType.B));
-            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), getLength(), getWidth(), getHeight() - box.getHeight(), BinType.C));
-            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), getLength(), getWidth(), getHeight() - box.getHeight(), BinType.D));
-        }
-    }
+//    public void addPossibleSubspacesFor(Box box) {
+//        if (getLength() - box.getLength() > 0) {
+//            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength() - box.getLength(), getWidth(), getHeight(), Type.A));
+//            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength()- box.getLength(), box.getWidth(), getHeight(), Type.B));
+//            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength() - box.getLength(), getWidth(), box.getHeight(), Type.C));
+//            addChild(new Bin(getX() + box.getLength(), getY(), getZ(), getLength()- box.getLength(), box.getWidth(), box.getHeight(), Type.D));
+//        }
+//        if (getWidth() - box.getWidth() > 0) {
+//            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), box.getLength(), getWidth() - box.getWidth(), getHeight(), Type.A));
+//            addChild(new Bin(getX(), getY()+ box.getWidth(), getZ(), getLength(), getWidth() - box.getWidth(), getHeight(), Type.B));
+//            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), box.getLength(), getWidth() - box.getWidth(), box.getHeight(), Type.C));
+//            addChild(new Bin(getX(), getY() + box.getWidth(), getZ(), getLength(), getWidth() - box.getWidth(), box.getHeight(), Type.D));
+//        }
+//        if (getHeight() - box.getHeight() > 0) {
+//            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), box.getLength(), box.getWidth(), getHeight() - box.getHeight(), Type.A));
+//            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), box.getLength(), box.getWidth(), getHeight() - box.getHeight(), Type.B));
+//            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), getLength(), getWidth(), getHeight() - box.getHeight(), Type.C));
+//            addChild(new Bin(getX(), getY(), getZ() + box.getHeight(), getLength(), getWidth(), getHeight() - box.getHeight(), Type.D));
+//        }
+//    }
 
     /**
      * If the box fits to the one of 3 subspaces forming a BinType, eg. A rest of them will be removed (B,C,D)
      */
-    public  void removeAltSiblings() {
+    public  void removeNotSelectedSubspaces() {
         if (parent != null)
-            parent.children.removeIf(bin -> bin.binType != binType);
+            parent.children.removeIf(bin -> bin.type != type);
     }
 
     /**
@@ -113,7 +113,7 @@ public class Bin extends BinSpace implements SceneModel {
     public void reserveBin(Box box){
         box.setCoordinates(getX(), getY(), getZ());
         box.setId(getId());
-        setBinState(BinState.FULL);
+        setState(State.FULL);
     }
 
     /**
@@ -122,25 +122,33 @@ public class Bin extends BinSpace implements SceneModel {
      * @param box Box Object.
      * @return found bin or null.
      */
-    public Bin search(PackingStrategy packingStrategy, Box box) {
-        return packingStrategy.search(this, box);
-    }
+//    public BinTree search(PackingStrategy packingStrategy, Box box) {
+//        return packingStrategy.search(this, box);
+//    }
 
     public List<Bin> getBinChildren() {
         return children;
     }
 
-    private void setBinState(BinState binState) {
-        this.binState = binState;
+    public void setState(State state) {
+        this.state = state;
     }
 
-    public BinState getBinState() {
-        return binState;
+    public State getState() {
+        return state;
     }
 
-    public static void resetRootBinCounter(){
-        Bin.rootBinCounter = 0;
+    public Type getType() {
+        return type;
     }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+//    public static void resetRootBinCounter(){
+//        Bin.rootBinCounter = 0;
+//    }
 
     /**
      * A Graphic model used to display a bin in the GUI.

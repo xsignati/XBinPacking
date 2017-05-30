@@ -151,18 +151,25 @@ public class Controller {
 
         //Add box listener
         addBox.setOnAction(e -> {
-                boxList.add(new Box(
-                        Double.parseDouble(addLength.getText()),
-                        Double.parseDouble(addWidth.getText()),
-                        Double.parseDouble(addHeight.getText())
-                ));
-                addLength.clear();
-                addWidth.clear();
-                addHeight.clear();
-            });
+            boxList.add(new Box(new Dimensions(
+                    Double.parseDouble(addLength.getText()),
+                    Double.parseDouble(addWidth.getText()),
+                    Double.parseDouble(addHeight.getText())
+            )
+            ));
+            addLength.clear();
+            addWidth.clear();
+            addHeight.clear();
+        });
 
         //Add Box objects to the table observable list
         boxListViewer.setItems(boxList.get());
+
+        //alabama
+        boxList.add(new Box(new Dimensions(111,111,111)));
+        boxList.add(new Box(new Dimensions(222,222,222)));
+        boxList.add(new Box(new Dimensions(333,333,333)));
+        boxList.add(new Box(new Dimensions(111,111,111)));
     }
 
     @FXML
@@ -193,7 +200,7 @@ public class Controller {
     }
 
     @FXML
-    private ComboBox<Bin> binSelector;
+    private ComboBox<BinTree> binSelector;
     @FXML
     private HBox selectorWrapper;
     @FXML
@@ -203,12 +210,12 @@ public class Controller {
      * Configure controls responsible for selecting Bins and clearing all data.
      */
     private void binSelectInit(){
-        Callback<ListView<Bin>, ListCell<Bin>> cf = new Callback<ListView<Bin>, ListCell<Bin>>() {
+        Callback<ListView<BinTree>, ListCell<BinTree>> cf = new Callback<ListView<BinTree>, ListCell<BinTree>>() {
             @Override
-            public ListCell<Bin> call(ListView<Bin> list) {
-                return new ListCell<Bin>(){
+            public ListCell<BinTree> call(ListView<BinTree> list) {
+                return new ListCell<BinTree>(){
                     @Override
-                    public void updateItem(Bin item, boolean empty) {
+                    public void updateItem(BinTree item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null)
                             setText(null);

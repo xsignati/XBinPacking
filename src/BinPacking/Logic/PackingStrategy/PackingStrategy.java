@@ -1,5 +1,7 @@
 package BinPacking.Logic.PackingStrategy;
 
+import BinPacking.Data.LogicUI.BinTree;
+import BinPacking.Data.LogicUI.BinTreeNode;
 import javafx.collections.ObservableList;
 import BinPacking.Data.LogicUI.Bin;
 import BinPacking.Data.LogicUI.Box;
@@ -15,7 +17,7 @@ public interface PackingStrategy {
      * @param box
      * @return bin that meet the conditions
      */
-    Bin search(Bin bin, Box box);
+    BinTree search(BinTree binTreeNode, Box box);
 
     default boolean boxFitsToBin(Bin bin, Box box) {
         return (box.getLength() <= bin.getLength() &&

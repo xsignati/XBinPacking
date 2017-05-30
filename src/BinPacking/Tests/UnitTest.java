@@ -1,8 +1,6 @@
 package BinPacking.Tests;
 
-import BinPacking.Data.LogicUI.Bin;
-import BinPacking.Data.LogicUI.Box;
-import BinPacking.Data.LogicUI.InputData;
+import BinPacking.Data.LogicUI.*;
 import BinPacking.Logic.BinPacker;
 import BinPacking.Logic.PackingStrategy.PackingStrategyFactory;
 import javafx.collections.FXCollections;
@@ -24,7 +22,7 @@ public class UnitTest {
     public void test() {
         //source lists
         ObservableList<Box> boxList = FXCollections.observableArrayList();
-        ObservableList<Bin> binList = FXCollections.observableArrayList();
+        ObservableList<BinTree> binList = FXCollections.observableArrayList();
         ObservableList<Box> testBoxList = FXCollections.observableArrayList();
 
         double binLength;
@@ -53,9 +51,9 @@ public class UnitTest {
                 double boxY = Double.parseDouble(values[4]);
                 double boxZ = Double.parseDouble(values[5]);
 
-                boxList.add(new Box(boxLength, boxWidth, boxHeight));
+                boxList.add(new Box(new Dimensions(boxLength, boxWidth, boxHeight)));
 
-                Box testBox = new Box(boxLength, boxWidth, boxHeight);
+                Box testBox = new Box(new Dimensions(boxLength, boxWidth, boxHeight));
                 testBox.setCoordinates(boxX, boxY, boxZ);
                 testBoxList.add(testBox);
             }

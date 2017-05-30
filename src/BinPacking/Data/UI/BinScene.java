@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-
 /**
  * Custom BinScene displaying boxes and bins.
  * Created by Xsignati on 08.04.2017.
@@ -27,11 +26,11 @@ public class BinScene extends SubScene {
     private double scrollPosZ;
 
     /**
-     * A Custom BinScene.
-     * @param root BinScene class root.
-     * @param width BinScene window width.
-     * @param height BinScene window height.
-     * @param depthBuffer SubScene class dephtBuffer.
+     * Custom BinScene
+     * @param root SubScene class root
+     * @param width SubScene class width
+     * @param height SubScene class height
+     * @param depthBuffer SubScene class dephtBuffer
      */
     public BinScene(@NamedArg("root") Parent root, @NamedArg("width") double width, @NamedArg("height") double height, @NamedArg("depthBuffer") boolean depthBuffer) {
         super(root, width, height, true, SceneAntialiasing.BALANCED);
@@ -70,18 +69,18 @@ public class BinScene extends SubScene {
 
     /**
      * Add elements to the BinScene
-     * @param modelComposite set of objects addable to BinScene.
-     * @param selectedBin allows to select boxes and bin with same ids only.
+     * @param modelComposite set of objects addable to BinScene
+     * @param selectedBin allows to select boxes and bin with same ids only
      */
     public void add(SceneModelComposite modelComposite, int selectedBin) {
         modelComposite.addModel(binSceneElements, selectedBin);
     }
 
     /**
-     * Must be done after the creation of the application window (uses the window size).
-     * @param binLength length of bin.
-     * @param binWidth width of bin.
-     * @param binHeight height of bin.
+     * Must be done after the creation of the application window (uses the window size)
+     * @param binLength length of bin
+     * @param binWidth width of bin
+     * @param binHeight height of bin
      */
     public void init(double binLength, double binWidth, double binHeight){
         camera.setDistance(getWidth() * 4);
@@ -90,16 +89,16 @@ public class BinScene extends SubScene {
     }
 
     /**
-     * The Method used to fit a model to the SubScene size.
-     * @param modelComposite set of all models.
+     * The Method used to fit a model to the SubScene size
+     * @param modelComposite set of all models
      */
     public void rescale(SceneModelComposite modelComposite) {
         modelComposite.scale(scale.get());
     }
 
     /**
-     * The Method used to fit a model to the SubScene size.
-     * @param sceneModel model.
+     * The Method used to fit a model to the SubScene size
+     * @param sceneModel model
      */
     public void rescale(SceneModel sceneModel){
         sceneModel.scale(scale.get());
@@ -114,7 +113,7 @@ public class BinScene extends SubScene {
 
     /**
      * Created by Xsignati on 09.04.2017.
-     * Computes an appropriate scaling factor. Every box and bin is scaled.
+     * Computes an appropriate scaling factor. Every box and bin is scaled
      * before drawing to match to the SubScene camera view and avoid too large objects to displaying.
      */
     private class Scale{

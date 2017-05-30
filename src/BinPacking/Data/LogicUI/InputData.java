@@ -7,14 +7,14 @@ import javafx.collections.ObservableList;
  * Structure that is being passed from Controller (View) to BinPacker (logic).
  */
 public class InputData {
-    private final ObservableList<Bin> binList;
+    private final ObservableList<BinTree> binList;
     private final PackingStrategy packingStrategy;
     private final ObservableList<Box> boxList;
     private final double binLength;
     private final double binWidth;
     private final double binHeight;
 
-    public InputData(double binLength, double binWidth, double binHeight, ObservableList<Bin> binList, PackingStrategy packingStrategy, ObservableList<Box> boxList){
+    public InputData(double binLength, double binWidth, double binHeight, ObservableList<BinTree> binList, PackingStrategy packingStrategy, ObservableList<Box> boxList){
         this.binLength = binLength;
         this.binWidth = binWidth;
         this.binHeight = binHeight;
@@ -23,7 +23,7 @@ public class InputData {
         this.boxList = boxList;
     }
 
-    public ObservableList<Bin> getBinList() {
+    public ObservableList<BinTree> getBinList() {
         return binList;
     }
     public PackingStrategy getPackingStrategy() {

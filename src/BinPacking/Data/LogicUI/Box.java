@@ -8,29 +8,21 @@ import java.util.Random;
 /**
  * Created by Xsignati on 24.01.2017.
  */
-public class Box extends BinSpace implements SceneModel{
+public class Box extends BinSpace implements Rotatable, SceneModel{
+    private BoxRotator boxRotator;
     private final BoxModel model = new BoxModel();
 
-    /**
-     * Default color parameter constructor.
-     * @param length
-     * @param width
-     * @param height
-     */
-    public Box(double length, double width, double height){
-        this(length, width, height, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
+    public void rotate(){
+        boxRotator.rotate(this);
+    }
+    public Box(Dimensions dimensions){
+        this(dimensions, new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat(), 1));
+        boxRotator = new BoxRotator();
     }
 
-    /**
-     * User defined color constructor.
-     * @param length
-     * @param width
-     * @param height
-     * @param color
-     */
-    public Box(double length, double width, double height, Color color){
-        super(new Point(0,0,0), new Dimensions(length, width, height));
-        model.createGraphicModel(length, width, height, color);
+    public Box(Dimensions dimensions, Color color){
+        super(new Point(0,0,0), new Dimensions(dimensions.getLength(), dimensions.getWidth(), dimensions.getHeight()));
+        model.createGraphicModel(dimensions.getLength(), dimensions.getWidth(), dimensions.getHeight(), color);
     }
 
     @Override

@@ -3,16 +3,15 @@ package BinPacking.Data.LogicUI;
 /**
  * Created by Xsignati on 24.05.2017.
  */
-public class BoxRotator implements Rotator {
+public class BoxRotator{
     public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
-    private static final int ROTATIONS_NUM = Rotations.values().length;
+    public static final int ROTATIONS_NUM = Rotations.values().length;
     private int rotationStep;
     private Rotations rotation;
 
-    @Override
     public void rotate(BinSpace box) {
+        System.out.println("rotationstep " + rotationStep);
         rotation = Rotations.values()[rotationStep];
-        System.out.println("rotation step: " + rotationStep + "rotation" + rotation);
         switch (rotation) {
             case WLH:
                 box.setSize(box.ORIGINAL_WIDTH, box.ORIGINAL_LENGTH, box.ORIGINAL_HEIGHT);
@@ -38,17 +37,7 @@ public class BoxRotator implements Rotator {
         }
         next();
     }
-
-    @Override
-    public int limit(){
-        return ROTATIONS_NUM;
-    }
-
-    /**
-     * Increment a step
-     */
     public void next(){
-        rotationStep = rotationStep < ROTATIONS_NUM ? rotationStep + 1 : 0 ;
+        rotationStep = rotationStep < ROTATIONS_NUM - 1 ? rotationStep + 1 : 0 ;
     }
-
 }

@@ -12,12 +12,12 @@ public class PackingStrategyFactory {
         if(psType.equalsIgnoreCase("BestFit")){
             return new BestFit();
         }
-        else if(psType.equalsIgnoreCase("AreaBestFit")){
-            return new AreaBestFit();
-        }
-        else if(psType.equalsIgnoreCase("FirstFit")){
-            return new FirstFit();
-        }
+//        else if(psType.equalsIgnoreCase("AreaBestFit")){
+//            return new AreaBestFit();
+//        }
+//        else if(psType.equalsIgnoreCase("FirstFit")){
+//            return new FirstFit();
+//        }
 
         return null;
     }

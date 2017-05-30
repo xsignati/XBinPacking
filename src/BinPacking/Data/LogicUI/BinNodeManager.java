@@ -6,7 +6,7 @@
 //public class BinNodeManager implements NodeManager {
 //
 //    @Override
-//    public void createChildren(TreeNode<? extends Bin> binNode, Box box) {
+//    public void tryToAddSubspacesFor(TreeNode<? extends Bin> binNode, Box box) {
 //    }
 //
 //    @Override

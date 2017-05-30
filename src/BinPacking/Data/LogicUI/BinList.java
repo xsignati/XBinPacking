@@ -9,11 +9,11 @@ import javafx.scene.Group;
  * A wrapper for list of bins.
  */
 public class BinList implements SceneModel{
-    private final ObservableList<Bin> binList = FXCollections.observableArrayList();
-    public synchronized void add(Bin bin){
+    private final ObservableList<BinTree> binList = FXCollections.observableArrayList();
+    public synchronized void add(BinTree bin){
         binList.add(bin);
     }
-    public synchronized ObservableList<Bin> get() {
+    public synchronized ObservableList<BinTree> get() {
         return binList;
     }
     public synchronized void clear(){
@@ -21,14 +21,14 @@ public class BinList implements SceneModel{
     }
     @Override
     public void addModel(Group binSceneModels){
-        binList.stream().forEach(i -> i.addModel(binSceneModels));
+        binList.stream().forEach(i -> i.getData().addModel(binSceneModels));
     }
     @Override
     public void addModel(Group binSceneModels, int id){
-        binList.stream().forEach(i -> i.addModel(binSceneModels, id));
+        binList.forEach(i -> i.getData().addModel(binSceneModels, id));
     }
     @Override
     public void scale(double scale) {
-        binList.stream().forEach(i -> i.scale(scale));
+        binList.stream().forEach(i -> i.getData().scale(scale));
     }
 }

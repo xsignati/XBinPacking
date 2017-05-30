@@ -1,11 +1,10 @@
 package BinPacking.Logic.PackingStrategy;
 
+import BinPacking.Data.LogicUI.BinTree;
+import BinPacking.Data.LogicUI.BinTreeNode;
 import javafx.collections.ObservableList;
 import BinPacking.Data.LogicUI.Bin;
 import BinPacking.Data.LogicUI.Box;
-
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -13,36 +12,57 @@ import java.util.Comparator;
  */
 public class BestFit implements PackingStrategy {
     @Override
-    public Bin search(Bin bin, Box box) {
-        Bin minBin;
+    public BinTree search(BinTree binTreeNode, Box box) {
+        BinTree minBinNode;
 
-        if(bin.getBinState() == Bin.BinState.EMPTY && boxFitsToBin(bin, box))
-            minBin = bin;
+        if(isBinEmptyAndFitToBox(binTreeNode, box))
+            minBinNode = binTreeNode;
         else
-            minBin = null;
+            minBinNode = null;
 
-        for (Bin child : bin.getBinChildren()) {
-            minBin = min(minBin, search(child, box));
-        }
+        for (BinTree child : binTreeNode.getChildren())
+            minBinNode = min(minBinNode, search(child, box));
 
-        return minBin;
+        return minBinNode;
     }
 
-    private Bin min(Bin bin1, Bin bin2){
-        Bin minNode;
-        if(bin1 == null)
-            minNode = bin2;
-        else{
-            if(bin2 == null)
-                minNode = bin1;
-            else{
-                if(bin2.getVolume() < bin1.getVolume())
-                    minNode = bin2;
-                else
-                    minNode = bin1;
-            }
-        }
-        return minNode;
+    private boolean isBinEmptyAndFitToBox(BinTree binTreeNode, Box box){
+        Bin bin = binTreeNode.getData();
+        return bin.getState() == Bin.State.EMPTY && boxFitsToBin(bin, box);
+    }
+
+    private BinTree min(BinTree firstNode, BinTree secondNode){
+        BinTree minimumVolumeNode;
+        if(isEmpty(firstNode))
+            minimumVolumeNode = secondNode;
+        else
+            minimumVolumeNode = continueSearch(firstNode, secondNode);
+
+        return minimumVolumeNode;
+    }
+
+    private boolean isEmpty(BinTree node){
+        return node == null;
+    }
+
+    private BinTree continueSearch(BinTree firstNode, BinTree secondNode){
+        if(isEmpty(secondNode))
+            return firstNode;
+        else
+            return getSmallerVolumeNode(firstNode, secondNode);
+    }
+
+    private BinTree getSmallerVolumeNode(BinTree firstNode, BinTree secondNode){
+        Bin first = firstNode.getData();
+        Bin second = secondNode.getData();
+        if(isFirstGreater(first, second))
+            return secondNode;
+        else
+            return firstNode;
+    }
+
+    private boolean isFirstGreater(Bin first, Bin second){
+        return second.getVolume() < first.getVolume();
     }
 
     @Override
