@@ -1,7 +1,10 @@
 package BinPacking.Tests;
 
-import BinPacking.Data.LogicUI.*;
-import BinPacking.Logic.BinPacker;
+import BinPacking.Data.Logic.BinSpace.Dimensions;
+import BinPacking.Data.Logic.BinTree.BinTree;
+import BinPacking.Data.Logic.Box.Box;
+import BinPacking.Data.Logic.InputData.InputData;
+import BinPacking.Logic.Packer.BinPacker;
 import BinPacking.Logic.PackingStrategy.PackingStrategyFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,6 +1,6 @@
-package BinPacking.Logic;
+package BinPacking.Logic.Packer;
 
-import BinPacking.Data.LogicUI.InputData;
+import BinPacking.Data.Logic.InputData.InputData;
 /**
  * Created by Xsignati on 25.05.2017.
  */

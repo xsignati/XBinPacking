@@ -1,4 +1,4 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.UI.SceneModels;
 
 import javafx.scene.Group;
 import java.util.LinkedList;
@@ -15,13 +15,13 @@ public class SceneModelComposite implements SceneModel {
     }
     @Override
     public void addModel(Group binSceneModels){
-        modelsList.stream().forEach(m -> m.addModel(binSceneModels));
+        modelsList.forEach(m -> m.addModel(binSceneModels));
     }
     @Override
-    public void addModel(Group binSceneModels, int id){modelsList.stream().forEach(m -> m.addModel(binSceneModels, id));}
+    public void addModel(Group binSceneModels, int id){modelsList.forEach(m -> m.addModel(binSceneModels, id));}
     @Override
     public void scale(double scale) {
-        modelsList.stream().forEach(m -> m.scale(scale));
+        modelsList.forEach(m -> m.scale(scale));
     }
 
 }

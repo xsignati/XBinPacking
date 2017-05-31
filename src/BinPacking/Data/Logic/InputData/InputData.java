@@ -1,4 +1,6 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.InputData;
+import BinPacking.Data.Logic.BinTree.BinTree;
+import BinPacking.Data.Logic.Box.Box;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
 import javafx.collections.ObservableList;
 

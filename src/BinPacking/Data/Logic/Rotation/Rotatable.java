@@ -1,4 +1,4 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.Rotation;
 
 /**
  * Created by Xsignati on 24.05.2017.

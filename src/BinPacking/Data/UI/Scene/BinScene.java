@@ -1,6 +1,6 @@
-package BinPacking.Data.UI;
+package BinPacking.Data.UI.Scene;
 
-import BinPacking.Data.LogicUI.*;
+import BinPacking.Data.UI.SceneModels.SceneModel;
 import javafx.beans.NamedArg;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -67,46 +67,20 @@ public class BinScene extends SubScene {
         });
     }
 
-    /**
-     * Add elements to the BinScene
-     * @param modelComposite set of objects addable to BinScene
-     * @param selectedBin allows to select boxes and bin with same ids only
-     */
-    public void add(SceneModelComposite modelComposite, int selectedBin) {
+    public void add(SceneModel modelComposite, int selectedBin) {
         modelComposite.addModel(binSceneElements, selectedBin);
     }
 
-    /**
-     * Must be done after the creation of the application window (uses the window size)
-     * @param binLength length of bin
-     * @param binWidth width of bin
-     * @param binHeight height of bin
-     */
     public void init(double binLength, double binWidth, double binHeight){
         camera.setDistance(getWidth() * 4);
         camera.reset();
         scale = new Scale(getWidth() / binLength, getHeight() / binWidth, getWidth() / binHeight);
     }
 
-    /**
-     * The Method used to fit a model to the SubScene size
-     * @param modelComposite set of all models
-     */
-    public void rescale(SceneModelComposite modelComposite) {
-        modelComposite.scale(scale.get());
-    }
-
-    /**
-     * The Method used to fit a model to the SubScene size
-     * @param sceneModel model
-     */
     public void rescale(SceneModel sceneModel){
         sceneModel.scale(scale.get());
     }
 
-    /**
-     * Clear all graphics elements
-     */
     public void clear(){
         binSceneElements.getChildren().clear();
     }

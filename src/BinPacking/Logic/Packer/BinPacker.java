@@ -1,6 +1,13 @@
-package BinPacking.Logic;
+package BinPacking.Logic.Packer;
 
-import BinPacking.Data.LogicUI.*;
+import BinPacking.Data.Logic.Bin.Bin;
+import BinPacking.Data.Logic.BinSpace.Dimensions;
+import BinPacking.Data.Logic.BinSpace.Point;
+import BinPacking.Data.Logic.BinTree.BinTree;
+import BinPacking.Data.Logic.BinTree.BinTreeNode;
+import BinPacking.Data.Logic.Box.Box;
+import BinPacking.Data.Logic.InputData.InputData;
+import BinPacking.Data.Logic.Rotation.BoxRotator;
 
 /**
  * Created by Xsignati on 24.01.2017.
@@ -18,7 +25,7 @@ public class BinPacker implements Packer {
 
     private void prepareInputAndAddBin(InputData inputData){
         inputData.getPackingStrategy().prepareInput(inputData.getBoxList());
-        inputData.getBinList().add(BinTreeNode.rootNode((new Bin(new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight())))));
+        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Point(0,0,0),new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()), Bin.Type.ROOT)));
     }
 
     private void fitBoxOrCreateBinTree(InputData inputData, Box box, int binListSize){
@@ -47,7 +54,7 @@ public class BinPacker implements Packer {
     }
 
     private void createNewBinTree(InputData inputData){
-        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()))));
+        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Point(0,0,0),new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()), Bin.Type.ROOT)));
     }
 
     private boolean nodeExists(BinTree foundNode){

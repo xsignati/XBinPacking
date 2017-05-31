@@ -1,4 +1,4 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.BinSpace;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -14,15 +14,15 @@ import javafx.beans.property.SimpleIntegerProperty;
  * |/
  * ------------ X length
  **/
-public abstract class BinSpace {
-    protected final SimpleDoubleProperty length = new SimpleDoubleProperty();
-    protected final SimpleDoubleProperty width = new SimpleDoubleProperty();
-    protected final SimpleDoubleProperty height = new SimpleDoubleProperty();
-    protected final SimpleDoubleProperty x = new SimpleDoubleProperty();
-    protected final SimpleDoubleProperty y = new SimpleDoubleProperty();
-    protected final SimpleDoubleProperty z = new SimpleDoubleProperty();
-    protected final SimpleIntegerProperty id = new SimpleIntegerProperty();
-    protected final Double volume;
+public abstract class BinSpace{
+    private final SimpleDoubleProperty length = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty width = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty height = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty x = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty y = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty z = new SimpleDoubleProperty();
+    private SimpleIntegerProperty id = new SimpleIntegerProperty();
+    private final Double volume;
     public final double ORIGINAL_LENGTH;
     public final double ORIGINAL_WIDTH;
     public final double ORIGINAL_HEIGHT;

@@ -14,9 +14,9 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ComboBox?>
-<?import BinPacking.Data.UI.*?>
+<?import BinPacking.Data.UI.Scene.*?>
 
-<GridPane fx:controller="BinPacking.UI.Controller" fx:id = "mainLayout"
+<GridPane fx:controller="BinPacking.View.Controller" fx:id = "mainLayout"
           xmlns:fx="http://javafx.com/fxml" hgap="30" vgap="30"  >
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 

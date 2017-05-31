@@ -1,9 +1,19 @@
-package BinPacking.UI;
+package BinPacking.View;
 
-import BinPacking.Data.LogicUI.*;
-import BinPacking.Data.UI.*;
-import BinPacking.Logic.BinPacker;
+import BinPacking.Data.Logic.BinSpace.Dimensions;
+import BinPacking.Data.Logic.BinTree.BinTree;
+import BinPacking.Data.Logic.Box.Box;
+import BinPacking.Data.Logic.InputData.InputData;
+import BinPacking.Data.UI.Scene.BinScene;
+import BinPacking.Data.UI.SceneModels.BinTreesWrapper;
+import BinPacking.Data.UI.SceneModels.BoxesWrapper;
+import BinPacking.Data.UI.SceneModels.SceneModel;
+import BinPacking.Data.UI.SceneModels.SceneModelComposite;
+import BinPacking.Logic.Packer.BinPacker;
+import BinPacking.Logic.Packer.Packer;
 import BinPacking.Logic.PackingStrategy.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -24,11 +34,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * UI view class.
+ * View view class.
  */
 public class Controller {
-    private final BoxList boxList = new BoxList();
-    private final BinList binList = new BinList();
+    private final ObservableList<Box> boxList = FXCollections.observableArrayList();
+    private final ObservableList<BinTree> binList = FXCollections.observableArrayList();
+    private final SceneModel binTreesWrapper = new BinTreesWrapper(binList);
+    private final SceneModel boxesWrapper = new BoxesWrapper(boxList);
     private final SceneModelComposite modelComposite = new SceneModelComposite();
 
     /**
@@ -36,8 +48,8 @@ public class Controller {
      */
     @FXML
     public void initialize(){
-        modelComposite.add(boxList);
-        modelComposite.add(binList);
+        modelComposite.add(binTreesWrapper);
+        modelComposite.add(boxesWrapper);
         subSceneInit();
         boxTableInit();
         binSizeInit();
@@ -119,15 +131,18 @@ public class Controller {
 
                     if(ce.getSource() == lengthCol) {
                         be.setLength(ce.getNewValue());
+                        be.updateModel();
                     }
                     else if(ce.getSource() == widthCol){
                         be.setWidth(ce.getNewValue());
+                        be.updateModel();
                     }
                     else if(ce.getSource() == heightCol){
                         be.setHeight(ce.getNewValue());
+                        be.updateModel();
                     }
                     if(binScene.getScale() != null)
-                        binScene.rescale(be);
+                        binScene.rescale(be.getBoxModel());
             };
 
         //Add box table event handlers
@@ -151,25 +166,20 @@ public class Controller {
 
         //Add box listener
         addBox.setOnAction(e -> {
-            boxList.add(new Box(new Dimensions(
+            Box box = new Box(new Dimensions(
                     Double.parseDouble(addLength.getText()),
                     Double.parseDouble(addWidth.getText()),
-                    Double.parseDouble(addHeight.getText())
-            )
-            ));
+                    Double.parseDouble(addHeight.getText())));
+            boxList.add(box);
+
             addLength.clear();
             addWidth.clear();
             addHeight.clear();
         });
 
         //Add Box objects to the table observable list
-        boxListViewer.setItems(boxList.get());
+        boxListViewer.setItems(boxList);
 
-        //alabama
-        boxList.add(new Box(new Dimensions(111,111,111)));
-        boxList.add(new Box(new Dimensions(222,222,222)));
-        boxList.add(new Box(new Dimensions(333,333,333)));
-        boxList.add(new Box(new Dimensions(111,111,111)));
     }
 
     @FXML
@@ -236,7 +246,7 @@ public class Controller {
                 }
             }
         );
-        binSelector.setItems(binList.get());
+        binSelector.setItems(binList);
 
         clearBtn.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.20));
         binSelector.prefWidthProperty().bind(selectorWrapper.widthProperty().multiply(0.40));
@@ -278,9 +288,13 @@ public class Controller {
             PackingStrategy packingAlg = PackingStrategyFactory.getPS(selectedBtn.getText());
 
             //Create the InputData structure for BinPacker
-            InputData inputData = new InputData(binLength, binWidth, binHeight, binList.get(), packingAlg, boxList.get());
-            BinPacker loader = new BinPacker();
+            InputData inputData = new InputData(binLength, binWidth, binHeight, binList, packingAlg, boxList);
+            Packer loader = new BinPacker();
             loader.pack(inputData);
+
+            //update
+            boxList.forEach(i -> i.updateModel());
+            binList.forEach(i -> i.getData().updateModel());
 
             //Rescale BinScene
             binScene.init(binLength, binWidth, binHeight);
@@ -293,7 +307,8 @@ public class Controller {
             setOnSucceeded((WorkerStateEvent event) ->
                     Platform.runLater(() -> {
                                 binScene.clear();
-                                binScene.add(modelComposite, 0);
+                                int displayId = binList.size() > 0 ? binList.get(0).getData().getId() : 0;
+                                binScene.add(modelComposite, displayId);
                             }
                     )
             );
@@ -366,13 +381,13 @@ public class Controller {
         if(setWidth.getCharacters().length() > 10 || setLength.getCharacters().length() == 10 || setHeight.getCharacters().length() > 10)
             throw new TooLongInputException();
 
-        if(boxList.get().size() == 0)
+        if(boxList.size() == 0)
             throw new EmptyListException();
 
         double binLength = Double.parseDouble(setLength.getCharacters().toString());
         double binWidth = Double.parseDouble(setWidth.getCharacters().toString());
         double binHeight = Double.parseDouble(setHeight.getCharacters().toString());
-        for(Box box: boxList.get()){
+        for(Box box: boxList){
             if(box.getLength() > binLength || box.getWidth() > binWidth || box.getHeight() > binHeight)
                 throw new TooLargeBoxException();
         }

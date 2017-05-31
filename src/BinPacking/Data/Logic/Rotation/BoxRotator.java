@@ -1,16 +1,18 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.Rotation;
+
+import BinPacking.Data.Logic.BinSpace.BinSpace;
+import BinPacking.Data.Logic.Box.Box;
 
 /**
  * Created by Xsignati on 24.05.2017.
  */
-public class BoxRotator{
+public class BoxRotator implements Rotator{
     public enum Rotations {WLH, LHW, HLW, WHL, HWL, LWH }
     public static final int ROTATIONS_NUM = Rotations.values().length;
     private int rotationStep;
     private Rotations rotation;
 
-    public void rotate(BinSpace box) {
-        System.out.println("rotationstep " + rotationStep);
+    public void rotate(Box box) {
         rotation = Rotations.values()[rotationStep];
         switch (rotation) {
             case WLH:

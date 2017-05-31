@@ -1,10 +1,9 @@
 package BinPacking.Logic.PackingStrategy;
 
-import BinPacking.Data.LogicUI.BinTree;
-import BinPacking.Data.LogicUI.BinTreeNode;
+import BinPacking.Data.Logic.BinTree.BinTree;
 import javafx.collections.ObservableList;
-import BinPacking.Data.LogicUI.Bin;
-import BinPacking.Data.LogicUI.Box;
+import BinPacking.Data.Logic.Bin.Bin;
+import BinPacking.Data.Logic.Box.Box;
 
 /**
  * Created by Xsignati on 24.01.2017.

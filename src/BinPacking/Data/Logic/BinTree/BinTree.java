@@ -1,5 +1,6 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.BinTree;
 
+import BinPacking.Data.Logic.Box.Box;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
 
 import java.util.List;
@@ -7,12 +8,8 @@ import java.util.List;
 /**
  * Created by Xsignati on 25.05.2017.
  */
-public interface BinTree {
-    void addChildWith(Bin child);
-    BinTree getParent();
-    void setParent(BinTree binTree);
+public interface BinTree extends BasicBinTree{
     List<BinTree> getChildren();
-    Bin getData();
     void setId(int id);
     BinTree search(PackingStrategy packingStrategy, Box box);
     void reserveBinFor(Box box);

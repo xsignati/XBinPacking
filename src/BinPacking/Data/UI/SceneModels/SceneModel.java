@@ -1,4 +1,4 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.UI.SceneModels;
 
 import javafx.scene.Group;
 

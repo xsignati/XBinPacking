@@ -1,4 +1,4 @@
-package BinPacking.Data.UI;
+package BinPacking.Data.UI.Scene;
 
 import javafx.beans.NamedArg;
 import javafx.scene.*;

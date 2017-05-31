@@ -1,4 +1,4 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.BinSpace;
 
 /**
  * Created by Xsignati on 25.05.2017.

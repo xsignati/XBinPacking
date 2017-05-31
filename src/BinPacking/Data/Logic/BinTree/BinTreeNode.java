@@ -1,5 +1,9 @@
-package BinPacking.Data.LogicUI;
+package BinPacking.Data.Logic.BinTree;
 
+import BinPacking.Data.Logic.Bin.Bin;
+import BinPacking.Data.Logic.Box.Box;
+import BinPacking.Data.Logic.BinSpace.Dimensions;
+import BinPacking.Data.Logic.BinSpace.Point;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
 
 import java.util.LinkedList;
@@ -28,11 +32,6 @@ public class BinTreeNode implements BinTree{
         childNode.setParent(this);
         childNode.setId(id);
         children.add(childNode);
-    }
-
-    @Override
-    public BinTree getParent(){
-        return parent;
     }
 
     @Override

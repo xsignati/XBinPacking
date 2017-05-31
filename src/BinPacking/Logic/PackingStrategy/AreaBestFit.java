@@ -1,60 +1,88 @@
-//package BinPacking.Logic.PackingStrategy;
-//
-//import javafx.collections.ObservableList;
-//import BinPacking.Data.LogicUI.Bin;
-//import BinPacking.Data.LogicUI.Box;
-//
-///**
-// * Created by Xsignati on 24.01.2017.
-// */
-//public class AreaBestFit implements PackingStrategy {
-//    @Override
-//    public Bin search(Bin bin, Box box) {
-//        Bin minBin;
-//        if(bin.getState() == Bin.BinState.EMPTY && boxFitsToBin(bin, box))
-//            minBin = bin;
-//        else
-//            minBin = null;
-//
-//        for (Bin child : bin.getBinChildren()) {
-//            minBin = min(minBin, search(child, box));
-//        }
-//
-//        return minBin;
-//    }
-//
-//    /**
-//     * @param bin1 first compared bin.
-//     * @param bin2 second compared bin.
-//     * @return bin with a lesser volume.
-//     */
-//    private Bin min(Bin bin1, Bin bin2){
-//        Bin minBin;
-//        if(bin1 == null)
-//            minBin = bin2;
-//        else{
-//            if(bin2 == null)
-//                minBin = bin1;
-//            else{
-//                if(bin2.getZ() == bin1.getZ()){
-//                    if (bin2.getVolume() < bin1.getVolume())
-//                        minBin = bin2;
-//                    else
-//                        minBin = bin1;
-//                }
-//                else if(bin2.getZ() < bin1.getZ()){
-//                    minBin = bin2;
-//                }
-//                else
-//                    minBin = bin1;
-//            }
-//        }
-//        return minBin;
-//    }
-//
-//    @Override
-//    public void prepareInput(ObservableList<Box> boxList){
-//        boxList.sort((b1,b2) -> b2.getVolume().compareTo(b1.getVolume()));
-//    }
-//
-//}
+package BinPacking.Logic.PackingStrategy;
+
+import BinPacking.Data.Logic.BinTree.BinTree;
+import javafx.collections.ObservableList;
+import BinPacking.Data.Logic.Bin.Bin;
+import BinPacking.Data.Logic.Box.Box;
+
+/**
+ * Created by Xsignati on 24.01.2017.
+ */
+public class AreaBestFit implements PackingStrategy {
+    @Override
+    public BinTree search(BinTree binTreeNode, Box box)  {
+        BinTree minBinNode;
+
+        if(isBinEmptyAndFitToBox(binTreeNode, box))
+            minBinNode = binTreeNode;
+        else
+            minBinNode = null;
+
+        for (BinTree child : binTreeNode.getChildren())
+            minBinNode = min(minBinNode, search(child, box));
+
+        return minBinNode;
+    }
+
+    private boolean isBinEmptyAndFitToBox(BinTree binTreeNode, Box box){
+        Bin bin = binTreeNode.getData();
+        return bin.getState() == Bin.State.EMPTY && boxFitsToBin(bin, box);
+    }
+
+    private BinTree min(BinTree firstNode, BinTree secondNode){
+        BinTree minimumVolumeNode;
+        if(isEmpty(firstNode))
+            minimumVolumeNode = secondNode;
+        else
+            minimumVolumeNode = continueSearch(firstNode, secondNode);
+
+        return minimumVolumeNode;
+    }
+
+    private boolean isEmpty(BinTree node){
+        return node == null;
+    }
+
+    private BinTree continueSearch(BinTree firstNode, BinTree secondNode){
+        if(isEmpty(secondNode))
+            return firstNode;
+        else
+            return getSmallerZandVolume(firstNode, secondNode);
+    }
+
+    private BinTree getSmallerZandVolume(BinTree firstNode, BinTree secondNode){
+        Bin first = firstNode.getData();
+        Bin second = secondNode.getData();
+        if(areZEqual(first, second))
+            return getSmallerVolumeNode(firstNode, secondNode);
+        else
+            return firstNode;
+    }
+
+    private boolean areZEqual(Bin first, Bin second){return first.getZ() == second.getZ();}
+
+    private BinTree getSmallerVolumeNode(BinTree firstNode, BinTree secondNode){
+        Bin first = firstNode.getData();
+        Bin second = secondNode.getData();
+        if(isFirstGreater(first, second))
+            return secondNode;
+        else if(isFirstZgreater(first, second))
+            return secondNode;
+        else
+            return firstNode;
+    }
+
+    private boolean isFirstGreater(Bin first, Bin second){
+        return second.getVolume() < first.getVolume();
+    }
+
+    private boolean isFirstZgreater(Bin first, Bin second){
+        return second.getZ() < first.getZ();
+    }
+
+    @Override
+    public void prepareInput(ObservableList<Box> boxList){
+        boxList.sort((b1,b2) -> b2.getVolume().compareTo(b1.getVolume()));
+    }
+
+}
