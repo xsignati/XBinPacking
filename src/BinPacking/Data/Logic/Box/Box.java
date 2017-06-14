@@ -18,18 +18,13 @@ public class Box extends BinSpace implements Rotatable, GraphicsModel {
     public Box(Dimensions dimensions) {
         super(new Point(0,0,0), dimensions);
         boxRotator = new BoxRotator();
-        createModel();
     }
 
     public SceneModel getBoxModel() {
         return boxModel;
     }
 
-    public void createModel(){
-        boxModel = new BoxModel(this);
-    }
-
-    public void updateModel(){
-        boxModel = new BoxModel(this);
+    public void updateModel(SceneModel boxModel){
+        this.boxModel = boxModel;
     }
 }

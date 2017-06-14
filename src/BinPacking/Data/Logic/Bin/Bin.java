@@ -21,7 +21,6 @@ public class Bin extends BinSpace implements GraphicsModel {
     public Bin(Point point, Dimensions dimensions, Type type) {
         super(point, new Dimensions(dimensions.getLength(), dimensions.getWidth(), dimensions.getHeight()));
         this.type = type;
-        createModel();
     }
     public void setState(State state) {
         this.state = state;
@@ -39,12 +38,8 @@ public class Bin extends BinSpace implements GraphicsModel {
         return binModel;
     }
 
-    public void createModel(){
-        binModel = new BinModel(this);
-    }
-
-    public void updateModel(){
-        binModel = new BinModel(this);
+    public void updateModel(SceneModel binModel){
+        this.binModel = binModel;
     }
 
 }

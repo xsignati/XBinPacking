@@ -1,17 +1,15 @@
 package BinPacking.Logic.Packer;
 
-import BinPacking.Data.Logic.Bin.Bin;
-import BinPacking.Data.Logic.BinSpace.Dimensions;
-import BinPacking.Data.Logic.BinSpace.Point;
 import BinPacking.Data.Logic.BinTree.BinTree;
 import BinPacking.Data.Logic.BinTree.BinTreeNode;
 import BinPacking.Data.Logic.Box.Box;
 import BinPacking.Data.Logic.InputData.InputData;
 import BinPacking.Data.Logic.Rotation.BoxRotator;
+import BinPacking.DependencyInjectors.BinInjector;
 
 /**
  * Created by Xsignati on 24.01.2017.
- * Main logic class responsible for assigning boxes to binsTrees.
+ * Main logic class responsible for assigning boxes to binTrees.
  */
 public class BinPacker implements Packer {
 
@@ -25,17 +23,21 @@ public class BinPacker implements Packer {
 
     private void prepareInputAndAddBin(InputData inputData){
         inputData.getPackingStrategy().prepareInput(inputData.getBoxList());
-        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Point(0,0,0),new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()), Bin.Type.ROOT)));
+        inputData.getBinList().add(BinTreeNode.rootNode(BinInjector.get(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight())));
     }
 
     private void fitBoxOrCreateBinTree(InputData inputData, Box box, int binListSize){
         for(int currentNode = 0 ; currentNode <= binListSize; currentNode++){
             if(BoxFitsToBin(inputData, box, currentNode))
                 return;
-            else if (currentNode == binListSize - 1)
+            else if (allNodesAreToSmall(currentNode, binListSize))
                 createNewBinTree(inputData);
 
         }
+    }
+
+    private boolean allNodesAreToSmall(int currentNode, int binListSize){
+        return currentNode == binListSize - 1;
     }
 
     private boolean BoxFitsToBin(InputData inputData, Box box, int currentNode){
@@ -54,7 +56,7 @@ public class BinPacker implements Packer {
     }
 
     private void createNewBinTree(InputData inputData){
-        inputData.getBinList().add(BinTreeNode.rootNode(new Bin(new Point(0,0,0),new Dimensions(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight()), Bin.Type.ROOT)));
+        inputData.getBinList().add(BinTreeNode.rootNode(BinInjector.get(inputData.getBinLength(), inputData.getBinWidth(), inputData.getBinHeight())));
     }
 
     private boolean nodeExists(BinTree foundNode){

@@ -2,8 +2,7 @@ package BinPacking.Data.Logic.BinTree;
 
 import BinPacking.Data.Logic.Bin.Bin;
 import BinPacking.Data.Logic.Box.Box;
-import BinPacking.Data.Logic.BinSpace.Dimensions;
-import BinPacking.Data.Logic.BinSpace.Point;
+import BinPacking.DependencyInjectors.BinInjector;
 import BinPacking.Logic.PackingStrategy.PackingStrategy;
 
 import java.util.LinkedList;
@@ -71,22 +70,22 @@ public class BinTreeNode implements BinTree{
      */
     public void tryToAddSubspacesFor(Box box) {
         if (isFirstArgGreater(bin.getLength(), box.getLength())) {
-            addChildWith(new Bin(new Point(bin.getX() + box.getLength(), bin.getY(), bin.getZ()), new Dimensions(bin.getLength() - box.getLength(), bin.getWidth(), bin.getHeight()), Bin.Type.A));
-            addChildWith(new Bin(new Point(bin.getX() + box.getLength(), bin.getY(), bin.getZ()), new Dimensions(bin.getLength()- box.getLength(), box.getWidth(), bin.getHeight()), Bin.Type.B));
-            addChildWith(new Bin(new Point(bin.getX() + box.getLength(), bin.getY(), bin.getZ()), new Dimensions(bin.getLength() - box.getLength(), bin.getWidth(), box.getHeight()), Bin.Type.C));
-            addChildWith(new Bin(new Point(bin.getX() + box.getLength(), bin.getY(), bin.getZ()), new Dimensions(bin.getLength()- box.getLength(), box.getWidth(), box.getHeight()), Bin.Type.D));
+            addChildWith(BinInjector.get(bin.getX() + box.getLength(), bin.getY(), bin.getZ(), bin.getLength() - box.getLength(), bin.getWidth(), bin.getHeight(), Bin.Type.A));
+            addChildWith(BinInjector.get(bin.getX() + box.getLength(), bin.getY(), bin.getZ(), bin.getLength() - box.getLength(), box.getWidth(), bin.getHeight(), Bin.Type.B));
+            addChildWith(BinInjector.get(bin.getX() + box.getLength(), bin.getY(), bin.getZ(), bin.getLength() - box.getLength(), bin.getWidth(), box.getHeight(), Bin.Type.C));
+            addChildWith(BinInjector.get(bin.getX() + box.getLength(), bin.getY(), bin.getZ(), bin.getLength() - box.getLength(), box.getWidth(), box.getHeight(), Bin.Type.D));
         }
         if (isFirstArgGreater(bin.getWidth(), box.getWidth())) {
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY() + box.getWidth(), bin.getZ()), new Dimensions(box.getLength(), bin.getWidth() - box.getWidth(), bin.getHeight()), Bin.Type.A));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY() + box.getWidth(), bin.getZ()), new Dimensions(bin.getLength(), bin.getWidth() - box.getWidth(), bin.getHeight()), Bin.Type.B));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY() + box.getWidth(), bin.getZ()), new Dimensions(box.getLength(), bin.getWidth() - box.getWidth(), box.getHeight()), Bin.Type.C));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY() + box.getWidth(), bin.getZ()), new Dimensions(bin.getLength(), bin.getWidth() - box.getWidth(), box.getHeight()), Bin.Type.D));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY() + box.getWidth(), bin.getZ(), box.getLength(), bin.getWidth() - box.getWidth(), bin.getHeight(), Bin.Type.A));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY() + box.getWidth(), bin.getZ(), bin.getLength(), bin.getWidth() - box.getWidth(), bin.getHeight(), Bin.Type.B));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY() + box.getWidth(), bin.getZ(), box.getLength(), bin.getWidth() - box.getWidth(), box.getHeight(), Bin.Type.C));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY() + box.getWidth(), bin.getZ(), bin.getLength(), bin.getWidth() - box.getWidth(), box.getHeight(), Bin.Type.D));
         }
         if (isFirstArgGreater(bin.getHeight(), box.getHeight())) {
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY(), bin.getZ() + box.getHeight()), new Dimensions(box.getLength(), box.getWidth(), bin.getHeight() - box.getHeight()), Bin.Type.A));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY(), bin.getZ() + box.getHeight()), new Dimensions(box.getLength(), box.getWidth(), bin.getHeight() - box.getHeight()), Bin.Type.B));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY(), bin.getZ() + box.getHeight()), new Dimensions(bin.getLength(), bin.getWidth(), bin.getHeight() - box.getHeight()), Bin.Type.C));
-            addChildWith(new Bin(new Point(bin.getX(), bin.getY(), bin.getZ() + box.getHeight()), new Dimensions(bin.getLength(), bin.getWidth(), bin.getHeight() - box.getHeight()), Bin.Type.D));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY(), bin.getZ() + box.getHeight(), box.getLength(), box.getWidth(), bin.getHeight() - box.getHeight(), Bin.Type.A));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY(), bin.getZ() + box.getHeight(), box.getLength(), box.getWidth(), bin.getHeight() - box.getHeight(), Bin.Type.B));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY(), bin.getZ() + box.getHeight(), bin.getLength(), bin.getWidth(), bin.getHeight() - box.getHeight(), Bin.Type.C));
+            addChildWith(BinInjector.get(bin.getX(), bin.getY(), bin.getZ() + box.getHeight(), bin.getLength(), bin.getWidth(), bin.getHeight() - box.getHeight(), Bin.Type.D));
         }
     }
 

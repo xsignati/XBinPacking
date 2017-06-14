@@ -5,10 +5,9 @@ import BinPacking.Data.Logic.BinTree.BinTree;
 import BinPacking.Data.Logic.Box.Box;
 import BinPacking.Data.Logic.InputData.InputData;
 import BinPacking.Data.UI.Scene.BinScene;
-import BinPacking.Data.UI.SceneModels.BinTreesWrapper;
-import BinPacking.Data.UI.SceneModels.BoxesWrapper;
-import BinPacking.Data.UI.SceneModels.SceneModel;
-import BinPacking.Data.UI.SceneModels.SceneModelComposite;
+import BinPacking.Data.UI.SceneModels.*;
+import BinPacking.DependencyInjectors.BoxInjector;
+import BinPacking.DependencyInjectors.PackerInjector;
 import BinPacking.Logic.Packer.BinPacker;
 import BinPacking.Logic.Packer.Packer;
 import BinPacking.Logic.PackingStrategy.*;
@@ -131,15 +130,15 @@ public class Controller {
 
                     if(ce.getSource() == lengthCol) {
                         be.setLength(ce.getNewValue());
-                        be.updateModel();
+                        be.updateModel(new BoxModel(be));
                     }
                     else if(ce.getSource() == widthCol){
                         be.setWidth(ce.getNewValue());
-                        be.updateModel();
+                        be.updateModel(new BoxModel(be));
                     }
                     else if(ce.getSource() == heightCol){
                         be.setHeight(ce.getNewValue());
-                        be.updateModel();
+                        be.updateModel(new BoxModel(be));
                     }
                     if(binScene.getScale() != null)
                         binScene.rescale(be.getBoxModel());
@@ -166,10 +165,10 @@ public class Controller {
 
         //Add box listener
         addBox.setOnAction(e -> {
-            Box box = new Box(new Dimensions(
+            Box box = BoxInjector.get(
                     Double.parseDouble(addLength.getText()),
                     Double.parseDouble(addWidth.getText()),
-                    Double.parseDouble(addHeight.getText())));
+                    Double.parseDouble(addHeight.getText()));
             boxList.add(box);
 
             addLength.clear();
@@ -289,12 +288,12 @@ public class Controller {
 
             //Create the InputData structure for BinPacker
             InputData inputData = new InputData(binLength, binWidth, binHeight, binList, packingAlg, boxList);
-            Packer loader = new BinPacker();
+            Packer loader = PackerInjector.get();
             loader.pack(inputData);
 
             //update
-            boxList.forEach(i -> i.updateModel());
-            binList.forEach(i -> i.getData().updateModel());
+            boxList.forEach(i -> i.updateModel(new BoxModel(i)));
+            binList.forEach(i -> i.getData().updateModel(new BinModel(i.getData())));
 
             //Rescale BinScene
             binScene.init(binLength, binWidth, binHeight);
@@ -363,10 +362,10 @@ public class Controller {
         });
     }
 
-    class NoInputException extends Exception{}
-    class TooLongInputException extends Exception{}
-    class EmptyListException extends Exception{}
-    class TooLargeBoxException extends Exception{}
+    private class NoInputException extends Exception{}
+    private class TooLongInputException extends Exception{}
+    private class EmptyListException extends Exception{}
+    private class TooLargeBoxException extends Exception{}
 
     /**
      * @throws NoInputException Control's field is empty.

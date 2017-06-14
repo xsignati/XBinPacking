@@ -12,7 +12,7 @@ public interface PackingStrategy {
     /**
      * A recurrent method that search for a Bin that meet the conditions. The function look through Bin children
      * (the RootBin by default)
-     * @param bin
+     * @param binTreeNode
      * @param box
      * @return bin that meet the conditions
      */
